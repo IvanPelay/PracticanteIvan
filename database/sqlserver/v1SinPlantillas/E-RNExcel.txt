@@ -1,0 +1,65 @@
+erDiagram
+    Cat016PlantillasReportes ||--o{ Enc016ProgramacionReportes : "programa"
+    Cat016PlantillasReportes ||--o{ Enc016ValidacionesReportes : "tiene_validaciones"
+    Enc016ProgramacionReportes ||--o{ Det016DestinatariosReportes : "tiene_destinatarios"
+    Enc016ProgramacionReportes ||--o{ Bit016EjecucionesReportes : "registra_ejecuciones"
+    
+    Cat016PlantillasReportes {
+        int i_Cve_Plantilla PK
+        varchar(200) t_NombrePlantilla
+        text t_ConsultaSQL
+        varchar(10) t_FormatoSalida
+        varchar(max) t_ColumnasJSON
+        varchar(max) t_ParametrosJSON
+        int i_Estatus
+        datetime fh_FechaRegistro
+        varchar(50) t_UsuarioRegistro
+    }
+    
+    Enc016ValidacionesReportes {
+        int i_Cve_Validacion PK
+        int i_Cve_Plantilla FK
+        varchar(50) t_TipoValidacion
+        nvarchar(max) t_ConfiguracionJSON
+        int i_Orden
+        int i_Estatus
+        datetime fh_FechaRegistro
+        varchar(50) t_UsuarioRegistro
+    }
+    
+    Cng016ConfigAutomatizacion {
+        int i_Cve_Config PK
+        varchar(50) t_Clave
+        varchar(500) t_Valor
+        varchar(200) t_Descripcion
+        datetime fh_Actualizacion
+    }
+    
+    Enc016ProgramacionReportes {
+        int i_Cve_Programacion PK
+        int i_Cve_Plantilla FK
+        char(1) t_Frecuencia
+        time t_HoraEjecucion
+        varchar(max) t_ParametrosFijosJSON
+        int i_Estatus
+        datetime fh_ProximaEjecucion
+    }
+    
+    Det016DestinatariosReportes {
+        int i_Cve_Destinatario PK
+        int i_Cve_Programacion FK
+        varchar(200) t_Correo
+        char(1) t_TipoDestino
+        int i_Orden
+    }
+    
+    Bit016EjecucionesReportes {
+        int i_Cve_Ejecucion PK
+        int i_Cve_Programacion FK
+        datetime fh_InicioEjecucion
+        datetime fh_FinEjecucion
+        varchar(20) t_Estatus
+        text t_ErrorDetalle
+        varchar(500) t_RutaDocumento
+        varchar(50) t_IDDocumentoPaperless
+    }
