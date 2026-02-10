@@ -1,0 +1,23 @@
+# Documentos
+*.docx
+*.xlsx
+*.pdf
+
+# Imágenes
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Archivos temporales
+*.tmp
+*.log
+
+Reporte*.sql
+
+# Carpetas de pruebas
+git-test/
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
