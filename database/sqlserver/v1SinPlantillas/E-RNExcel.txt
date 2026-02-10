@@ -1,65 +1,79 @@
 erDiagram
-    Cat016PlantillasReportes ||--o{ Enc016ProgramacionReportes : "programa"
-    Cat016PlantillasReportes ||--o{ Enc016ValidacionesReportes : "tiene_validaciones"
-    Enc016ProgramacionReportes ||--o{ Det016DestinatariosReportes : "tiene_destinatarios"
-    Enc016ProgramacionReportes ||--o{ Bit016EjecucionesReportes : "registra_ejecuciones"
+    Cat016PlantillasReporteador ||--o{ Enc016ProgramacionReporteador : "programa"
+    Cat016PlantillasReporteador ||--o{ Enc016ValidacionesReporteador : "tiene_validaciones"
+    Enc016ProgramacionReporteador ||--o{ Det016DestinatariosReporteador : "tiene_destinatarios"
+    Enc016ProgramacionReporteador ||--o{ Bit016GeneracionReporteador : "registra_generaciones"
     
-    Cat016PlantillasReportes {
+    Cat016PlantillasReporteador {
         int i_Cve_Plantilla PK
-        varchar(200) t_NombrePlantilla
-        text t_ConsultaSQL
+        varchar(200) t_Nombre
+        text t_Consulta
         varchar(10) t_FormatoSalida
-        varchar(max) t_ColumnasJSON
-        varchar(max) t_ParametrosJSON
-        int i_Estatus
-        datetime fh_FechaRegistro
+        varchar(max) t_Columnas
+        varchar(max) t_Parametros
+        int i_Cve_Estado
+        datetime f_FechaRegistro
         varchar(50) t_UsuarioRegistro
     }
     
-    Enc016ValidacionesReportes {
+    Enc016ValidacionesReporteador {
         int i_Cve_Validacion PK
         int i_Cve_Plantilla FK
-        varchar(50) t_TipoValidacion
-        nvarchar(max) t_ConfiguracionJSON
+        varchar(50) t_Tipo
+        nvarchar(max) t_Configuracion
         int i_Orden
-        int i_Estatus
-        datetime fh_FechaRegistro
+        int i_Cve_Estado
+        datetime f_FechaRegistro
         varchar(50) t_UsuarioRegistro
     }
     
-    Cng016ConfigAutomatizacion {
+    Cng016ConfigReporteador {
         int i_Cve_Config PK
         varchar(50) t_Clave
         varchar(500) t_Valor
         varchar(200) t_Descripcion
-        datetime fh_Actualizacion
+        int i_Cve_Estado
+        datetime f_Actualizacion
+        varchar(50) t_UsuarioActualizacion
     }
     
-    Enc016ProgramacionReportes {
+    Enc016ProgramacionReporteador {
         int i_Cve_Programacion PK
         int i_Cve_Plantilla FK
+        varchar(150) t_Nombre
         char(1) t_Frecuencia
-        time t_HoraEjecucion
-        varchar(max) t_ParametrosFijosJSON
-        int i_Estatus
-        datetime fh_ProximaEjecucion
+        time t_Hora
+        varchar(max) t_Parametros
+        int i_Cve_Estado
+        datetime f_ProximaEjecucion
+        datetime f_UltimaEjecucion
+        datetime f_FechaRegistro
+        varchar(50) t_UsuarioRegistro
     }
     
-    Det016DestinatariosReportes {
+    Det016DestinatariosReporteador {
         int i_Cve_Destinatario PK
         int i_Cve_Programacion FK
+        varchar(150) t_Nombre
         varchar(200) t_Correo
         char(1) t_TipoDestino
+        char(1) t_TipoNotificacion
         int i_Orden
+        int i_Cve_Estado
+        datetime f_FechaRegistro
+        varchar(50) t_UsuarioRegistro
     }
     
-    Bit016EjecucionesReportes {
-        int i_Cve_Ejecucion PK
+    Bit016GeneracionReporteador {
+        int i_Cve_Generacion PK
         int i_Cve_Programacion FK
-        datetime fh_InicioEjecucion
-        datetime fh_FinEjecucion
+        datetime f_FechaInicio
+        datetime f_FechaFin
         varchar(20) t_Estatus
-        text t_ErrorDetalle
+        int i_RegistrosProcesados
         varchar(500) t_RutaDocumento
-        varchar(50) t_IDDocumentoPaperless
+        varchar(50) t_IdDocumento
+        text t_Error
+        varchar(max) t_ParametrosUsados
+        datetime f_FechaRegistro
     }
