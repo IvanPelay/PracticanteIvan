@@ -1,3 +1,14 @@
+-- =============================================
+-- GENERADOR DE REPORTES AUTOMATIZADOS
+-- FAMILIA 016 - REPORTES
+-- ESQUEMA BASE (SIN SVN)
+-- VERSIÓN: 1.0
+-- AUTOR: Residencia Profesional
+-- DESCRIPCIÓN:
+-- Modelo de datos para generación, validación,
+-- programación y auditoría de reportes automatizados
+-- =============================================
+
 USE [SysExpert]; -- O la base de datos donde se implementará el sistema
 GO
 
