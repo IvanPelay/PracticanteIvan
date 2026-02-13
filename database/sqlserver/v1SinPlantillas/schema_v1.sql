@@ -1,281 +1,396 @@
--- =============================================
--- GENERADOR DE REPORTES AUTOMATIZADOS
--- FAMILIA 016 - REPORTES
--- ESQUEMA BASE (SIN SVN)
--- VERSIÓN: 1.0
--- AUTOR: Residencia Profesional
--- DESCRIPCIÓN:
--- Modelo de datos para generación, validación,
--- programación y auditoría de reportes automatizados
--- =============================================
+-- ===================================================================
+-- Script: Creación de tablas para Módulo Reporteador Automático
+-- Sistema: KROM - Automatización de Reportes Aduanales
+-- Familia: 016 (Reportes)
+-- Autor: Residente Iván Pelayo Martínez
+-- Fecha: Febrero 2026
+-- Base de datos: SysExpert (según corresponda)
+-- ===================================================================
 
-USE [SysExpert]; -- O la base de datos donde se implementará el sistema
+USE [SysExpert];  -- ← Cambiar por la BD destino
 GO
 
--- =============================================
--- Tabla: Catálogo de Plantillas de Reportes
--- =============================================
-CREATE TABLE [dbo].[Cat016PlantillasReportes] (
+-- ===================================================================
+-- 1. CATÁLOGO DE PLANTILLAS DE REPORTE
+--    Almacena la definición lógica del reporte: consulta SQL, columnas,
+--    parámetros, formato de salida, etc.
+-- ===================================================================
+CREATE TABLE [dbo].[Cat016PlantillasReporteador] (
+    -- Llave primaria
     i_Cve_Plantilla INT IDENTITY(1,1) NOT NULL,
-    t_NombrePlantilla VARCHAR(200) NOT NULL,
+    
+    -- Datos generales
+    t_Nombre VARCHAR(200) NOT NULL,
     t_Descripcion VARCHAR(500) NULL,
-    t_ConsultaSQL TEXT NOT NULL,
-    t_FormatoSalida VARCHAR(10) NOT NULL DEFAULT 'XLSX', -- XLSX, CSV, PDF
-    t_ColumnasJSON NVARCHAR(MAX) NULL, -- Mapeo de columnas SQL a Excel
-    t_ParametrosJSON NVARCHAR(MAX) NULL, -- Definición de parámetros de la consulta
-    i_Estatus INT NOT NULL DEFAULT 1, -- 1=Activa, 0=Inactiva, 2=En revisión
-    fh_FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    t_UsuarioRegistro VARCHAR(50) NOT NULL,
-    fh_FechaModificacion DATETIME NULL,
+    t_Consulta NVARCHAR(MAX) NOT NULL,
+    t_FormatoSalida VARCHAR(10) NOT NULL CONSTRAINT DF_Cat016_FormatoSalida DEFAULT ('XLSX'),
+    
+    -- Configuración técnica
+    t_Columnas VARCHAR(MAX) NULL,        -- JSON con definición de columnas (título, formato, orden)
+    t_Parametros VARCHAR(MAX) NULL,      -- JSON con parámetros esperados (nombre, tipo, default)
+    
+    -- Estado y auditoría
+    i_Cve_Estado INT NOT NULL CONSTRAINT DF_Cat016_Estado DEFAULT (1),
+    f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Cat016_FechaRegistro DEFAULT (GETDATE()),
+    t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Cat016_UsuarioRegistro DEFAULT (''),
+    f_FechaModificacion DATETIME NULL,
     t_UsuarioModificacion VARCHAR(50) NULL,
-    CONSTRAINT PK_Cat016PlantillasReportes PRIMARY KEY (i_Cve_Plantilla)
-);
+    
+    -- Restricciones
+    CONSTRAINT PK_Cat016PlantillasReporteador PRIMARY KEY CLUSTERED (i_Cve_Plantilla ASC),
+    CONSTRAINT CK_Cat016_Formato CHECK (t_FormatoSalida IN ('XLSX', 'XLS', 'CSV', 'PDF')),
+    CONSTRAINT CK_Cat016_Estado CHECK (i_Cve_Estado IN (0, 1))  -- 0 = Inactivo, 1 = Activo
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
--- Índice para búsqueda por nombre
-CREATE INDEX IX_Cat016PlantillasReportes_Nombre 
-ON [dbo].[Cat016PlantillasReportes] (t_NombrePlantilla);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Cat016_Nombre ON [dbo].[Cat016PlantillasReporteador] (t_Nombre) WHERE i_Cve_Estado = 1
+GO
+CREATE NONCLUSTERED INDEX IX_Cat016_Estado ON [dbo].[Cat016PlantillasReporteador] (i_Cve_Estado)
+GO
+CREATE NONCLUSTERED INDEX IX_Cat016_Formato ON [dbo].[Cat016PlantillasReporteador] (t_FormatoSalida)
 GO
 
--- Índice para estatus activo
-CREATE INDEX IX_Cat016PlantillasReportes_Estatus 
-ON [dbo].[Cat016PlantillasReportes] (i_Estatus);
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Catálogo de plantillas de reportes con consulta SQL, formato y configuración de columnas',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador';
 GO
 
--- =============================================
--- Tabla: Encabezado de Validaciones de Reportes
--- =============================================
-CREATE TABLE [dbo].[Enc016ValidacionesReportes] (
+-- DESCRIPCIONES DE COLUMNAS
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave única de la plantilla', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Plantilla';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Nombre descriptivo de la plantilla', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Nombre';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Descripción detallada del reporte', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Descripcion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Consulta SQL que obtiene los datos del reporte', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Consulta';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Formato de archivo de salida: XLSX, XLS, CSV, PDF', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_FormatoSalida';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con configuración de columnas (título, formato, orden, ancho)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Columnas';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con definición de parámetros de la consulta (nombre, tipo, default)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Parametros';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Estatus: 1=Activo, 0=Inactivo', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Estado';
+GO
+
+-- ===================================================================
+-- 2. VALIDACIONES POR PLANTILLA
+--    Reglas de negocio que se ejecutarán antes de generar el reporte.
+--    Cada validación es reutilizable y configurable vía JSON.
+-- ===================================================================
+CREATE TABLE [dbo].[Enc016ValidacionesReporteador] (
     i_Cve_Validacion INT IDENTITY(1,1) NOT NULL,
     i_Cve_Plantilla INT NOT NULL,
-    t_TipoValidacion VARCHAR(50) NOT NULL, -- MIN_REGISTROS, CAMPOS_OBLIGATORIOS, TOTALES, ETC.
-    t_Descripcion VARCHAR(300) NULL,
-    t_ConfiguracionJSON NVARCHAR(MAX) NOT NULL, -- Parámetros específicos de la validación
-    i_Orden INT NOT NULL DEFAULT 0,
-    i_Estatus INT NOT NULL DEFAULT 1, -- 1=Activa, 0=Inactiva
-    fh_FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    t_UsuarioRegistro VARCHAR(50) NOT NULL,
-    fh_FechaModificacion DATETIME NULL,
+    
+    t_Tipo VARCHAR(50) NOT NULL,  -- 'registros_minimos', 'campos_obligatorios', 'totales', 'nulos', 'personalizada'
+    t_Configuracion NVARCHAR(MAX) NOT NULL,  -- JSON con umbrales, campos, condiciones
+    i_Orden INT NOT NULL CONSTRAINT DF_Enc016_Orden DEFAULT (1),
+    t_MensajeError VARCHAR(500) NULL,        -- Mensaje personalizado para esta validación
+    
+    i_Cve_Estado INT NOT NULL CONSTRAINT DF_Enc016_Estado DEFAULT (1),
+    f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Enc016_FechaRegistro DEFAULT (GETDATE()),
+    t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Enc016_UsuarioRegistro DEFAULT (''),
+    f_FechaModificacion DATETIME NULL,
     t_UsuarioModificacion VARCHAR(50) NULL,
-    CONSTRAINT PK_Enc016ValidacionesReportes PRIMARY KEY (i_Cve_Validacion),
-    CONSTRAINT FK_Enc016ValidacionesReportes_Plantilla 
-        FOREIGN KEY (i_Cve_Plantilla) 
-        REFERENCES [dbo].[Cat016PlantillasReportes](i_Cve_Plantilla)
-        ON DELETE CASCADE
-);
+    
+    CONSTRAINT PK_Enc016ValidacionesReporteador PRIMARY KEY CLUSTERED (i_Cve_Validacion ASC),
+    CONSTRAINT FK_Enc016_Plantilla FOREIGN KEY (i_Cve_Plantilla) 
+        REFERENCES [dbo].[Cat016PlantillasReporteador] (i_Cve_Plantilla),
+    CONSTRAINT CK_Enc016_Estado CHECK (i_Cve_Estado IN (0, 1))
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
--- Índice para búsqueda por plantilla
-CREATE INDEX IX_Enc016ValidacionesReportes_Plantilla 
-ON [dbo].[Enc016ValidacionesReportes] (i_Cve_Plantilla);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Enc016_Plantilla ON [dbo].[Enc016ValidacionesReporteador] (i_Cve_Plantilla)
+GO
+CREATE NONCLUSTERED INDEX IX_Enc016_Tipo ON [dbo].[Enc016ValidacionesReporteador] (t_Tipo)
+GO
+CREATE NONCLUSTERED INDEX IX_Enc016_Orden ON [dbo].[Enc016ValidacionesReporteador] (i_Orden)
 GO
 
--- Índice para tipo de validación
-CREATE INDEX IX_Enc016ValidacionesReportes_Tipo 
-ON [dbo].[Enc016ValidacionesReportes] (t_TipoValidacion);
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Validaciones aplicables a cada plantilla de reporte',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador';
 GO
 
--- =============================================
--- Tabla: Configuración del Sistema de Automatización
--- =============================================
-CREATE TABLE [dbo].[Cng016ConfigAutomatizacion] (
+-- DESCRIPCIONES DE COLUMNAS
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave única de la validación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Validacion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave de la plantilla asociada (FK)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Plantilla';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Tipo de validación: registros_minimos, campos_obligatorios, totales, nulos, personalizada', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N't_Tipo';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con configuración específica de la validación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N't_Configuracion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Orden de ejecución de la validación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N'i_Orden';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Mensaje de error personalizado', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReporteador', @level2type = N'COLUMN', @level2name = N't_MensajeError';
+GO
+
+-- ===================================================================
+-- 3. CONFIGURACIÓN GENERAL DEL MÓDULO REPORTEADOR
+--    Parámetros globales: rutas, timeout, límites, SMTP, etc.
+-- ===================================================================
+CREATE TABLE [dbo].[Cng016ConfigReporteador] (
     i_Cve_Config INT IDENTITY(1,1) NOT NULL,
     t_Clave VARCHAR(50) NOT NULL,
-    t_Valor VARCHAR(500) NOT NULL,
-    t_Descripcion VARCHAR(200) NULL,
-    t_Grupo VARCHAR(50) NULL, -- GENERAL, CORREO, RUTAS, CONEXIONES
-    i_Estatus INT NOT NULL DEFAULT 1, -- 1=Activa, 0=Inactiva
-    fh_Actualizacion DATETIME NOT NULL DEFAULT GETDATE(),
-    t_UsuarioActualizacion VARCHAR(50) NOT NULL,
-    CONSTRAINT PK_Cng016ConfigAutomatizacion PRIMARY KEY (i_Cve_Config),
-    CONSTRAINT UQ_Cng016ConfigAutomatizacion_Clave UNIQUE (t_Clave)
-);
+    t_Valor VARCHAR(500) NOT NULL CONSTRAINT DF_Cng016_Valor DEFAULT (''),
+    t_Descripcion VARCHAR(200) NOT NULL CONSTRAINT DF_Cng016_Descripcion DEFAULT (''),
+    t_TipoDato VARCHAR(20) NOT NULL CONSTRAINT DF_Cng016_Tipo DEFAULT ('STRING'), -- STRING, INT, BOOL, JSON
+    
+    i_Cve_Estado INT NOT NULL CONSTRAINT DF_Cng016_Estado DEFAULT (1),
+    f_Actualizacion DATETIME NOT NULL CONSTRAINT DF_Cng016_Actualizacion DEFAULT (GETDATE()),
+    t_UsuarioActualizacion VARCHAR(50) NOT NULL CONSTRAINT DF_Cng016_UsuarioActualizacion DEFAULT (''),
+    
+    CONSTRAINT PK_Cng016ConfigReporteador PRIMARY KEY CLUSTERED (i_Cve_Config ASC),
+    CONSTRAINT UQ_Cng016_Clave UNIQUE (t_Clave),
+    CONSTRAINT CK_Cng016_Estado CHECK (i_Cve_Estado IN (0, 1))
+) ON [PRIMARY]
 GO
 
--- Índice para búsqueda por grupo
-CREATE INDEX IX_Cng016ConfigAutomatizacion_Grupo 
-ON [dbo].[Cng016ConfigAutomatizacion] (t_Grupo);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Cng016_Clave ON [dbo].[Cng016ConfigReporteador] (t_Clave)
+GO
+CREATE NONCLUSTERED INDEX IX_Cng016_Grupo ON [dbo].[Cng016ConfigReporteador] (t_TipoDato)
 GO
 
--- =============================================
--- Tabla: Encabezado de Programación de Reportes
--- =============================================
-CREATE TABLE [dbo].[Enc016ProgramacionReportes] (
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Configuración global del módulo reporteador',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cng016ConfigReporteador';
+GO
+
+-- ===================================================================
+-- 4. PROGRAMACIÓN DE EJECUCIONES
+--    Define cuándo y con qué parámetros fijos se ejecuta una plantilla.
+-- ===================================================================
+CREATE TABLE [dbo].[Enc016ProgramacionReporteador] (
     i_Cve_Programacion INT IDENTITY(1,1) NOT NULL,
     i_Cve_Plantilla INT NOT NULL,
-    t_NombreProgramacion VARCHAR(150) NOT NULL,
-    t_Frecuencia CHAR(1) NOT NULL, -- D=Diaria, S=Semanal, M=Mensual, U=Única vez
-    t_DiasSemana VARCHAR(20) NULL, -- Para frecuencia semanal: 1,3,5 (Lunes, Miércoles, Viernes)
-    t_DiaMes INT NULL, -- Para frecuencia mensual: día del mes
-    t_HoraEjecucion TIME NOT NULL,
-    t_ParametrosFijosJSON NVARCHAR(MAX) NULL, -- Valores fijos para los parámetros de la plantilla
-    i_Estatus INT NOT NULL DEFAULT 1, -- 1=Activa, 0=Inactiva, 2=Pausada
-    fh_ProximaEjecucion DATETIME NULL,
-    fh_UltimaEjecucion DATETIME NULL,
-    fh_FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    t_UsuarioRegistro VARCHAR(50) NOT NULL,
-    fh_FechaModificacion DATETIME NULL,
+    
+    t_Nombre VARCHAR(150) NOT NULL,
+    t_Descripcion VARCHAR(500) NULL,
+    t_Frecuencia CHAR(1) NOT NULL,  -- 'U'=Única, 'D'=Diaria, 'S'=Semanal, 'M'=Mensual, 'P'=Personalizada
+    t_DiasSemana VARCHAR(20) NULL,  -- '1,3,5' = Lunes, Miércoles, Viernes (para frecuencia semanal)
+    i_DiaMes INT NULL,              -- Día del mes (para frecuencia mensual)
+    t_Hora TIME NOT NULL,
+    t_Parametros VARCHAR(MAX) NULL, -- JSON con valores fijos para los parámetros de la plantilla
+    i_MaximoIntentos INT NOT NULL CONSTRAINT DF_Enc016_Intentos DEFAULT (3),
+    
+    i_Cve_Estado INT NOT NULL CONSTRAINT DF_Enc016_EstadoProgramacion DEFAULT (1),
+    f_ProximaEjecucion DATETIME NULL,
+    f_UltimaEjecucion DATETIME NULL,
+    f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Enc016_FechaRegistroProgramacion DEFAULT (GETDATE()),
+    t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Enc016_UsuarioRegistroProgramacion DEFAULT (''),
+    f_FechaModificacion DATETIME NULL,
     t_UsuarioModificacion VARCHAR(50) NULL,
-    CONSTRAINT PK_Enc016ProgramacionReportes PRIMARY KEY (i_Cve_Programacion),
-    CONSTRAINT FK_Enc016ProgramacionReportes_Plantilla 
-        FOREIGN KEY (i_Cve_Plantilla) 
-        REFERENCES [dbo].[Cat016PlantillasReportes](i_Cve_Plantilla)
-        ON DELETE CASCADE
-);
+    
+    CONSTRAINT PK_Enc016ProgramacionReporteador PRIMARY KEY CLUSTERED (i_Cve_Programacion ASC),
+    CONSTRAINT FK_Enc016_PlantillaProgramacion FOREIGN KEY (i_Cve_Plantilla) 
+        REFERENCES [dbo].[Cat016PlantillasReporteador] (i_Cve_Plantilla),
+    CONSTRAINT CK_Enc016_Frecuencia CHECK (t_Frecuencia IN ('U', 'D', 'S', 'M', 'P')),
+    CONSTRAINT CK_Enc016_DiaSemana CHECK (t_DiasSemana IS NULL OR t_DiasSemana LIKE '[0-9]%' OR t_DiasSemana = ''),
+    CONSTRAINT CK_Enc016_DiaMes CHECK (i_DiaMes IS NULL OR (i_DiaMes BETWEEN 1 AND 31)),
+    CONSTRAINT CK_Enc016_EstadoProgramacion CHECK (i_Cve_Estado IN (0, 1))
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
--- Índice para búsqueda por plantilla
-CREATE INDEX IX_Enc016ProgramacionReportes_Plantilla 
-ON [dbo].[Enc016ProgramacionReportes] (i_Cve_Plantilla);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Enc016_ProximaEjecucion ON [dbo].[Enc016ProgramacionReporteador] (f_ProximaEjecucion) 
+    WHERE i_Cve_Estado = 1 AND f_ProximaEjecucion IS NOT NULL
+GO
+CREATE NONCLUSTERED INDEX IX_Enc016_PlantillaProgramacion ON [dbo].[Enc016ProgramacionReporteador] (i_Cve_Plantilla)
+GO
+CREATE NONCLUSTERED INDEX IX_Enc016_Frecuencia ON [dbo].[Enc016ProgramacionReporteador] (t_Frecuencia)
+GO
+CREATE NONCLUSTERED INDEX IX_Enc016_Estado ON [dbo].[Enc016ProgramacionReporteador] (i_Cve_Estado)
 GO
 
--- Índice para próximas ejecuciones (optimización del scheduler)
-CREATE INDEX IX_Enc016ProgramacionReportes_ProximaEjecucion 
-ON [dbo].[Enc016ProgramacionReportes] (fh_ProximaEjecucion) 
-WHERE i_Estatus = 1;
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Programaciones de ejecución de reportes',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador';
 GO
 
--- =============================================
--- Tabla: Detalle de Destinatarios de Reportes
--- =============================================
-CREATE TABLE [dbo].[Det016DestinatariosReportes] (
+-- DESCRIPCIONES DE COLUMNAS
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave única de la programación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Programacion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave de la plantilla asociada (FK)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Plantilla';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Frecuencia de ejecución: U=Única, D=Diaria, S=Semanal, M=Mensual, P=Personalizada', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Frecuencia';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Días de la semana (1=Domingo, 2=Lunes, ..., 7=Sábado) en formato "1,3,5"', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_DiasSemana';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Día del mes (1-31) para frecuencia mensual', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_DiaMes';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Hora de ejecución', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Hora';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Número máximo de intentos en caso de fallo', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_MaximoIntentos';
+GO
+
+-- ===================================================================
+-- 5. DESTINATARIOS POR PROGRAMACIÓN
+--    Correos electrónicos que recibirán el reporte (éxito) o alertas (error).
+--    Manejo explícito de cadenas vacías vs NULL.
+-- ===================================================================
+CREATE TABLE [dbo].[Det016DestinatariosReporteador] (
     i_Cve_Destinatario INT IDENTITY(1,1) NOT NULL,
     i_Cve_Programacion INT NOT NULL,
-    t_NombreDestinatario VARCHAR(150) NULL,
+    
+    t_Nombre VARCHAR(150) NOT NULL CONSTRAINT DF_Det016_Nombre DEFAULT (''),
     t_Correo VARCHAR(200) NOT NULL,
-    t_TipoDestino CHAR(1) NOT NULL DEFAULT 'T', -- T=To, C=CC, B=BCC
-    t_TipoNotificacion CHAR(1) NOT NULL DEFAULT 'A', -- A=Ambos, E=Éxito, F=Fallo
-    i_Orden INT NOT NULL DEFAULT 0,
-    i_Estatus INT NOT NULL DEFAULT 1, -- 1=Activo, 0=Inactivo
-    fh_FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    t_UsuarioRegistro VARCHAR(50) NOT NULL,
-    CONSTRAINT PK_Det016DestinatariosReportes PRIMARY KEY (i_Cve_Destinatario),
-    CONSTRAINT FK_Det016DestinatariosReportes_Programacion 
-        FOREIGN KEY (i_Cve_Programacion) 
-        REFERENCES [dbo].[Enc016ProgramacionReportes](i_Cve_Programacion)
-        ON DELETE CASCADE
-);
+    t_TipoDestino CHAR(1) NOT NULL,  -- 'P' = Para, 'C' = CC, 'O' = CCO
+    t_TipoNotificacion CHAR(1) NOT NULL, -- 'E' = Éxito, 'F' = Fallo, 'A' = Ambos
+    i_Orden INT NOT NULL CONSTRAINT DF_Det016_Orden DEFAULT (1),
+    
+    i_Cve_Estado INT NOT NULL CONSTRAINT DF_Det016_Estado DEFAULT (1),
+    f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Det016_FechaRegistro DEFAULT (GETDATE()),
+    t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Det016_UsuarioRegistro DEFAULT (''),
+    f_FechaModificacion DATETIME NULL,
+    t_UsuarioModificacion VARCHAR(50) NULL,
+    
+    CONSTRAINT PK_Det016DestinatariosReporteador PRIMARY KEY CLUSTERED (i_Cve_Destinatario ASC),
+    CONSTRAINT FK_Det016_Programacion FOREIGN KEY (i_Cve_Programacion) 
+        REFERENCES [dbo].[Enc016ProgramacionReporteador] (i_Cve_Programacion),
+    CONSTRAINT CK_Det016_TipoDestino CHECK (t_TipoDestino IN ('P', 'C', 'O')),
+    CONSTRAINT CK_Det016_TipoNotificacion CHECK (t_TipoNotificacion IN ('E', 'F', 'A')),
+    CONSTRAINT CK_Det016_Estado CHECK (i_Cve_Estado IN (0, 1)),
+    CONSTRAINT CK_Det016_Correo CHECK (t_Correo LIKE '%_@__%.__%') -- Validación básica de email
+) ON [PRIMARY]
 GO
 
--- Índice para búsqueda por programación
-CREATE INDEX IX_Det016DestinatariosReportes_Programacion 
-ON [dbo].[Det016DestinatariosReportes] (i_Cve_Programacion);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Det016_Programacion ON [dbo].[Det016DestinatariosReporteador] (i_Cve_Programacion)
+GO
+CREATE NONCLUSTERED INDEX IX_Det016_Correo ON [dbo].[Det016DestinatariosReporteador] (t_Correo)
+GO
+CREATE NONCLUSTERED INDEX IX_Det016_TipoDestino ON [dbo].[Det016DestinatariosReporteador] (t_TipoDestino)
 GO
 
--- =============================================
--- Tabla: Bitácora de Ejecuciones de Reportes
--- =============================================
-CREATE TABLE [dbo].[Bit016EjecucionesReportes] (
-    i_Cve_Ejecucion INT IDENTITY(1,1) NOT NULL,
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Destinatarios de correo por programación de reporte',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Det016DestinatariosReporteador';
+GO
+
+-- ===================================================================
+-- 6. BITÁCORA DE GENERACIONES
+--    Registro histórico de cada ejecución del reporteador.
+--    Aquí NO se usa DEFAULT '' en t_Error; se usa NULL para indicar "sin error".
+-- ===================================================================
+CREATE TABLE [dbo].[Bit016GeneracionReporteador] (
+    i_Cve_Generacion INT IDENTITY(1,1) NOT NULL,
     i_Cve_Programacion INT NOT NULL,
-    fh_InicioEjecucion DATETIME NOT NULL DEFAULT GETDATE(),
-    fh_FinEjecucion DATETIME NULL,
-    t_Estatus VARCHAR(20) NOT NULL, -- EXITO, ERROR, ADVERTENCIA, VALIDACION_FALLIDA
-    i_RegistrosProcesados INT NULL,
-    t_RutaDocumento VARCHAR(500) NULL, -- Ruta del archivo generado
-    t_IDDocumentoPaperless VARCHAR(50) NULL, -- ID en el sistema Paperless
-    t_ErrorDetalle TEXT NULL,
-    t_ParametrosUsadosJSON NVARCHAR(MAX) NULL, -- Parámetros usados en esta ejecución
-    fh_FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT PK_Bit016EjecucionesReportes PRIMARY KEY (i_Cve_Ejecucion),
-    CONSTRAINT FK_Bit016EjecucionesReportes_Programacion 
-        FOREIGN KEY (i_Cve_Programacion) 
-        REFERENCES [dbo].[Enc016ProgramacionReportes](i_Cve_Programacion)
-        ON DELETE CASCADE
-);
+    
+    f_FechaInicio DATETIME NOT NULL CONSTRAINT DF_Bit016_FechaInicio DEFAULT (GETDATE()),
+    f_FechaFin DATETIME NULL,
+    t_Estatus VARCHAR(20) NOT NULL,  -- 'PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA'
+    i_RegistrosProcesados INT NOT NULL CONSTRAINT DF_Bit016_Registros DEFAULT (0),
+    i_FilasAfectadas INT NULL,       -- Para reportes con INSERT/UPDATE
+    t_RutaDocumento VARCHAR(500) NULL,
+    t_IdDocumento VARCHAR(50) NULL,  -- ID en Paperless / KromBase
+    t_Error TEXT NULL,               -- NULL = sin error
+    t_ParametrosUsados VARCHAR(MAX) NULL,  -- JSON con los parámetros reales usados en esta ejecución
+    t_Trazabilidad VARCHAR(MAX) NULL,       -- JSON con tiempos por fase (consulta, validación, generación)
+    
+    CONSTRAINT PK_Bit016GeneracionReporteador PRIMARY KEY CLUSTERED (i_Cve_Generacion ASC),
+    CONSTRAINT FK_Bit016_Programacion FOREIGN KEY (i_Cve_Programacion) 
+        REFERENCES [dbo].[Enc016ProgramacionReporteador] (i_Cve_Programacion),
+    CONSTRAINT CK_Bit016_Estatus CHECK (t_Estatus IN ('PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA'))
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
--- Índice para búsqueda por programación
-CREATE INDEX IX_Bit016EjecucionesReportes_Programacion 
-ON [dbo].[Bit016EjecucionesReportes] (i_Cve_Programacion);
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX IX_Bit016_ProgramacionFecha ON [dbo].[Bit016GeneracionReporteador] (i_Cve_Programacion, f_FechaInicio)
+GO
+CREATE NONCLUSTERED INDEX IX_Bit016_Estatus ON [dbo].[Bit016GeneracionReporteador] (t_Estatus)
+GO
+CREATE NONCLUSTERED INDEX IX_Bit016_FechaInicio ON [dbo].[Bit016GeneracionReporteador] (f_FechaInicio)
+GO
+CREATE NONCLUSTERED INDEX IX_Bit016_FechaFin ON [dbo].[Bit016GeneracionReporteador] (f_FechaFin)
 GO
 
--- Índice para búsqueda por fecha (reportes históricos)
-CREATE INDEX IX_Bit016EjecucionesReportes_Fecha 
-ON [dbo].[Bit016EjecucionesReportes] (fh_InicioEjecucion);
+-- DESCRIPCIÓN DE TABLA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Bitácora de generaciones de reportes',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador';
 GO
 
--- Índice para búsqueda por estatus
-CREATE INDEX IX_Bit016EjecucionesReportes_Estatus 
-ON [dbo].[Bit016EjecucionesReportes] (t_Estatus);
+-- DESCRIPCIONES DE COLUMNAS
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave única de la generación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Generacion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave de la programación asociada (FK)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Programacion';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Estatus de la ejecución: PROCESANDO, COMPLETADO, FALLIDO, VALIDACION_FALLIDA', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_Estatus';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Ruta del documento generado', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_RutaDocumento';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'ID del documento en Paperless', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_IdDocumento';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Detalle del error (NULL = sin error)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_Error';
 GO
 
--- =============================================
--- Datos iniciales de configuración
--- =============================================
-INSERT INTO [dbo].[Cng016ConfigAutomatizacion] 
-    (t_Clave, t_Valor, t_Descripcion, t_Grupo, t_UsuarioActualizacion)
+-- ===================================================================
+-- 7. DATOS INICIALES (MÍNIMOS PARA OPERACIÓN)
+-- ===================================================================
+INSERT INTO [dbo].[Cng016ConfigReporteador] (t_Clave, t_Valor, t_Descripcion, t_TipoDato, t_UsuarioActualizacion)
 VALUES
-    -- CONFIGURACIÓN DE CORREO
-    ('SMTP_SERVER', 'smtp.corporativo.com', 'Servidor SMTP para envío de correos', 'CORREO', 'SISTEMA'),
-    ('SMTP_PORT', '587', 'Puerto SMTP', 'CORREO', 'SISTEMA'),
-    ('SMTP_USER', 'reportes@krom.com', 'Usuario SMTP', 'CORREO', 'SISTEMA'),
-    ('SMTP_SSL', '1', 'Usar SSL (1=Sí, 0=No)', 'CORREO', 'SISTEMA'),
-    ('CORREO_REMITENTE', 'reportes@krom.com', 'Correo remitente por defecto', 'CORREO', 'SISTEMA'),
-    
-    -- RUTAS DEL SISTEMA
-    ('RUTA_REPORTES', '\\servidor\reportes\', 'Ruta base para guardar reportes', 'RUTAS', 'SISTEMA'),
-    ('RUTA_TEMPORAL', 'C:\Temp\Reportes\', 'Ruta para archivos temporales', 'RUTAS', 'SISTEMA'),
-    ('RETENCION_DIAS', '90', 'Días de retención de reportes generados', 'RUTAS', 'SISTEMA'),
-    
-    -- CONFIGURACIÓN GENERAL
-    ('TIEMPO_MAX_EJECUCION', '300', 'Tiempo máximo de ejecución en segundos', 'GENERAL', 'SISTEMA'),
-    ('HORA_INICIO_SCHEDULER', '06:00', 'Hora de inicio del scheduler', 'GENERAL', 'SISTEMA'),
-    ('HORA_FIN_SCHEDULER', '22:00', 'Hora de fin del scheduler', 'GENERAL', 'SISTEMA'),
-    ('LOG_LEVEL', 'INFO', 'Nivel de log (DEBUG, INFO, WARN, ERROR)', 'GENERAL', 'SISTEMA'),
-    
-    -- INTEGRACIÓN CON PAPERLESS
-    ('PAPERLESS_URL', 'http://paperless/api', 'URL de API de Paperless', 'INTEGRACION', 'SISTEMA'),
-    ('PAPERLESS_API_KEY', '', 'API Key para Paperless', 'INTEGRACION', 'SISTEMA');
+    ('RUTA_DOCUMENTOS_TEMP', 'C:\Temp\Reporteador', 'Ruta temporal para generación de archivos', 'STRING', 'SISTEMA'),
+    ('RUTA_DOCUMENTOS_FINAL', '\\servidor\reportes', 'Ruta final para almacenamiento', 'STRING', 'SISTEMA'),
+    ('TIEMPO_MAXIMO_EJECUCION_SEG', '300', 'Tiempo máximo de ejecución por reporte (segundos)', 'INT', 'SISTEMA'),
+    ('REGISTROS_MAXIMOS_EXCEL', '100000', 'Límite de registros para exportación a Excel', 'INT', 'SISTEMA'),
+    ('INTEGRACION_PAPERLESS', '1', 'Activar integración con Paperless (1=SI, 0=NO)', 'BOOL', 'SISTEMA'),
+    ('SMTP_SERVIDOR', 'smtp.krom.com.mx', 'Servidor SMTP para envío de correos', 'STRING', 'SISTEMA'),
+    ('SMTP_PUERTO', '587', 'Puerto SMTP', 'INT', 'SISTEMA'),
+    ('SMTP_SSL', '1', 'Usar SSL (1=SI, 0=NO)', 'BOOL', 'SISTEMA'),
+    ('SMTP_USUARIO', 'reporteador@krom.com.mx', 'Usuario SMTP', 'STRING', 'SISTEMA'),
+    ('SMTP_PASSWORD_ENCRIPTADO', '', 'Contraseña encriptada SMTP', 'STRING', 'SISTEMA'),
+    ('CORREO_EMISOR', 'reporteador@krom.com.mx', 'Cuenta remitente para correos', 'STRING', 'SISTEMA')
 GO
 
--- =============================================
--- Comentarios descriptivos de las tablas
--- =============================================
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Catálogo de plantillas de reportes con consultas SQL y configuración de formato',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Cat016PlantillasReportes';
+-- ===================================================================
+-- 8. VISTA ÚTIL: Programaciones activas con próxima ejecución
+-- ===================================================================
+CREATE VIEW [dbo].[Vig016ProgramacionesPendientes] AS
+SELECT 
+    p.i_Cve_Programacion,
+    p.t_Nombre,
+    p.t_Frecuencia,
+    p.t_Hora,
+    p.f_ProximaEjecucion,
+    pl.i_Cve_Plantilla,
+    pl.t_Nombre AS t_NombrePlantilla,
+    pl.t_Consulta,
+    pl.t_Columnas,
+    pl.t_Parametros
+FROM [dbo].[Enc016ProgramacionReporteador] p
+INNER JOIN [dbo].[Cat016PlantillasReporteador] pl ON p.i_Cve_Plantilla = pl.i_Cve_Plantilla
+WHERE p.i_Cve_Estado = 1 
+AND pl.i_Cve_Estado = 1
+AND p.f_ProximaEjecucion IS NOT NULL
+AND p.f_ProximaEjecucion <= GETDATE()
 GO
 
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Encabezado de validaciones aplicables a cada plantilla de reporte',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Enc016ValidacionesReportes';
+-- DESCRIPCIÓN DE VISTA
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Vista de programaciones activas listas para ejecutar',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'Vig016ProgramacionesPendientes';
 GO
 
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Configuración global del sistema de automatización de reportes',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Cng016ConfigAutomatizacion';
-GO
-
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Encabezado de programaciones de ejecución de reportes',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReportes';
-GO
-
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Detalle de destinatarios por programación de reporte',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Det016DestinatariosReportes';
-GO
-
-EXEC sp_addextendedproperty 
-    @name = N'MS_Description', 
-    @value = N'Bitácora de ejecuciones realizadas por el sistema',
-    @level0type = N'SCHEMA', @level0name = N'dbo', 
-    @level1type = N'TABLE', @level1name = N'Bit016EjecucionesReportes';
-GO
-
-PRINT 'Base de datos del Generador de Reportes Automatizados creada exitosamente.';
-PRINT 'Tablas creadas: 6';
-PRINT 'Índices creados: 12';
-PRINT 'Configuraciones iniciales insertadas: 15';
+-- ===================================================================
+-- 9. RESUMEN DE CREACIÓN
+-- ===================================================================
+PRINT '========================================================='
+PRINT 'MÓDULO REPORTEADOR KROM - FAMILIA 016'
+PRINT '========================================================='
+PRINT 'Tablas creadas: 6'
+PRINT 'Índices creados: 18'
+PRINT 'Restricciones: 30+'
+PRINT 'Descripciones de tabla: 6'
+PRINT 'Descripciones de columna: 25+'
+PRINT 'Configuraciones iniciales: 11'
+PRINT 'Vistas creadas: 1'
+PRINT '========================================================='
+PRINT 'Script ejecutado exitosamente.'
+PRINT '========================================================='
 GO

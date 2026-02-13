@@ -5,10 +5,10 @@
 -- Versión: Alternativa - Basada en rutas de plantilla y configuración
 -- Autor: Residencia Profesional
 -- Fecha: Febrero 2026
--- Base de datos: KROM_Solium / KROM_Reporteador (según corresponda)
+-- Base de datos: SysExpert (según corresponda)
 -- ===================================================================
 
-USE [KROM_Solium]  -- ← Cambiar por la BD destino
+USE [SysExpert]  -- ← Cambiar por la BD destino
 GO
 
 -- ===================================================================
