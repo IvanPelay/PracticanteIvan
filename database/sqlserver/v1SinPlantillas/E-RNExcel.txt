@@ -1,7 +1,6 @@
 erDiagram
     Cat016PlantillasReporteador ||--o{ Enc016ProgramacionReporteador : "programa"
     Cat016PlantillasReporteador ||--o{ Enc016ValidacionesReporteador : "tiene_validaciones"
-    Enc016ProgramacionReporteador ||--o{ Det016DestinatariosReporteador : "tiene_destinatarios"
     Enc016ProgramacionReporteador ||--o{ Bit016GeneracionReporteador : "registra_generaciones"
     
     Cat016PlantillasReporteador {
@@ -11,9 +10,10 @@ erDiagram
         varchar(10) t_FormatoSalida
         varchar(max) t_Columnas
         varchar(max) t_Parametros
-        int i_Cve_Estado
         datetime f_FechaRegistro
         varchar(50) t_UsuarioRegistro
+        int i_Cve_Status
+        int i_Cve_Estado
     }
     
     Enc016ValidacionesReporteador {
@@ -22,19 +22,10 @@ erDiagram
         varchar(50) t_Tipo
         nvarchar(max) t_Configuracion
         int i_Orden
-        int i_Cve_Estado
         datetime f_FechaRegistro
         varchar(50) t_UsuarioRegistro
-    }
-    
-    Cng016ConfigReporteador {
-        int i_Cve_Config PK
-        varchar(50) t_Clave
-        varchar(500) t_Valor
-        varchar(200) t_Descripcion
+        int i_Cve_Status
         int i_Cve_Estado
-        datetime f_Actualizacion
-        varchar(50) t_UsuarioActualizacion
     }
     
     Enc016ProgramacionReporteador {
@@ -44,24 +35,12 @@ erDiagram
         char(1) t_Frecuencia
         time t_Hora
         varchar(max) t_Parametros
-        int i_Cve_Estado
         datetime f_ProximaEjecucion
         datetime f_UltimaEjecucion
         datetime f_FechaRegistro
         varchar(50) t_UsuarioRegistro
-    }
-    
-    Det016DestinatariosReporteador {
-        int i_Cve_Destinatario PK
-        int i_Cve_Programacion FK
-        varchar(150) t_Nombre
-        varchar(200) t_Correo
-        char(1) t_TipoDestino
-        char(1) t_TipoNotificacion
-        int i_Orden
+        int i_Cve_Status
         int i_Cve_Estado
-        datetime f_FechaRegistro
-        varchar(50) t_UsuarioRegistro
     }
     
     Bit016GeneracionReporteador {
@@ -76,4 +55,6 @@ erDiagram
         text t_Error
         varchar(max) t_ParametrosUsados
         datetime f_FechaRegistro
+        int i_Cve_Status
+        int i_Cve_Estado
     }
