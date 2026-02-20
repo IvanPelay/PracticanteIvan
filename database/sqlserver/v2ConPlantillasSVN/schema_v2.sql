@@ -24,9 +24,11 @@ CREATE TABLE [dbo].[Cat016PlantillasReporteador] (
     
     -- Datos generales
     t_Nombre VARCHAR(200) NOT NULL,
+    t_Descripcion VARCHAR(500) NULL,
     t_RutaPlantilla VARCHAR(500) NOT NULL,
     t_NombreBaseDatos VARCHAR(100) NOT NULL,
-    t_Consulta TEXT NOT NULL,
+    t_Consulta NVARCHAR(MAX) NOT NULL,
+    t_ColumnasConfig VARCHAR(MAX) NULL,
     t_ParametrosConfig VARCHAR(MAX) NULL,      -- JSON con parámetros esperados (nombre, tipo, default, etc.)
     t_FormatoSalida VARCHAR(10) NOT NULL CONSTRAINT DF_Cat016_FormatoSalida DEFAULT ('XLSX'),
     
@@ -66,13 +68,17 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave única d
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Plantilla';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Nombre descriptivo de la plantilla', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Nombre';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Breve descripción de la plantilla', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Descripcion';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Ruta física o lógica de la plantilla de reporte (archivo .rdl, .jrxml, etc.)', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_RutaPlantilla';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Nombre de la base de datos contra la que se ejecutará la consulta', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_NombreBaseDatos';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Consulta SQL que obtiene los datos del reporte', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_Consulta';
-EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con configuración de parámetros (nombre, tipo, valor por defecto, etc.)', 
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con configuración de Campos del Reporte Ejemplo {"campo":"NumeroReferencia","titulo":"Referencia"},{"campo":"Pago","titulo":"Fecha Pago"}',
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_ColumnasConfig';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con configuración de parámetros Ejemplo {"nombre":"@FechaInicio","tipo":"DATE"},{"nombre":"@RFC","tipo":"VARCHAR"}', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_ParametrosConfig';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Formato de archivo de salida: XLSX, XLS, CSV, PDF', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_FormatoSalida';
@@ -151,6 +157,7 @@ CREATE TABLE [dbo].[Enc016ProgramacionReporteador] (
     i_Cve_Plantilla INT NOT NULL,
     
     t_Nombre VARCHAR(150) NOT NULL,
+    t_Descripcion VARCHAR(500) NULL,
     t_Frecuencia CHAR(1) NOT NULL,  -- 'U'=Única, 'D'=Diaria, 'S'=Semanal, 'M'=Mensual
     t_DiasSemana VARCHAR(20) NULL,  -- '1,3,5' = Lunes, Miércoles, Viernes (para frecuencia semanal)
     i_DiaMes INT NULL,              -- Día del mes (para frecuencia mensual)
@@ -200,6 +207,8 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Clave de la pl
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Plantilla';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Nombre de la programación', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Nombre';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Breve descripcion de la programación', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Descripcion';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Frecuencia de ejecución: U=Única, D=Diaria, S=Semanal, M=Mensual', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Frecuencia';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Días de la semana (1=Domingo, 2=Lunes, ..., 7=Sábado) en formato "1,3,5"', 

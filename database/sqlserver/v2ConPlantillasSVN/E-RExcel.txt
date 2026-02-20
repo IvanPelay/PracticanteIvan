@@ -6,9 +6,11 @@ erDiagram
     Cat016PlantillasReporteador {
         int i_Cve_Plantilla PK
         varchar(200) t_Nombre
+        varchar(500) t_Descripcion
         varchar(500) t_RutaPlantilla
         varchar(100) t_NombreBaseDatos
-        text t_Consulta
+        nvarchar(max) t_Consulta
+        varchar(max) t_ColumnasConfig
         varchar(max) t_ParametrosConfig
         varchar(10) t_FormatoSalida
         datetime f_FechaRegistro
@@ -33,6 +35,7 @@ erDiagram
         int i_Cve_Programacion PK
         int i_Cve_Plantilla FK
         varchar(150) t_Nombre
+        varchar(500) t_Descripcion
         char(1) t_Frecuencia
         varchar(20) t_DiasSemana
         int t_DiaMes
