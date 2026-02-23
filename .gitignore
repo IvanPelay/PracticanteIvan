@@ -21,3 +21,31 @@ git-test/
 # Archivos del sistema
 Thumbs.db
 .DS_Store
+
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Resultados de compilación
+bin/
+obj/
+
+# Paquetes NuGet
+packages/
+*.nupkg
+
+# Archivos de configuración específicos del entorno
+appsettings.Development.json
+appsettings.Production.json
+
+# Archivos de migración de Entity Framework (si usas EF)
+Migrations/*.Designer.cs
+Migrations/*.resx
+
+# Archivos de caché de Roslyn (el compilador de C#)
+*.crashreport.json
+*.ide-settings
