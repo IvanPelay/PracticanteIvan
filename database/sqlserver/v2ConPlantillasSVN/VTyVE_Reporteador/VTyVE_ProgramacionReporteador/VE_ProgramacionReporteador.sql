@@ -29,7 +29,7 @@ SELECT * FROM (
     UNION ALL
     SELECT 't_UsuarioRegistro' as Nombre, 0 AS Llave, 50 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Usuario Registro' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
-    SELECT 't_Status' as Nombre, 0 AS Llave, 10 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Status' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
+    SELECT 't_Estatus' as Nombre, 0 AS Llave, 10 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Estatus' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
     SELECT 't_Estado' as Nombre, 0 AS Llave, 10 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Estado' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
 ) AS VE
