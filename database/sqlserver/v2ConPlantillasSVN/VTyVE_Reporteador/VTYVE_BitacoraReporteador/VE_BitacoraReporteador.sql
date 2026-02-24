@@ -15,7 +15,7 @@ SELECT * FROM (
     UNION ALL
     SELECT 'f_FechaFin' as Nombre, 0 AS Llave, 23 AS Longitud, 4 AS TipoDato, 1 AS Visible, 'Fin' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
-    SELECT 't_Estatus' as Nombre, 0 AS Llave, 20 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Estado' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
+    SELECT 't_Proceso' as Nombre, 0 AS Llave, 20 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Proceso' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
     SELECT 'i_RegistrosProcesados' as Nombre, 0 AS Llave, 11 AS Longitud, 0 AS TipoDato, 1 AS Visible, 'Registros' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL

@@ -9,7 +9,7 @@ SELECT
     pl.t_Nombre AS t_NombrePlantilla,
     b.f_FechaInicio,
     b.f_FechaFin,
-    b.t_Estatus,
+    b.t_Proceso,
     b.i_RegistrosProcesados,
     b.t_RutaDocumento,
     b.t_IdDocumento,

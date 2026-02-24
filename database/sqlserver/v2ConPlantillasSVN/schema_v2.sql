@@ -35,13 +35,13 @@ CREATE TABLE [dbo].[Cat016PlantillasReporteador] (
     -- Estado y auditoría
     f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Cat016_FechaRegistro DEFAULT (GETDATE()),
     t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Cat016_UsuarioRegistro DEFAULT (''),
-    i_Cve_Status INT NOT NULL CONSTRAINT DF_Cat016_Status DEFAULT (1),
+    i_Cve_Estatus INT NOT NULL CONSTRAINT DF_Cat016_Estatus DEFAULT (1),
     i_Cve_Estado INT NOT NULL CONSTRAINT DF_Cat016_Estado DEFAULT (1),
     
     -- Restricciones
     CONSTRAINT PK_Cat016PlantillasReporteador PRIMARY KEY CLUSTERED (i_Cve_Plantilla ASC),
     CONSTRAINT CK_Cat016_Formato CHECK (t_FormatoSalida IN ('XLSX', 'XLS', 'CSV', 'PDF')),
-    CONSTRAINT CK_Cat016_Status CHECK (i_Cve_Status IN (0, 1)),  -- 0 = Inactivo, 1 = Activo
+    CONSTRAINT CK_Cat016_Estatus CHECK (i_Cve_Estatus IN (0, 1)),  -- 0 = Inactivo, 1 = Activo
     CONSTRAINT CK_Cat016_Estado CHECK (i_Cve_Estado IN (0, 1))   -- 0 = Inactivo, 1 = Activo
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -49,7 +49,7 @@ GO
 -- ÍNDICES
 CREATE NONCLUSTERED INDEX IX_Cat016_Nombre ON [dbo].[Cat016PlantillasReporteador] (t_Nombre) WHERE i_Cve_Estado = 1
 GO
-CREATE NONCLUSTERED INDEX IX_Cat016_Status ON [dbo].[Cat016PlantillasReporteador] (i_Cve_Status)
+CREATE NONCLUSTERED INDEX IX_Cat016_Estatus ON [dbo].[Cat016PlantillasReporteador] (i_Cve_Estatus)
 GO
 CREATE NONCLUSTERED INDEX IX_Cat016_Estado ON [dbo].[Cat016PlantillasReporteador] (i_Cve_Estado)
 GO
@@ -86,8 +86,8 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Fecha de regis
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'f_FechaRegistro';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Usuario que registró la plantilla', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N't_UsuarioRegistro';
-EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Status: 1=Activo, 0=Inactivo (para borrado lógico)', 
-    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Status';
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Estatus: 1=Activo, 0=Inactivo (para borrado lógico)', 
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Estatus';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Estado: 1=Activo, 0=Inactivo (para borrado de sistema)', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Cat016PlantillasReporteador', @level2type = N'COLUMN', @level2name = N'i_Cve_Estado';
 GO
@@ -107,13 +107,13 @@ CREATE TABLE [dbo].[Enc016ValidacionesReporteador] (
     
     f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Enc016_FechaRegistro DEFAULT (GETDATE()),
     t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Enc016_UsuarioRegistro DEFAULT (''),
-    i_Cve_Status INT NOT NULL CONSTRAINT DF_Enc016_Status DEFAULT (1),
+    i_Cve_Estatus INT NOT NULL CONSTRAINT DF_Enc016_Estatus DEFAULT (1),
     i_Cve_Estado INT NOT NULL CONSTRAINT DF_Enc016_Estado DEFAULT (1),
     
     CONSTRAINT PK_Enc016ValidacionesReporteador PRIMARY KEY CLUSTERED (i_Cve_Validacion ASC),
     CONSTRAINT FK_Enc016_Plantilla FOREIGN KEY (i_Cve_Plantilla) 
         REFERENCES [dbo].[Cat016PlantillasReporteador] (i_Cve_Plantilla),
-    CONSTRAINT CK_Enc016_Status CHECK (i_Cve_Status IN (0, 1)),
+    CONSTRAINT CK_Enc016_Estatus CHECK (i_Cve_Estatus IN (0, 1)),
     CONSTRAINT CK_Enc016_Estado CHECK (i_Cve_Estado IN (0, 1))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -125,7 +125,7 @@ CREATE NONCLUSTERED INDEX IX_Enc016_Tipo ON [dbo].[Enc016ValidacionesReporteador
 GO
 CREATE NONCLUSTERED INDEX IX_Enc016_Orden ON [dbo].[Enc016ValidacionesReporteador] (i_Orden)
 GO
-CREATE NONCLUSTERED INDEX IX_Enc016_Status ON [dbo].[Enc016ValidacionesReporteador] (i_Cve_Status)
+CREATE NONCLUSTERED INDEX IX_Enc016_Estatus ON [dbo].[Enc016ValidacionesReporteador] (i_Cve_Estatus)
 GO
 CREATE NONCLUSTERED INDEX IX_Enc016_Fecha ON [dbo].[Enc016ValidacionesReporteador] (f_FechaRegistro)
 GO
@@ -168,7 +168,7 @@ CREATE TABLE [dbo].[Enc016ProgramacionReporteador] (
     f_UltimaEjecucion DATETIME NULL,
     f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Enc016_FechaRegistroProgramacion DEFAULT (GETDATE()),
     t_UsuarioRegistro VARCHAR(50) NOT NULL CONSTRAINT DF_Enc016_UsuarioRegistroProgramacion DEFAULT (''),
-    i_Cve_Status INT NOT NULL CONSTRAINT DF_Enc016_StatusProgramacion DEFAULT (1),
+    i_Cve_Estatus INT NOT NULL CONSTRAINT DF_Enc016_EstatusProgramacion DEFAULT (1),
     i_Cve_Estado INT NOT NULL CONSTRAINT DF_Enc016_EstadoProgramacion DEFAULT (1),
     
     CONSTRAINT PK_Enc016ProgramacionReporteador PRIMARY KEY CLUSTERED (i_Cve_Programacion ASC),
@@ -177,7 +177,7 @@ CREATE TABLE [dbo].[Enc016ProgramacionReporteador] (
     CONSTRAINT CK_Enc016_Frecuencia CHECK (t_Frecuencia IN ('U', 'D', 'S', 'M')),
     CONSTRAINT CK_Enc016_DiaSemana CHECK (t_DiasSemana IS NULL OR t_DiasSemana LIKE '[0-9]%' OR t_DiasSemana = ''),
     CONSTRAINT CK_Enc016_DiaMes CHECK (i_DiaMes IS NULL OR (i_DiaMes BETWEEN 1 AND 31)),
-    CONSTRAINT CK_Enc016_StatusProgramacion CHECK (i_Cve_Status IN (0, 1)),
+    CONSTRAINT CK_Enc016_EstatusProgramacion CHECK (i_Cve_Estatus IN (0, 1)),
     CONSTRAINT CK_Enc016_EstadoProgramacion CHECK (i_Cve_Estado IN (0, 1))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -190,7 +190,7 @@ CREATE NONCLUSTERED INDEX IX_Enc016_PlantillaProgramacion ON [dbo].[Enc016Progra
 GO
 CREATE NONCLUSTERED INDEX IX_Enc016_Frecuencia ON [dbo].[Enc016ProgramacionReporteador] (t_Frecuencia)
 GO
-CREATE NONCLUSTERED INDEX IX_Enc016_Status ON [dbo].[Enc016ProgramacionReporteador] (i_Cve_Status)
+CREATE NONCLUSTERED INDEX IX_Enc016_Estatus ON [dbo].[Enc016ProgramacionReporteador] (i_Cve_Estatus)
 GO
 CREATE NONCLUSTERED INDEX IX_Enc016_Estado ON [dbo].[Enc016ProgramacionReporteador] (i_Cve_Estado)
 GO
@@ -235,7 +235,7 @@ CREATE TABLE [dbo].[Bit016GeneracionReporteador] (
     
     f_FechaInicio DATETIME NOT NULL CONSTRAINT DF_Bit016_FechaInicio DEFAULT (GETDATE()),
     f_FechaFin DATETIME NULL,
-    t_Estatus VARCHAR(20) NOT NULL,  -- 'PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA'
+    t_Proceso VARCHAR(20) NOT NULL,  -- 'PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA'
     i_RegistrosProcesados INT NOT NULL CONSTRAINT DF_Bit016_Registros DEFAULT (0),
     t_RutaDocumento VARCHAR(500) NULL,
     t_IdDocumento VARCHAR(50) NULL,
@@ -243,14 +243,14 @@ CREATE TABLE [dbo].[Bit016GeneracionReporteador] (
     t_ParametrosUsados VARCHAR(MAX) NULL,  -- JSON con los parámetros reales usados en esta ejecución
     
     f_FechaRegistro DATETIME NOT NULL CONSTRAINT DF_Bit016_FechaRegistro DEFAULT (GETDATE()),
-    i_Cve_Status INT NOT NULL CONSTRAINT DF_Bit016_Status DEFAULT (1),
+    i_Cve_Estatus INT NOT NULL CONSTRAINT DF_Bit016_Estatus DEFAULT (1),
     i_Cve_Estado INT NOT NULL CONSTRAINT DF_Bit016_Estado DEFAULT (1),
     
     CONSTRAINT PK_Bit016GeneracionReporteador PRIMARY KEY CLUSTERED (i_Cve_Generacion ASC),
     CONSTRAINT FK_Bit016_Programacion FOREIGN KEY (i_Cve_Programacion) 
         REFERENCES [dbo].[Enc016ProgramacionReporteador] (i_Cve_Programacion),
-    CONSTRAINT CK_Bit016_Estatus CHECK (t_Estatus IN ('PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA')),
-    CONSTRAINT CK_Bit016_Status CHECK (i_Cve_Status IN (0, 1)),
+    CONSTRAINT CK_Bit016_Proceso CHECK (t_Proceso IN ('PROCESANDO', 'COMPLETADO', 'FALLIDO', 'VALIDACION_FALLIDA')),
+    CONSTRAINT CK_Bit016_Estatus CHECK (i_Cve_Estatus IN (0, 1)),
     CONSTRAINT CK_Bit016_Estado CHECK (i_Cve_Estado IN (0, 1))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -258,13 +258,13 @@ GO
 -- ÍNDICES
 CREATE NONCLUSTERED INDEX IX_Bit016_ProgramacionFecha ON [dbo].[Bit016GeneracionReporteador] (i_Cve_Programacion, f_FechaInicio)
 GO
-CREATE NONCLUSTERED INDEX IX_Bit016_Estatus ON [dbo].[Bit016GeneracionReporteador] (t_Estatus)
+CREATE NONCLUSTERED INDEX IX_Bit016_Proceso ON [dbo].[Bit016GeneracionReporteador] (t_Proceso)
 GO
 CREATE NONCLUSTERED INDEX IX_Bit016_FechaInicio ON [dbo].[Bit016GeneracionReporteador] (f_FechaInicio)
 GO
 CREATE NONCLUSTERED INDEX IX_Bit016_FechaFin ON [dbo].[Bit016GeneracionReporteador] (f_FechaFin)
 GO
-CREATE NONCLUSTERED INDEX IX_Bit016_Status ON [dbo].[Bit016GeneracionReporteador] (i_Cve_Status)
+CREATE NONCLUSTERED INDEX IX_Bit016_Estatus ON [dbo].[Bit016GeneracionReporteador] (i_Cve_Estatus)
 GO
 
 -- DESCRIPCIÓN DE TABLA
@@ -282,7 +282,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Fecha y hora d
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Fecha y hora de fin de la generación', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N'f_FechaFin';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Estatus de la ejecución: PROCESANDO, COMPLETADO, FALLIDO, VALIDACION_FALLIDA', 
-    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_Estatus';
+    @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N't_Proceso';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Número de registros procesados', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Bit016GeneracionReporteador', @level2type = N'COLUMN', @level2name = N'i_RegistrosProcesados';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Ruta del documento generado', 
@@ -318,6 +318,7 @@ SELECT
     pl.i_Cve_Plantilla,
     pl.t_Nombre AS t_NombrePlantilla,
     pl.t_Consulta,
+    pl.t_ColumnasConfig
     pl.t_ParametrosConfig,
     pl.t_RutaPlantilla,
     pl.t_NombreBaseDatos

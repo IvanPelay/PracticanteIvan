@@ -21,7 +21,7 @@ SELECT
     p.f_UltimaEjecucion,
     p.f_FechaRegistro,
     p.t_UsuarioRegistro,
-    CASE WHEN p.i_Cve_Status = 1 THEN 'Activo' ELSE 'Inactivo' END AS t_Status,
+    CASE WHEN p.i_Cve_Estatus = 1 THEN 'Activo' ELSE 'Inactivo' END AS t_Estatus,
     CASE WHEN p.i_Cve_Estado = 1 THEN 'Activo' ELSE 'Inactivo' END AS t_Estado
 FROM [dbo].[Enc016ProgramacionReporteador] p
 INNER JOIN [dbo].[Cat016PlantillasReporteador] pl ON p.i_Cve_Plantilla = pl.i_Cve_Plantilla

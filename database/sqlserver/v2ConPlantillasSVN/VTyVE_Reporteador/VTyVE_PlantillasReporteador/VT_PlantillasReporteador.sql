@@ -5,9 +5,11 @@ CREATE VIEW [dbo].[Vt016Plantillas] AS
 SELECT 
     i_Cve_Plantilla,
     t_Nombre,
+    t_Descripcion,
     t_RutaPlantilla,
     t_NombreBaseDatos,
     t_Consulta,
+    t_ColumnasConfig,
     t_ParametrosConfig,
     t_FormatoSalida,
     f_FechaRegistro,

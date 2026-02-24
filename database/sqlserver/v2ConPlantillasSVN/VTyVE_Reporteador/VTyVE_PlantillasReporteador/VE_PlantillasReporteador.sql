@@ -7,13 +7,17 @@ SELECT * FROM (
     UNION ALL
     SELECT 't_Nombre' as Nombre, 0 AS Llave, 200 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Nombre Plantilla' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
+    SELECT 't_Descripcion' as Nombre, 0 AS Llave, 1000 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Descripcion Plantilla' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '0' AS TipoFiltro
+    UNION ALL
     SELECT 't_RutaPlantilla' as Nombre, 0 AS Llave, 500 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Ruta Plantilla' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
     SELECT 't_NombreBaseDatos' as Nombre, 0 AS Llave, 100 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Base de Datos' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro --dudas si dejarlop o eliminarlo
     UNION ALL
-    SELECT 't_Consulta' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Consulta SQL' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro 
+    SELECT 't_Consulta' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Consulta SQL' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '0' AS TipoFiltro 
     UNION ALL
-    SELECT 't_ParametrosConfig' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Config. Parámetros (JSON)' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro --dudas los usuarios pueden cargar paqrametros e formato JSON??
+    SELECT 't_ColumnasConfig' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Config. Columnas (JSON)' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '0' AS TipoFiltro
+    UNION ALL
+    SELECT 't_ParametrosConfig' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Config. Parámetros (JSON)' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '0' AS TipoFiltro --dudas los usuarios pueden cargar paqrametros e formato JSON??
     UNION ALL
     SELECT 't_FormatoSalida' as Nombre, 0 AS Llave, 10 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Formato Salida' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, 'XLSX' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
