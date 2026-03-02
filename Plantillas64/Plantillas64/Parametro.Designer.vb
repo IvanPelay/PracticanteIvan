@@ -25,18 +25,18 @@ Partial Class frm000Parametro
         Me.ControlPanel = New System.Windows.Forms.Panel()
         Me.lblVersionModulo = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.TbOrden = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.TbValorDefault = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.checkbRequerido = New System.Windows.Forms.CheckBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.tbEtiqueta = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.cbTipo = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.tbNombre = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.ControlPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -99,17 +99,17 @@ Partial Class frm000Parametro
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.TextBox4)
+        Me.GroupBox1.Controls.Add(Me.TbOrden)
         Me.GroupBox1.Controls.Add(Me.Label7)
-        Me.GroupBox1.Controls.Add(Me.TextBox3)
+        Me.GroupBox1.Controls.Add(Me.TbValorDefault)
         Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.CheckBox1)
+        Me.GroupBox1.Controls.Add(Me.checkbRequerido)
         Me.GroupBox1.Controls.Add(Me.Label4)
-        Me.GroupBox1.Controls.Add(Me.TextBox2)
+        Me.GroupBox1.Controls.Add(Me.tbEtiqueta)
         Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Controls.Add(Me.ComboBox1)
+        Me.GroupBox1.Controls.Add(Me.cbTipo)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.TextBox1)
+        Me.GroupBox1.Controls.Add(Me.tbNombre)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Location = New System.Drawing.Point(26, 64)
         Me.GroupBox1.Name = "GroupBox1"
@@ -117,89 +117,12 @@ Partial Class frm000Parametro
         Me.GroupBox1.TabIndex = 360
         Me.GroupBox1.TabStop = False
         '
-        'Label1
+        'TbOrden
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(8, 27)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Nombre: "
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(85, 24)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox1.TabIndex = 1
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(8, 54)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(34, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Tipo: "
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"String", "Int", "Date", "Decimal"})
-        Me.ComboBox1.Location = New System.Drawing.Point(85, 54)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
-        Me.ComboBox1.TabIndex = 3
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(8, 85)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(52, 13)
-        Me.Label3.TabIndex = 4
-        Me.Label3.Text = "Etiqueta: "
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Location = New System.Drawing.Point(85, 85)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox2.TabIndex = 5
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(8, 116)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(62, 13)
-        Me.Label4.TabIndex = 6
-        Me.Label4.Text = "Requerido: "
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(85, 116)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(15, 14)
-        Me.CheckBox1.TabIndex = 7
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(8, 146)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(74, 13)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "Valor Default: "
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Location = New System.Drawing.Point(85, 143)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox3.TabIndex = 9
+        Me.TbOrden.Location = New System.Drawing.Point(85, 175)
+        Me.TbOrden.Name = "TbOrden"
+        Me.TbOrden.Size = New System.Drawing.Size(100, 20)
+        Me.TbOrden.TabIndex = 11
         '
         'Label7
         '
@@ -210,12 +133,89 @@ Partial Class frm000Parametro
         Me.Label7.TabIndex = 10
         Me.Label7.Text = "Orden: "
         '
-        'TextBox4
+        'TbValorDefault
         '
-        Me.TextBox4.Location = New System.Drawing.Point(85, 175)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox4.TabIndex = 11
+        Me.TbValorDefault.Location = New System.Drawing.Point(85, 143)
+        Me.TbValorDefault.Name = "TbValorDefault"
+        Me.TbValorDefault.Size = New System.Drawing.Size(100, 20)
+        Me.TbValorDefault.TabIndex = 9
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(8, 146)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(74, 13)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "Valor Default: "
+        '
+        'checkbRequerido
+        '
+        Me.checkbRequerido.AutoSize = True
+        Me.checkbRequerido.Location = New System.Drawing.Point(85, 116)
+        Me.checkbRequerido.Name = "checkbRequerido"
+        Me.checkbRequerido.Size = New System.Drawing.Size(15, 14)
+        Me.checkbRequerido.TabIndex = 7
+        Me.checkbRequerido.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(8, 116)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(62, 13)
+        Me.Label4.TabIndex = 6
+        Me.Label4.Text = "Requerido: "
+        '
+        'tbEtiqueta
+        '
+        Me.tbEtiqueta.Location = New System.Drawing.Point(85, 85)
+        Me.tbEtiqueta.Name = "tbEtiqueta"
+        Me.tbEtiqueta.Size = New System.Drawing.Size(100, 20)
+        Me.tbEtiqueta.TabIndex = 5
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(8, 85)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(52, 13)
+        Me.Label3.TabIndex = 4
+        Me.Label3.Text = "Etiqueta: "
+        '
+        'cbTipo
+        '
+        Me.cbTipo.FormattingEnabled = True
+        Me.cbTipo.Items.AddRange(New Object() {"String", "Int", "Date", "Decimal"})
+        Me.cbTipo.Location = New System.Drawing.Point(85, 54)
+        Me.cbTipo.Name = "cbTipo"
+        Me.cbTipo.Size = New System.Drawing.Size(121, 21)
+        Me.cbTipo.TabIndex = 3
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(8, 54)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(34, 13)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "Tipo: "
+        '
+        'tbNombre
+        '
+        Me.tbNombre.Location = New System.Drawing.Point(85, 24)
+        Me.tbNombre.Name = "tbNombre"
+        Me.tbNombre.Size = New System.Drawing.Size(100, 20)
+        Me.tbNombre.TabIndex = 1
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(8, 27)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(50, 13)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "Nombre: "
         '
         'frm000Parametro
         '
@@ -244,16 +244,16 @@ Partial Class frm000Parametro
     Friend WithEvents ControlPanel As System.Windows.Forms.Panel
     Friend WithEvents lblVersionModulo As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents cbTipo As ComboBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents tbNombre As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents TextBox4 As TextBox
+    Friend WithEvents TbOrden As TextBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents TbValorDefault As TextBox
     Friend WithEvents Label5 As Label
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents checkbRequerido As CheckBox
     Friend WithEvents Label4 As Label
-    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents tbEtiqueta As TextBox
     Friend WithEvents Label3 As Label
 End Class

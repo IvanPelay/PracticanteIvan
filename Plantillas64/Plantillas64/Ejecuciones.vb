@@ -1,7 +1,7 @@
 ﻿Imports Gsol
 Imports Gsol.BaseDatos.Operaciones
 
-Public Class frm000ProgramarEjecuciones
+Public Class frm000ProgramarEjecucion
     Inherits FormularioBase64
 
 #Region "Atributos"

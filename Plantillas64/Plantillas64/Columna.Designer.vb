@@ -25,14 +25,14 @@ Partial Class frm000Columna
         Me.ControlPanel = New System.Windows.Forms.Panel()
         Me.lblVersionModulo = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.cbFormato = New System.Windows.Forms.ComboBox()
+        Me.tbOrden = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.tbEtiqueta = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.tbCampo = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.ControlPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -95,13 +95,13 @@ Partial Class frm000Columna
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.ComboBox1)
-        Me.GroupBox1.Controls.Add(Me.TextBox4)
+        Me.GroupBox1.Controls.Add(Me.cbFormato)
+        Me.GroupBox1.Controls.Add(Me.tbOrden)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.TextBox2)
+        Me.GroupBox1.Controls.Add(Me.tbEtiqueta)
         Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Controls.Add(Me.TextBox1)
+        Me.GroupBox1.Controls.Add(Me.tbCampo)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Location = New System.Drawing.Point(26, 64)
         Me.GroupBox1.Name = "GroupBox1"
@@ -109,12 +109,21 @@ Partial Class frm000Columna
         Me.GroupBox1.TabIndex = 360
         Me.GroupBox1.TabStop = False
         '
-        'TextBox4
+        'cbFormato
         '
-        Me.TextBox4.Location = New System.Drawing.Point(85, 109)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(121, 20)
-        Me.TextBox4.TabIndex = 11
+        Me.cbFormato.FormattingEnabled = True
+        Me.cbFormato.Items.AddRange(New Object() {"Moneda", "Número", "Número Entero", "Porcentaje", "Fecha", "Texto", "Sin formato"})
+        Me.cbFormato.Location = New System.Drawing.Point(85, 80)
+        Me.cbFormato.Name = "cbFormato"
+        Me.cbFormato.Size = New System.Drawing.Size(121, 21)
+        Me.cbFormato.TabIndex = 12
+        '
+        'tbOrden
+        '
+        Me.tbOrden.Location = New System.Drawing.Point(85, 109)
+        Me.tbOrden.Name = "tbOrden"
+        Me.tbOrden.Size = New System.Drawing.Size(121, 20)
+        Me.tbOrden.TabIndex = 11
         '
         'Label7
         '
@@ -134,12 +143,12 @@ Partial Class frm000Columna
         Me.Label5.TabIndex = 8
         Me.Label5.Text = "Formato: "
         '
-        'TextBox2
+        'tbEtiqueta
         '
-        Me.TextBox2.Location = New System.Drawing.Point(85, 51)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(121, 20)
-        Me.TextBox2.TabIndex = 5
+        Me.tbEtiqueta.Location = New System.Drawing.Point(85, 51)
+        Me.tbEtiqueta.Name = "tbEtiqueta"
+        Me.tbEtiqueta.Size = New System.Drawing.Size(121, 20)
+        Me.tbEtiqueta.TabIndex = 5
         '
         'Label3
         '
@@ -150,12 +159,12 @@ Partial Class frm000Columna
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Etiqueta: "
         '
-        'TextBox1
+        'tbCampo
         '
-        Me.TextBox1.Location = New System.Drawing.Point(85, 24)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(121, 20)
-        Me.TextBox1.TabIndex = 1
+        Me.tbCampo.Location = New System.Drawing.Point(85, 24)
+        Me.tbCampo.Name = "tbCampo"
+        Me.tbCampo.Size = New System.Drawing.Size(121, 20)
+        Me.tbCampo.TabIndex = 1
         '
         'Label1
         '
@@ -165,15 +174,6 @@ Partial Class frm000Columna
         Me.Label1.Size = New System.Drawing.Size(46, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Campo: "
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Moneda", "Número", "Número Entero", "Porcentaje", "Fecha", "Texto", "Sin formato"})
-        Me.ComboBox1.Location = New System.Drawing.Point(85, 80)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
-        Me.ComboBox1.TabIndex = 12
         '
         'frm000Columna
         '
@@ -202,12 +202,12 @@ Partial Class frm000Columna
     Friend WithEvents ControlPanel As System.Windows.Forms.Panel
     Friend WithEvents lblVersionModulo As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents tbCampo As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents TextBox4 As TextBox
+    Friend WithEvents tbOrden As TextBox
     Friend WithEvents Label7 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents tbEtiqueta As TextBox
     Friend WithEvents Label3 As Label
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents cbFormato As ComboBox
 End Class

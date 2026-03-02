@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class frm000ProgramarEjecuciones
+Partial Class frm000ProgramarEjecucion
     Inherits FormularioBase64
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -25,38 +25,38 @@ Partial Class frm000ProgramarEjecuciones
         Me.ControlPanel = New System.Windows.Forms.Panel()
         Me.lblVersionModulo = New System.Windows.Forms.Label()
         Me.groupBox4 = New System.Windows.Forms.GroupBox()
-        Me.textBox2 = New System.Windows.Forms.TextBox()
+        Me.tbRFC = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.dateTimePicker3 = New System.Windows.Forms.DateTimePicker()
+        Me.SelectorFechaFin = New System.Windows.Forms.DateTimePicker()
         Me.label5 = New System.Windows.Forms.Label()
-        Me.dateTimePicker2 = New System.Windows.Forms.DateTimePicker()
+        Me.SelectorFechaInicio = New System.Windows.Forms.DateTimePicker()
         Me.label4 = New System.Windows.Forms.Label()
         Me.groupBox1 = New System.Windows.Forms.GroupBox()
-        Me.dateTimePicker1 = New System.Windows.Forms.DateTimePicker()
+        Me.HoraEjecucion = New System.Windows.Forms.DateTimePicker()
         Me.label3 = New System.Windows.Forms.Label()
         Me.groupBox3 = New System.Windows.Forms.GroupBox()
-        Me.numericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.numericUDMes = New System.Windows.Forms.NumericUpDown()
         Me.groupBox2 = New System.Windows.Forms.GroupBox()
-        Me.checkBox7 = New System.Windows.Forms.CheckBox()
-        Me.checkBox6 = New System.Windows.Forms.CheckBox()
-        Me.checkBox5 = New System.Windows.Forms.CheckBox()
-        Me.checkBox4 = New System.Windows.Forms.CheckBox()
-        Me.checkBox3 = New System.Windows.Forms.CheckBox()
-        Me.checkBox2 = New System.Windows.Forms.CheckBox()
-        Me.checkBox1 = New System.Windows.Forms.CheckBox()
-        Me.radioButton4 = New System.Windows.Forms.RadioButton()
-        Me.radioButton3 = New System.Windows.Forms.RadioButton()
-        Me.radioButton2 = New System.Windows.Forms.RadioButton()
-        Me.radioButton1 = New System.Windows.Forms.RadioButton()
-        Me.comboBox1 = New System.Windows.Forms.ComboBox()
+        Me.checkbD = New System.Windows.Forms.CheckBox()
+        Me.checkbS = New System.Windows.Forms.CheckBox()
+        Me.checkbV = New System.Windows.Forms.CheckBox()
+        Me.checkbJ = New System.Windows.Forms.CheckBox()
+        Me.checkbMie = New System.Windows.Forms.CheckBox()
+        Me.checkbMartes = New System.Windows.Forms.CheckBox()
+        Me.checkbL = New System.Windows.Forms.CheckBox()
+        Me.rbFrecuenciaM = New System.Windows.Forms.RadioButton()
+        Me.rbFrecuenciaS = New System.Windows.Forms.RadioButton()
+        Me.rbFrecuenciaD = New System.Windows.Forms.RadioButton()
+        Me.rbFrecuenciaU = New System.Windows.Forms.RadioButton()
+        Me.cbPlantillas = New System.Windows.Forms.ComboBox()
         Me.label2 = New System.Windows.Forms.Label()
-        Me.textBox1 = New System.Windows.Forms.TextBox()
+        Me.tbNombreProgramacion = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.ControlPanel.SuspendLayout()
         Me.groupBox4.SuspendLayout()
         Me.groupBox1.SuspendLayout()
         Me.groupBox3.SuspendLayout()
-        CType(Me.numericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.numericUDMes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.groupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -118,11 +118,11 @@ Partial Class frm000ProgramarEjecuciones
         '
         'groupBox4
         '
-        Me.groupBox4.Controls.Add(Me.textBox2)
+        Me.groupBox4.Controls.Add(Me.tbRFC)
         Me.groupBox4.Controls.Add(Me.Label1)
-        Me.groupBox4.Controls.Add(Me.dateTimePicker3)
+        Me.groupBox4.Controls.Add(Me.SelectorFechaFin)
         Me.groupBox4.Controls.Add(Me.label5)
-        Me.groupBox4.Controls.Add(Me.dateTimePicker2)
+        Me.groupBox4.Controls.Add(Me.SelectorFechaInicio)
         Me.groupBox4.Controls.Add(Me.label4)
         Me.groupBox4.Location = New System.Drawing.Point(32, 335)
         Me.groupBox4.Name = "groupBox4"
@@ -131,12 +131,12 @@ Partial Class frm000ProgramarEjecuciones
         Me.groupBox4.TabStop = False
         Me.groupBox4.Text = "Parametros: "
         '
-        'textBox2
+        'tbRFC
         '
-        Me.textBox2.Location = New System.Drawing.Point(81, 68)
-        Me.textBox2.Name = "textBox2"
-        Me.textBox2.Size = New System.Drawing.Size(195, 20)
-        Me.textBox2.TabIndex = 13
+        Me.tbRFC.Location = New System.Drawing.Point(81, 68)
+        Me.tbRFC.Name = "tbRFC"
+        Me.tbRFC.Size = New System.Drawing.Size(195, 20)
+        Me.tbRFC.TabIndex = 13
         '
         'Label1
         '
@@ -147,13 +147,13 @@ Partial Class frm000ProgramarEjecuciones
         Me.Label1.TabIndex = 12
         Me.Label1.Text = "Cliente/RFC: "
         '
-        'dateTimePicker3
+        'SelectorFechaFin
         '
-        Me.dateTimePicker3.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dateTimePicker3.Location = New System.Drawing.Point(83, 41)
-        Me.dateTimePicker3.Name = "dateTimePicker3"
-        Me.dateTimePicker3.Size = New System.Drawing.Size(200, 20)
-        Me.dateTimePicker3.TabIndex = 11
+        Me.SelectorFechaFin.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.SelectorFechaFin.Location = New System.Drawing.Point(83, 41)
+        Me.SelectorFechaFin.Name = "SelectorFechaFin"
+        Me.SelectorFechaFin.Size = New System.Drawing.Size(200, 20)
+        Me.SelectorFechaFin.TabIndex = 11
         '
         'label5
         '
@@ -164,13 +164,13 @@ Partial Class frm000ProgramarEjecuciones
         Me.label5.TabIndex = 10
         Me.label5.Text = "Fecha Fin: "
         '
-        'dateTimePicker2
+        'SelectorFechaInicio
         '
-        Me.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dateTimePicker2.Location = New System.Drawing.Point(83, 19)
-        Me.dateTimePicker2.Name = "dateTimePicker2"
-        Me.dateTimePicker2.Size = New System.Drawing.Size(200, 20)
-        Me.dateTimePicker2.TabIndex = 9
+        Me.SelectorFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.SelectorFechaInicio.Location = New System.Drawing.Point(83, 19)
+        Me.SelectorFechaInicio.Name = "SelectorFechaInicio"
+        Me.SelectorFechaInicio.Size = New System.Drawing.Size(200, 20)
+        Me.SelectorFechaInicio.TabIndex = 9
         '
         'label4
         '
@@ -183,14 +183,14 @@ Partial Class frm000ProgramarEjecuciones
         '
         'groupBox1
         '
-        Me.groupBox1.Controls.Add(Me.dateTimePicker1)
+        Me.groupBox1.Controls.Add(Me.HoraEjecucion)
         Me.groupBox1.Controls.Add(Me.label3)
         Me.groupBox1.Controls.Add(Me.groupBox3)
         Me.groupBox1.Controls.Add(Me.groupBox2)
-        Me.groupBox1.Controls.Add(Me.radioButton4)
-        Me.groupBox1.Controls.Add(Me.radioButton3)
-        Me.groupBox1.Controls.Add(Me.radioButton2)
-        Me.groupBox1.Controls.Add(Me.radioButton1)
+        Me.groupBox1.Controls.Add(Me.rbFrecuenciaM)
+        Me.groupBox1.Controls.Add(Me.rbFrecuenciaS)
+        Me.groupBox1.Controls.Add(Me.rbFrecuenciaD)
+        Me.groupBox1.Controls.Add(Me.rbFrecuenciaU)
         Me.groupBox1.Location = New System.Drawing.Point(32, 123)
         Me.groupBox1.Name = "groupBox1"
         Me.groupBox1.Size = New System.Drawing.Size(356, 206)
@@ -198,13 +198,13 @@ Partial Class frm000ProgramarEjecuciones
         Me.groupBox1.TabStop = False
         Me.groupBox1.Text = "Frecuencia: "
         '
-        'dateTimePicker1
+        'HoraEjecucion
         '
-        Me.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time
-        Me.dateTimePicker1.Location = New System.Drawing.Point(42, 169)
-        Me.dateTimePicker1.Name = "dateTimePicker1"
-        Me.dateTimePicker1.Size = New System.Drawing.Size(200, 20)
-        Me.dateTimePicker1.TabIndex = 8
+        Me.HoraEjecucion.Format = System.Windows.Forms.DateTimePickerFormat.Time
+        Me.HoraEjecucion.Location = New System.Drawing.Point(42, 169)
+        Me.HoraEjecucion.Name = "HoraEjecucion"
+        Me.HoraEjecucion.Size = New System.Drawing.Size(200, 20)
+        Me.HoraEjecucion.TabIndex = 8
         '
         'label3
         '
@@ -217,7 +217,7 @@ Partial Class frm000ProgramarEjecuciones
         '
         'groupBox3
         '
-        Me.groupBox3.Controls.Add(Me.numericUpDown1)
+        Me.groupBox3.Controls.Add(Me.numericUDMes)
         Me.groupBox3.Location = New System.Drawing.Point(218, 57)
         Me.groupBox3.Name = "groupBox3"
         Me.groupBox3.Size = New System.Drawing.Size(132, 100)
@@ -225,27 +225,27 @@ Partial Class frm000ProgramarEjecuciones
         Me.groupBox3.TabStop = False
         Me.groupBox3.Text = "Día Mes"
         '
-        'numericUpDown1
+        'numericUDMes
         '
-        Me.numericUpDown1.ImeMode = System.Windows.Forms.ImeMode.[On]
-        Me.numericUpDown1.Location = New System.Drawing.Point(7, 20)
-        Me.numericUpDown1.Maximum = New Decimal(New Integer() {31, 0, 0, 0})
-        Me.numericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numericUpDown1.Name = "numericUpDown1"
-        Me.numericUpDown1.Size = New System.Drawing.Size(120, 20)
-        Me.numericUpDown1.TabIndex = 0
-        Me.numericUpDown1.UseWaitCursor = True
-        Me.numericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericUDMes.ImeMode = System.Windows.Forms.ImeMode.[On]
+        Me.numericUDMes.Location = New System.Drawing.Point(7, 20)
+        Me.numericUDMes.Maximum = New Decimal(New Integer() {31, 0, 0, 0})
+        Me.numericUDMes.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericUDMes.Name = "numericUDMes"
+        Me.numericUDMes.Size = New System.Drawing.Size(120, 20)
+        Me.numericUDMes.TabIndex = 0
+        Me.numericUDMes.UseWaitCursor = True
+        Me.numericUDMes.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'groupBox2
         '
-        Me.groupBox2.Controls.Add(Me.checkBox7)
-        Me.groupBox2.Controls.Add(Me.checkBox6)
-        Me.groupBox2.Controls.Add(Me.checkBox5)
-        Me.groupBox2.Controls.Add(Me.checkBox4)
-        Me.groupBox2.Controls.Add(Me.checkBox3)
-        Me.groupBox2.Controls.Add(Me.checkBox2)
-        Me.groupBox2.Controls.Add(Me.checkBox1)
+        Me.groupBox2.Controls.Add(Me.checkbD)
+        Me.groupBox2.Controls.Add(Me.checkbS)
+        Me.groupBox2.Controls.Add(Me.checkbV)
+        Me.groupBox2.Controls.Add(Me.checkbJ)
+        Me.groupBox2.Controls.Add(Me.checkbMie)
+        Me.groupBox2.Controls.Add(Me.checkbMartes)
+        Me.groupBox2.Controls.Add(Me.checkbL)
         Me.groupBox2.Location = New System.Drawing.Point(12, 52)
         Me.groupBox2.Name = "groupBox2"
         Me.groupBox2.Size = New System.Drawing.Size(200, 111)
@@ -253,128 +253,128 @@ Partial Class frm000ProgramarEjecuciones
         Me.groupBox2.TabStop = False
         Me.groupBox2.Text = "Días Semana"
         '
-        'checkBox7
+        'checkbD
         '
-        Me.checkBox7.AutoSize = True
-        Me.checkBox7.Location = New System.Drawing.Point(97, 66)
-        Me.checkBox7.Name = "checkBox7"
-        Me.checkBox7.Size = New System.Drawing.Size(68, 17)
-        Me.checkBox7.TabIndex = 8
-        Me.checkBox7.Text = "Domingo"
-        Me.checkBox7.UseVisualStyleBackColor = True
+        Me.checkbD.AutoSize = True
+        Me.checkbD.Location = New System.Drawing.Point(97, 66)
+        Me.checkbD.Name = "checkbD"
+        Me.checkbD.Size = New System.Drawing.Size(68, 17)
+        Me.checkbD.TabIndex = 8
+        Me.checkbD.Text = "Domingo"
+        Me.checkbD.UseVisualStyleBackColor = True
         '
-        'checkBox6
+        'checkbS
         '
-        Me.checkBox6.AutoSize = True
-        Me.checkBox6.Location = New System.Drawing.Point(97, 43)
-        Me.checkBox6.Name = "checkBox6"
-        Me.checkBox6.Size = New System.Drawing.Size(63, 17)
-        Me.checkBox6.TabIndex = 7
-        Me.checkBox6.Text = "Sábado"
-        Me.checkBox6.UseVisualStyleBackColor = True
+        Me.checkbS.AutoSize = True
+        Me.checkbS.Location = New System.Drawing.Point(97, 43)
+        Me.checkbS.Name = "checkbS"
+        Me.checkbS.Size = New System.Drawing.Size(63, 17)
+        Me.checkbS.TabIndex = 7
+        Me.checkbS.Text = "Sábado"
+        Me.checkbS.UseVisualStyleBackColor = True
         '
-        'checkBox5
+        'checkbV
         '
-        Me.checkBox5.AutoSize = True
-        Me.checkBox5.Location = New System.Drawing.Point(97, 20)
-        Me.checkBox5.Name = "checkBox5"
-        Me.checkBox5.Size = New System.Drawing.Size(61, 17)
-        Me.checkBox5.TabIndex = 6
-        Me.checkBox5.Text = "Viernes"
-        Me.checkBox5.UseVisualStyleBackColor = True
+        Me.checkbV.AutoSize = True
+        Me.checkbV.Location = New System.Drawing.Point(97, 20)
+        Me.checkbV.Name = "checkbV"
+        Me.checkbV.Size = New System.Drawing.Size(61, 17)
+        Me.checkbV.TabIndex = 6
+        Me.checkbV.Text = "Viernes"
+        Me.checkbV.UseVisualStyleBackColor = True
         '
-        'checkBox4
+        'checkbJ
         '
-        Me.checkBox4.AutoSize = True
-        Me.checkBox4.Location = New System.Drawing.Point(6, 88)
-        Me.checkBox4.Name = "checkBox4"
-        Me.checkBox4.Size = New System.Drawing.Size(60, 17)
-        Me.checkBox4.TabIndex = 5
-        Me.checkBox4.Text = "Jueves"
-        Me.checkBox4.UseVisualStyleBackColor = True
+        Me.checkbJ.AutoSize = True
+        Me.checkbJ.Location = New System.Drawing.Point(6, 88)
+        Me.checkbJ.Name = "checkbJ"
+        Me.checkbJ.Size = New System.Drawing.Size(60, 17)
+        Me.checkbJ.TabIndex = 5
+        Me.checkbJ.Text = "Jueves"
+        Me.checkbJ.UseVisualStyleBackColor = True
         '
-        'checkBox3
+        'checkbMie
         '
-        Me.checkBox3.AutoSize = True
-        Me.checkBox3.Location = New System.Drawing.Point(6, 66)
-        Me.checkBox3.Name = "checkBox3"
-        Me.checkBox3.Size = New System.Drawing.Size(71, 17)
-        Me.checkBox3.TabIndex = 5
-        Me.checkBox3.Text = "Miércoles"
-        Me.checkBox3.UseVisualStyleBackColor = True
+        Me.checkbMie.AutoSize = True
+        Me.checkbMie.Location = New System.Drawing.Point(6, 66)
+        Me.checkbMie.Name = "checkbMie"
+        Me.checkbMie.Size = New System.Drawing.Size(71, 17)
+        Me.checkbMie.TabIndex = 5
+        Me.checkbMie.Text = "Miércoles"
+        Me.checkbMie.UseVisualStyleBackColor = True
         '
-        'checkBox2
+        'checkbMartes
         '
-        Me.checkBox2.AutoSize = True
-        Me.checkBox2.Location = New System.Drawing.Point(6, 43)
-        Me.checkBox2.Name = "checkBox2"
-        Me.checkBox2.Size = New System.Drawing.Size(58, 17)
-        Me.checkBox2.TabIndex = 1
-        Me.checkBox2.Text = "Martes"
-        Me.checkBox2.UseVisualStyleBackColor = True
+        Me.checkbMartes.AutoSize = True
+        Me.checkbMartes.Location = New System.Drawing.Point(6, 43)
+        Me.checkbMartes.Name = "checkbMartes"
+        Me.checkbMartes.Size = New System.Drawing.Size(58, 17)
+        Me.checkbMartes.TabIndex = 1
+        Me.checkbMartes.Text = "Martes"
+        Me.checkbMartes.UseVisualStyleBackColor = True
         '
-        'checkBox1
+        'checkbL
         '
-        Me.checkBox1.AutoSize = True
-        Me.checkBox1.Location = New System.Drawing.Point(7, 20)
-        Me.checkBox1.Name = "checkBox1"
-        Me.checkBox1.Size = New System.Drawing.Size(55, 17)
-        Me.checkBox1.TabIndex = 0
-        Me.checkBox1.Text = "Lunes"
-        Me.checkBox1.UseVisualStyleBackColor = True
+        Me.checkbL.AutoSize = True
+        Me.checkbL.Location = New System.Drawing.Point(7, 20)
+        Me.checkbL.Name = "checkbL"
+        Me.checkbL.Size = New System.Drawing.Size(55, 17)
+        Me.checkbL.TabIndex = 0
+        Me.checkbL.Text = "Lunes"
+        Me.checkbL.UseVisualStyleBackColor = True
         '
-        'radioButton4
+        'rbFrecuenciaM
         '
-        Me.radioButton4.AutoSize = True
-        Me.radioButton4.Location = New System.Drawing.Point(218, 20)
-        Me.radioButton4.Name = "radioButton4"
-        Me.radioButton4.Size = New System.Drawing.Size(65, 17)
-        Me.radioButton4.TabIndex = 3
-        Me.radioButton4.TabStop = True
-        Me.radioButton4.Text = "Mensual"
-        Me.radioButton4.UseVisualStyleBackColor = True
+        Me.rbFrecuenciaM.AutoSize = True
+        Me.rbFrecuenciaM.Location = New System.Drawing.Point(218, 20)
+        Me.rbFrecuenciaM.Name = "rbFrecuenciaM"
+        Me.rbFrecuenciaM.Size = New System.Drawing.Size(65, 17)
+        Me.rbFrecuenciaM.TabIndex = 3
+        Me.rbFrecuenciaM.TabStop = True
+        Me.rbFrecuenciaM.Text = "Mensual"
+        Me.rbFrecuenciaM.UseVisualStyleBackColor = True
         '
-        'radioButton3
+        'rbFrecuenciaS
         '
-        Me.radioButton3.AutoSize = True
-        Me.radioButton3.Location = New System.Drawing.Point(146, 20)
-        Me.radioButton3.Name = "radioButton3"
-        Me.radioButton3.Size = New System.Drawing.Size(66, 17)
-        Me.radioButton3.TabIndex = 2
-        Me.radioButton3.TabStop = True
-        Me.radioButton3.Text = "Semanal"
-        Me.radioButton3.UseVisualStyleBackColor = True
+        Me.rbFrecuenciaS.AutoSize = True
+        Me.rbFrecuenciaS.Location = New System.Drawing.Point(146, 20)
+        Me.rbFrecuenciaS.Name = "rbFrecuenciaS"
+        Me.rbFrecuenciaS.Size = New System.Drawing.Size(66, 17)
+        Me.rbFrecuenciaS.TabIndex = 2
+        Me.rbFrecuenciaS.TabStop = True
+        Me.rbFrecuenciaS.Text = "Semanal"
+        Me.rbFrecuenciaS.UseVisualStyleBackColor = True
         '
-        'radioButton2
+        'rbFrecuenciaD
         '
-        Me.radioButton2.AutoSize = True
-        Me.radioButton2.Location = New System.Drawing.Point(86, 20)
-        Me.radioButton2.Name = "radioButton2"
-        Me.radioButton2.Size = New System.Drawing.Size(54, 17)
-        Me.radioButton2.TabIndex = 1
-        Me.radioButton2.TabStop = True
-        Me.radioButton2.Text = "Díario"
-        Me.radioButton2.UseVisualStyleBackColor = True
+        Me.rbFrecuenciaD.AutoSize = True
+        Me.rbFrecuenciaD.Location = New System.Drawing.Point(86, 20)
+        Me.rbFrecuenciaD.Name = "rbFrecuenciaD"
+        Me.rbFrecuenciaD.Size = New System.Drawing.Size(54, 17)
+        Me.rbFrecuenciaD.TabIndex = 1
+        Me.rbFrecuenciaD.TabStop = True
+        Me.rbFrecuenciaD.Text = "Díario"
+        Me.rbFrecuenciaD.UseVisualStyleBackColor = True
         '
-        'radioButton1
+        'rbFrecuenciaU
         '
-        Me.radioButton1.AutoSize = True
-        Me.radioButton1.Location = New System.Drawing.Point(7, 20)
-        Me.radioButton1.Name = "radioButton1"
-        Me.radioButton1.Size = New System.Drawing.Size(73, 17)
-        Me.radioButton1.TabIndex = 0
-        Me.radioButton1.TabStop = True
-        Me.radioButton1.Text = "Única vez"
-        Me.radioButton1.UseVisualStyleBackColor = True
+        Me.rbFrecuenciaU.AutoSize = True
+        Me.rbFrecuenciaU.Location = New System.Drawing.Point(7, 20)
+        Me.rbFrecuenciaU.Name = "rbFrecuenciaU"
+        Me.rbFrecuenciaU.Size = New System.Drawing.Size(73, 17)
+        Me.rbFrecuenciaU.TabIndex = 0
+        Me.rbFrecuenciaU.TabStop = True
+        Me.rbFrecuenciaU.Text = "Única vez"
+        Me.rbFrecuenciaU.UseVisualStyleBackColor = True
         '
-        'comboBox1
+        'cbPlantillas
         '
-        Me.comboBox1.FormattingEnabled = True
-        Me.comboBox1.Items.AddRange(New Object() {"Reporte de Ventas Mensual", "Reporte Diario de Pedimentos", "Anexo 24", "Samsung", "TAMSA"})
-        Me.comboBox1.Location = New System.Drawing.Point(84, 96)
-        Me.comboBox1.Name = "comboBox1"
-        Me.comboBox1.Size = New System.Drawing.Size(243, 21)
-        Me.comboBox1.TabIndex = 363
+        Me.cbPlantillas.FormattingEnabled = True
+        Me.cbPlantillas.Items.AddRange(New Object() {"Reporte de Ventas Mensual", "Reporte Diario de Pedimentos", "Anexo 24", "Samsung", "TAMSA"})
+        Me.cbPlantillas.Location = New System.Drawing.Point(84, 96)
+        Me.cbPlantillas.Name = "cbPlantillas"
+        Me.cbPlantillas.Size = New System.Drawing.Size(243, 21)
+        Me.cbPlantillas.TabIndex = 363
         '
         'label2
         '
@@ -385,12 +385,12 @@ Partial Class frm000ProgramarEjecuciones
         Me.label2.TabIndex = 362
         Me.label2.Text = "Plantilla: "
         '
-        'textBox1
+        'tbNombreProgramacion
         '
-        Me.textBox1.Location = New System.Drawing.Point(84, 67)
-        Me.textBox1.Name = "textBox1"
-        Me.textBox1.Size = New System.Drawing.Size(242, 20)
-        Me.textBox1.TabIndex = 361
+        Me.tbNombreProgramacion.Location = New System.Drawing.Point(84, 67)
+        Me.tbNombreProgramacion.Name = "tbNombreProgramacion"
+        Me.tbNombreProgramacion.Size = New System.Drawing.Size(242, 20)
+        Me.tbNombreProgramacion.TabIndex = 361
         '
         'Label7
         '
@@ -401,30 +401,30 @@ Partial Class frm000ProgramarEjecuciones
         Me.Label7.TabIndex = 360
         Me.Label7.Text = "Nombre: "
         '
-        'frm000ProgramarEjecuciones
+        'frm000ProgramarEjecucion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(556, 514)
         Me.Controls.Add(Me.groupBox4)
         Me.Controls.Add(Me.groupBox1)
-        Me.Controls.Add(Me.comboBox1)
+        Me.Controls.Add(Me.cbPlantillas)
         Me.Controls.Add(Me.label2)
-        Me.Controls.Add(Me.textBox1)
+        Me.Controls.Add(Me.tbNombreProgramacion)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.ControlPanel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MinimizeBox = False
-        Me.Name = "frm000ProgramarEjecuciones"
+        Me.Name = "frm000ProgramarEjecucion"
         Me.Text = "Gestor"
         Me.Controls.SetChildIndex(Me.LblMensaje, 0)
         Me.Controls.SetChildIndex(Me.ControlPanel, 0)
         Me.Controls.SetChildIndex(Me.Label6, 0)
         Me.Controls.SetChildIndex(Me.LblAccion, 0)
         Me.Controls.SetChildIndex(Me.Label7, 0)
-        Me.Controls.SetChildIndex(Me.textBox1, 0)
+        Me.Controls.SetChildIndex(Me.tbNombreProgramacion, 0)
         Me.Controls.SetChildIndex(Me.label2, 0)
-        Me.Controls.SetChildIndex(Me.comboBox1, 0)
+        Me.Controls.SetChildIndex(Me.cbPlantillas, 0)
         Me.Controls.SetChildIndex(Me.groupBox1, 0)
         Me.Controls.SetChildIndex(Me.groupBox4, 0)
         Me.ControlPanel.ResumeLayout(False)
@@ -434,7 +434,7 @@ Partial Class frm000ProgramarEjecuciones
         Me.groupBox1.ResumeLayout(False)
         Me.groupBox1.PerformLayout()
         Me.groupBox3.ResumeLayout(False)
-        CType(Me.numericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.numericUDMes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.groupBox2.ResumeLayout(False)
         Me.groupBox2.PerformLayout()
         Me.ResumeLayout(False)
@@ -444,31 +444,31 @@ Partial Class frm000ProgramarEjecuciones
     Friend WithEvents ControlPanel As System.Windows.Forms.Panel
     Friend WithEvents lblVersionModulo As System.Windows.Forms.Label
     Private WithEvents groupBox4 As GroupBox
-    Private WithEvents textBox2 As TextBox
+    Private WithEvents tbRFC As TextBox
     Private WithEvents Label1 As Label
-    Private WithEvents dateTimePicker3 As DateTimePicker
+    Private WithEvents SelectorFechaFin As DateTimePicker
     Private WithEvents label5 As Label
-    Private WithEvents dateTimePicker2 As DateTimePicker
+    Private WithEvents SelectorFechaInicio As DateTimePicker
     Private WithEvents label4 As Label
     Private WithEvents groupBox1 As GroupBox
-    Private WithEvents dateTimePicker1 As DateTimePicker
+    Private WithEvents HoraEjecucion As DateTimePicker
     Private WithEvents label3 As Label
     Private WithEvents groupBox3 As GroupBox
-    Private WithEvents numericUpDown1 As NumericUpDown
+    Private WithEvents numericUDMes As NumericUpDown
     Private WithEvents groupBox2 As GroupBox
-    Private WithEvents checkBox7 As CheckBox
-    Private WithEvents checkBox6 As CheckBox
-    Private WithEvents checkBox5 As CheckBox
-    Private WithEvents checkBox4 As CheckBox
-    Private WithEvents checkBox3 As CheckBox
-    Private WithEvents checkBox2 As CheckBox
-    Private WithEvents checkBox1 As CheckBox
-    Private WithEvents radioButton4 As RadioButton
-    Private WithEvents radioButton3 As RadioButton
-    Private WithEvents radioButton2 As RadioButton
-    Private WithEvents radioButton1 As RadioButton
-    Private WithEvents comboBox1 As ComboBox
+    Private WithEvents checkbD As CheckBox
+    Private WithEvents checkbS As CheckBox
+    Private WithEvents checkbV As CheckBox
+    Private WithEvents checkbJ As CheckBox
+    Private WithEvents checkbMie As CheckBox
+    Private WithEvents checkbMartes As CheckBox
+    Private WithEvents checkbL As CheckBox
+    Private WithEvents rbFrecuenciaM As RadioButton
+    Private WithEvents rbFrecuenciaS As RadioButton
+    Private WithEvents rbFrecuenciaD As RadioButton
+    Private WithEvents rbFrecuenciaU As RadioButton
+    Private WithEvents cbPlantillas As ComboBox
     Private WithEvents label2 As Label
-    Private WithEvents textBox1 As TextBox
+    Private WithEvents tbNombreProgramacion As TextBox
     Private WithEvents Label7 As Label
 End Class

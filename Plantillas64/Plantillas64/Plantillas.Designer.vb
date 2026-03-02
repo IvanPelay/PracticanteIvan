@@ -28,18 +28,18 @@ Partial Class frm000Plantillas
         Me.lbConteoParametros = New System.Windows.Forms.Label()
         Me.lbConteoColumnas = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.button6 = New System.Windows.Forms.Button()
+        Me.bConfigurarParametros = New System.Windows.Forms.Button()
         Me.label5 = New System.Windows.Forms.Label()
-        Me.button3 = New System.Windows.Forms.Button()
+        Me.bConfigurarColumnas = New System.Windows.Forms.Button()
         Me.groupBox2 = New System.Windows.Forms.GroupBox()
-        Me.richTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.rtbConsultaSQL = New System.Windows.Forms.RichTextBox()
         Me.groupBox1 = New System.Windows.Forms.GroupBox()
-        Me.comboBox1 = New System.Windows.Forms.ComboBox()
+        Me.cbBaseDeDatos = New System.Windows.Forms.ComboBox()
         Me.label3 = New System.Windows.Forms.Label()
-        Me.button1 = New System.Windows.Forms.Button()
-        Me.textBox2 = New System.Windows.Forms.TextBox()
+        Me.bSeleccionarPlantilla = New System.Windows.Forms.Button()
+        Me.tbRutaPlantillaxlsx = New System.Windows.Forms.TextBox()
         Me.label2 = New System.Windows.Forms.Label()
-        Me.textBox1 = New System.Windows.Forms.TextBox()
+        Me.tbNombrePlantilla = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.ControlPanel.SuspendLayout()
         Me.groupBox3.SuspendLayout()
@@ -108,9 +108,9 @@ Partial Class frm000Plantillas
         Me.groupBox3.Controls.Add(Me.lbConteoParametros)
         Me.groupBox3.Controls.Add(Me.lbConteoColumnas)
         Me.groupBox3.Controls.Add(Me.Label1)
-        Me.groupBox3.Controls.Add(Me.button6)
+        Me.groupBox3.Controls.Add(Me.bConfigurarParametros)
         Me.groupBox3.Controls.Add(Me.label5)
-        Me.groupBox3.Controls.Add(Me.button3)
+        Me.groupBox3.Controls.Add(Me.bConfigurarColumnas)
         Me.groupBox3.Location = New System.Drawing.Point(85, 323)
         Me.groupBox3.Name = "groupBox3"
         Me.groupBox3.Size = New System.Drawing.Size(326, 85)
@@ -143,15 +143,15 @@ Partial Class frm000Plantillas
         Me.Label1.TabIndex = 10
         Me.Label1.Text = "Columnas: "
         '
-        'button6
+        'bConfigurarParametros
         '
-        Me.button6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.button6.Location = New System.Drawing.Point(238, 48)
-        Me.button6.Name = "button6"
-        Me.button6.Size = New System.Drawing.Size(82, 23)
-        Me.button6.TabIndex = 9
-        Me.button6.Text = "Configurar Parametros"
-        Me.button6.UseVisualStyleBackColor = True
+        Me.bConfigurarParametros.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.bConfigurarParametros.Location = New System.Drawing.Point(238, 48)
+        Me.bConfigurarParametros.Name = "bConfigurarParametros"
+        Me.bConfigurarParametros.Size = New System.Drawing.Size(82, 23)
+        Me.bConfigurarParametros.TabIndex = 9
+        Me.bConfigurarParametros.Text = "Configurar Parametros"
+        Me.bConfigurarParametros.UseVisualStyleBackColor = True
         '
         'label5
         '
@@ -162,19 +162,19 @@ Partial Class frm000Plantillas
         Me.label5.TabIndex = 8
         Me.label5.Text = "Parametros: "
         '
-        'button3
+        'bConfigurarColumnas
         '
-        Me.button3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.button3.Location = New System.Drawing.Point(238, 19)
-        Me.button3.Name = "button3"
-        Me.button3.Size = New System.Drawing.Size(82, 23)
-        Me.button3.TabIndex = 8
-        Me.button3.Text = "Configurar"
-        Me.button3.UseVisualStyleBackColor = True
+        Me.bConfigurarColumnas.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.bConfigurarColumnas.Location = New System.Drawing.Point(238, 19)
+        Me.bConfigurarColumnas.Name = "bConfigurarColumnas"
+        Me.bConfigurarColumnas.Size = New System.Drawing.Size(82, 23)
+        Me.bConfigurarColumnas.TabIndex = 8
+        Me.bConfigurarColumnas.Text = "Configurar"
+        Me.bConfigurarColumnas.UseVisualStyleBackColor = True
         '
         'groupBox2
         '
-        Me.groupBox2.Controls.Add(Me.richTextBox1)
+        Me.groupBox2.Controls.Add(Me.rtbConsultaSQL)
         Me.groupBox2.Location = New System.Drawing.Point(85, 170)
         Me.groupBox2.Name = "groupBox2"
         Me.groupBox2.Size = New System.Drawing.Size(326, 147)
@@ -182,22 +182,22 @@ Partial Class frm000Plantillas
         Me.groupBox2.TabStop = False
         Me.groupBox2.Text = "Consulta SQL: "
         '
-        'richTextBox1
+        'rtbConsultaSQL
         '
-        Me.richTextBox1.Location = New System.Drawing.Point(10, 20)
-        Me.richTextBox1.Name = "richTextBox1"
-        Me.richTextBox1.Size = New System.Drawing.Size(296, 75)
-        Me.richTextBox1.TabIndex = 0
-        Me.richTextBox1.Text = "SELECT * FROM Ventas WHERE Fecha BETWEEN @Inicio AND @Fin"
+        Me.rtbConsultaSQL.Location = New System.Drawing.Point(10, 20)
+        Me.rtbConsultaSQL.Name = "rtbConsultaSQL"
+        Me.rtbConsultaSQL.Size = New System.Drawing.Size(296, 75)
+        Me.rtbConsultaSQL.TabIndex = 0
+        Me.rtbConsultaSQL.Text = "SELECT * FROM Ventas WHERE Fecha BETWEEN @Inicio AND @Fin"
         '
         'groupBox1
         '
-        Me.groupBox1.Controls.Add(Me.comboBox1)
+        Me.groupBox1.Controls.Add(Me.cbBaseDeDatos)
         Me.groupBox1.Controls.Add(Me.label3)
-        Me.groupBox1.Controls.Add(Me.button1)
-        Me.groupBox1.Controls.Add(Me.textBox2)
+        Me.groupBox1.Controls.Add(Me.bSeleccionarPlantilla)
+        Me.groupBox1.Controls.Add(Me.tbRutaPlantillaxlsx)
         Me.groupBox1.Controls.Add(Me.label2)
-        Me.groupBox1.Controls.Add(Me.textBox1)
+        Me.groupBox1.Controls.Add(Me.tbNombrePlantilla)
         Me.groupBox1.Controls.Add(Me.Label7)
         Me.groupBox1.Location = New System.Drawing.Point(85, 63)
         Me.groupBox1.Name = "groupBox1"
@@ -206,14 +206,14 @@ Partial Class frm000Plantillas
         Me.groupBox1.TabStop = False
         Me.groupBox1.Text = "Datos Generales:"
         '
-        'comboBox1
+        'cbBaseDeDatos
         '
-        Me.comboBox1.FormattingEnabled = True
-        Me.comboBox1.Items.AddRange(New Object() {"Sys_Expert", "Solium", "Otra1", "Otra 2"})
-        Me.comboBox1.Location = New System.Drawing.Point(96, 63)
-        Me.comboBox1.Name = "comboBox1"
-        Me.comboBox1.Size = New System.Drawing.Size(136, 21)
-        Me.comboBox1.TabIndex = 6
+        Me.cbBaseDeDatos.FormattingEnabled = True
+        Me.cbBaseDeDatos.Items.AddRange(New Object() {"Sys_Expert", "Solium", "Otra1", "Otra 2"})
+        Me.cbBaseDeDatos.Location = New System.Drawing.Point(96, 63)
+        Me.cbBaseDeDatos.Name = "cbBaseDeDatos"
+        Me.cbBaseDeDatos.Size = New System.Drawing.Size(136, 21)
+        Me.cbBaseDeDatos.TabIndex = 6
         '
         'label3
         '
@@ -224,23 +224,23 @@ Partial Class frm000Plantillas
         Me.label3.TabIndex = 5
         Me.label3.Text = "Base de Datos: "
         '
-        'button1
+        'bSeleccionarPlantilla
         '
-        Me.button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.button1.Location = New System.Drawing.Point(238, 38)
-        Me.button1.Name = "button1"
-        Me.button1.Size = New System.Drawing.Size(48, 23)
-        Me.button1.TabIndex = 4
-        Me.button1.Text = "..."
-        Me.button1.UseVisualStyleBackColor = True
+        Me.bSeleccionarPlantilla.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.bSeleccionarPlantilla.Location = New System.Drawing.Point(238, 38)
+        Me.bSeleccionarPlantilla.Name = "bSeleccionarPlantilla"
+        Me.bSeleccionarPlantilla.Size = New System.Drawing.Size(48, 23)
+        Me.bSeleccionarPlantilla.TabIndex = 4
+        Me.bSeleccionarPlantilla.Text = "..."
+        Me.bSeleccionarPlantilla.UseVisualStyleBackColor = True
         '
-        'textBox2
+        'tbRutaPlantillaxlsx
         '
-        Me.textBox2.Location = New System.Drawing.Point(49, 41)
-        Me.textBox2.Name = "textBox2"
-        Me.textBox2.Size = New System.Drawing.Size(183, 20)
-        Me.textBox2.TabIndex = 3
-        Me.textBox2.Text = "C:\Reportes\Templates\Ventas.xlsx"
+        Me.tbRutaPlantillaxlsx.Location = New System.Drawing.Point(49, 41)
+        Me.tbRutaPlantillaxlsx.Name = "tbRutaPlantillaxlsx"
+        Me.tbRutaPlantillaxlsx.Size = New System.Drawing.Size(183, 20)
+        Me.tbRutaPlantillaxlsx.TabIndex = 3
+        Me.tbRutaPlantillaxlsx.Text = "C:\Reportes\Templates\Ventas.xlsx"
         '
         'label2
         '
@@ -251,13 +251,13 @@ Partial Class frm000Plantillas
         Me.label2.TabIndex = 2
         Me.label2.Text = "Ruta: "
         '
-        'textBox1
+        'tbNombrePlantilla
         '
-        Me.textBox1.Location = New System.Drawing.Point(63, 17)
-        Me.textBox1.Name = "textBox1"
-        Me.textBox1.Size = New System.Drawing.Size(169, 20)
-        Me.textBox1.TabIndex = 1
-        Me.textBox1.Text = "Reporte de Ventas Mensual"
+        Me.tbNombrePlantilla.Location = New System.Drawing.Point(63, 17)
+        Me.tbNombrePlantilla.Name = "tbNombrePlantilla"
+        Me.tbNombrePlantilla.Size = New System.Drawing.Size(169, 20)
+        Me.tbNombrePlantilla.TabIndex = 1
+        Me.tbNombrePlantilla.Text = "Reporte de Ventas Mensual"
         '
         'Label7
         '
@@ -303,18 +303,18 @@ Partial Class frm000Plantillas
     Friend WithEvents lblVersionModulo As System.Windows.Forms.Label
     Private WithEvents groupBox3 As GroupBox
     Private WithEvents Label1 As Label
-    Private WithEvents button6 As Button
+    Private WithEvents bConfigurarParametros As Button
     Private WithEvents label5 As Label
-    Private WithEvents button3 As Button
+    Private WithEvents bConfigurarColumnas As Button
     Private WithEvents groupBox2 As GroupBox
-    Private WithEvents richTextBox1 As RichTextBox
+    Private WithEvents rtbConsultaSQL As RichTextBox
     Private WithEvents groupBox1 As GroupBox
-    Private WithEvents comboBox1 As ComboBox
+    Private WithEvents cbBaseDeDatos As ComboBox
     Private WithEvents label3 As Label
-    Private WithEvents button1 As Button
-    Private WithEvents textBox2 As TextBox
+    Private WithEvents bSeleccionarPlantilla As Button
+    Private WithEvents tbRutaPlantillaxlsx As TextBox
     Private WithEvents label2 As Label
-    Private WithEvents textBox1 As TextBox
+    Private WithEvents tbNombrePlantilla As TextBox
     Private WithEvents Label7 As Label
     Private WithEvents lbConteoParametros As Label
     Private WithEvents lbConteoColumnas As Label
