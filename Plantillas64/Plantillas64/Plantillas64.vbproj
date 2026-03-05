@@ -64,6 +64,9 @@
     <Reference Include="ICatalogo">
       <HintPath>..\..\..\..\..\SVN QA\Namespaces\ICatalogo.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -105,6 +108,12 @@
     <Compile Include="Ejecuciones.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PlantillasConfColParam.Designer.vb">
+      <DependentUpon>PlantillasConfColParam.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PlantillasConfColParam.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Plantillas.Designer.vb">
       <DependentUpon>Plantillas.vb</DependentUpon>
     </Compile>
@@ -138,6 +147,9 @@
     <EmbeddedResource Include="Ejecuciones.resx">
       <DependentUpon>Ejecuciones.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PlantillasConfColParam.resx">
+      <DependentUpon>PlantillasConfColParam.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Plantillas.resx">
       <DependentUpon>Plantillas.vb</DependentUpon>
     </EmbeddedResource>
@@ -158,6 +170,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
