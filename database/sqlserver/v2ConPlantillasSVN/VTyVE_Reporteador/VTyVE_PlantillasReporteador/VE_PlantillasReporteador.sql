@@ -11,7 +11,7 @@ SELECT * FROM (
     UNION ALL
     SELECT 't_RutaPlantilla' as Nombre, 0 AS Llave, 500 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Ruta Plantilla' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
-    SELECT 't_NombreBaseDatos' as Nombre, 0 AS Llave, 100 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Base de Datos' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro --dudas si dejarlop o eliminarlo
+    SELECT 't_NombreCliente' as Nombre, 0 AS Llave, 100 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Cliente/RFC' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro 
     UNION ALL
     SELECT 't_Consulta' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Consulta SQL' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '0' AS TipoFiltro 
     UNION ALL
