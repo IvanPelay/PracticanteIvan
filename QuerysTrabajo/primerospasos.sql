@@ -1,0 +1,192 @@
+---------------------------------------------------------------PASO 1
+--INSERT INTO Solium.dbo.Bit044GeneracionExpedientes
+--           	(i_Cve_GeneracionExpediente
+--           	,i_Cve_MaestroOperaciones
+--           	,f_FechaRegistroBitacora
+--           	,t_NumeroReferencia
+--           	,i_Anio
+--           	,i_AduanaES
+--           	,i_Patente
+--           	,i_NumeroPedimento
+--           	,i_Cve_DivisionMiEmpresa
+--           	,i_TipoDocumentacion
+--           	,i_CuentaGastos
+--           	,i_ComprobantesTerceros
+--           	,i_ConfiguracionSalida
+--           	,i_Cve_TipoEvento
+--           	,f_FechaEvento
+--           	,i_Cve_RegistroEvento
+--           	,t_RutaDestino
+--           	,f_FechaCreacionExpediente
+--           	,t_Observaciones
+--           	,i_Cve_Estatus
+--           	,i_Cve_Estado)
+--SELECT i_Cve_GeneracionExpediente
+--      	,i_Cve_MaestroOperaciones
+--     	,f_FechaRegistroBitacora
+--      	,t_NumeroReferencia
+--      	,i_Anio
+--      	,i_AduanaES
+--      	,i_Patente
+--      	,i_NumeroPedimento
+--     	,i_Cve_DivisionMiEmpresa
+--      	,i_TipoDocumentacion
+--      	,i_CuentaGastos
+--      	,i_ComprobantesTerceros
+--      	,i_ConfiguracionSalida
+--      	,i_Cve_TipoEvento
+--      	,f_FechaEvento
+--      	,i_Cve_RegistroEvento
+--      	,t_RutaDestino
+--      	,f_FechaCreacionExpediente
+--      	,t_Observaciones
+--      	,i_Cve_Estatus
+--      	,i_Cve_Estado
+--  FROM Solium.dbo.Vt044GeneracionExpedientesAutomatico with(nolock)
+--  where i_cve_generacionexpediente in  (
+--43 -- Ferrero (PENDIENTE)
+--,30 -- Continental Automotive
+--,28 -- Hisense
+--,8  -- Continental Treat
+--,9  -- Continental sepa dios
+--,4  -- Bostik ,5,6,7
+--,22 -- Becton Dickenson
+--,27 -- Molex
+--,31 -- CNH Comercial
+--,32 -- CNH Industrial
+--,33 -- CBI
+--,34 -- Bostik admin
+--,35 -- CBI Admin
+--,36 -- CBI
+--,37 -- CBI Admin 
+--,38 -- CBI 
+--,39 -- CBI Admin
+--,44 -- Colgate
+--,45 -- Mission Hills
+--,47 -- Walmart HC y MV
+--,48 -- DIAGEO Operativa
+--,49 -- DIAGEO Operativa
+--,50 -- DIAGEO Operativa
+--,51 -- DIAGEO Operativa
+--)
+----  and t_NumeroReferencia = 'CEG24-05907'
+----  and i_Cve_MaestroOperaciones = 1196648
+--order by f_FechaEvento
+
+---------------------------------------------------------------PASO 2
+--INSERT INTO Solium.dbo.Bit044DetGeneracionExpedientes
+--	(i_Cve_BitacoraExpedientes
+--	,i_Aux_GeneracionExpediente
+--	,i_Aux_DetGeneracionExpediente
+--	,i_Cve_MaestroOperaciones
+--	,i_Cve_Documento
+--	,i_Cve_TipoDocumento
+--	,i_Cve_TipoArchivo
+--	,t_NombreCorto
+--	,t_Separador
+--	,t_PrefijoDocumento
+--	,t_PrefijoCarpeta
+--	,i_TipoDocumentacion
+--	,i_ConfiguracionAgrupacion
+--	,t_RutaDocumento
+--	,t_NombreDocumentoOriginal
+--	,f_FechaCreacionDocumento
+--	,i_Procesado
+--	,i_Cve_Estatus
+--	,i_Cve_Estado
+--                ,t_RutaDocumentoFinal
+--	,i_Cve_DoctoVucem)
+--SELECT i_Cve_BitacoraExpedientes
+--	,i_Cve_GeneracionExpediente
+--	,i_Cve_DetGeneracionExpediente
+--	,i_Cve_MaestroOperaciones
+--	,i_Cve_Documento
+--	,i_Cve_TipoDocumento
+--	,i_Cve_TipoArchivo
+--	,t_NombreCorto
+--	,t_Separador
+--	,t_PrefijoDocumento
+--	,t_PrefijoCarpeta
+--	,i_TipoDocumentacion
+--	,i_ConfiguracionAgrupacion
+--	,t_RutaDocumento
+--	,t_NombreDocumento
+--	,NULL
+--	,i_Procesado
+--	,i_Cve_Estatus
+--	,i_Cve_Estado
+--	,NULL
+--	,i_Cve_DoctoVucem
+--FROM Solium.dbo.Vt044GeneracionExpedientesFaltantes
+--WHERE i_cve_generacionexpediente in  (
+--43 -- Ferrero (PENDIENTE)
+--,30 -- Continental Automotive
+--,28 -- Hisense
+--,8  -- Continental Treat
+--,9  -- Continental sepa dios
+--,4  -- Bostik ,5,6,7
+--,22 -- Becton Dickenson
+--,27 -- Molex
+--,31 -- CNH Comercial
+--,32 -- CNH Industrial
+--,33 -- CBI
+--,34 -- Bostik admin
+--,35 -- CBI Admin
+--,36 -- CBI
+--,37 -- CBI Admin 
+--,38 -- CBI 
+--,39 -- CBI Admin
+--,44 -- Colgate
+--,45 -- Mission Hills
+--,47 -- Walmart HC y MV
+--,48 -- DIAGEO Operativa
+--,49 -- DIAGEO Operativa
+--,50 -- DIAGEO Operativa
+--,51 -- DIAGEO Operativa
+--)
+--ORDER BY i_Cve_BitacoraExpedientes
+
+
+---------------------------------------------------------------PASO 3
+--update Solium.dbo.Bit044DetGeneracionExpedientes set i_Cve_DoctoVucem=
+--case 
+--when t_NombreDocumentoOriginal like '%170_DOC_VUCEM%' THEN  170
+--when t_NombreDocumentoOriginal like '%192_DOC_VUCEM%' THEN  192
+--when t_NombreDocumentoOriginal like '%433_DOC_VUCEM%' THEN  433
+--when t_NombreDocumentoOriginal like '%436_DOC_VUCEM%' THEN  436
+--when t_NombreDocumentoOriginal like '%438_DOC_VUCEM%' THEN  438
+--when t_NombreDocumentoOriginal like '%440_DOC_VUCEM%' THEN  440
+--when t_NombreDocumentoOriginal like '%441_DOC_VUCEM%' THEN  441
+--when t_NombreDocumentoOriginal like '%445_DOC_VUCEM%' THEN  445
+--when t_NombreDocumentoOriginal like '%170_SUB%' THEN  170
+--when t_NombreDocumentoOriginal like '%192_SUB%' THEN  192
+--when t_NombreDocumentoOriginal like '%433_SUB%' THEN  433
+--when t_NombreDocumentoOriginal like '%436_SUB%' THEN  436
+--when t_NombreDocumentoOriginal like '%438_SUB%' THEN  438
+--when t_NombreDocumentoOriginal like '%440_SUB%' THEN  440
+--when t_NombreDocumentoOriginal like '%441_SUB%' THEN  441
+--when t_NombreDocumentoOriginal like '%445_SUB%' THEN  445
+--END
+--from Solium.dbo.Bit044DetGeneracionExpedientes where i_Aux_GeneracionExpediente=30 and i_Cve_TipoDocumento=119 AND i_Cve_DoctoVucem IS NULL and i_cve_estatus = 0
+
+--update Solium.dbo.Bit044DetGeneracionExpedientes set i_Cve_DoctoVucem=
+--case 
+--when t_NombreDocumentoOriginal like '%170_ACUSE_VUCEM%' THEN  170
+--when t_NombreDocumentoOriginal like '%192_ACUSE_VUCEM%' THEN  192
+--when t_NombreDocumentoOriginal like '%433_ACUSE_VUCEM%' THEN  433
+--when t_NombreDocumentoOriginal like '%436_ACUSE_VUCEM%' THEN  436
+--when t_NombreDocumentoOriginal like '%438_ACUSE_VUCEM%' THEN  438
+--when t_NombreDocumentoOriginal like '%440_ACUSE_VUCEM%' THEN  440
+--when t_NombreDocumentoOriginal like '%441_ACUSE_VUCEM%' THEN  441
+--when t_NombreDocumentoOriginal like '%445_ACUSE_VUCEM%' THEN  445
+--when t_NombreDocumentoOriginal like '%170_SUB%' THEN  170
+--when t_NombreDocumentoOriginal like '%192_SUB%' THEN  192
+--when t_NombreDocumentoOriginal like '%433_SUB%' THEN  433
+--when t_NombreDocumentoOriginal like '%436_SUB%' THEN  436
+--when t_NombreDocumentoOriginal like '%438_SUB%' THEN  438
+--when t_NombreDocumentoOriginal like '%440_SUB%' THEN  440
+--when t_NombreDocumentoOriginal like '%441_SUB%' THEN  441
+--when t_NombreDocumentoOriginal like '%445_SUB%' THEN  445
+--END
+--from Solium.dbo.Bit044DetGeneracionExpedientes where i_Aux_GeneracionExpediente=30 and i_Cve_TipoDocumento IN(109) AND i_Cve_DoctoVucem IS NULL and i_cve_estatus = 0
+

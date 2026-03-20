@@ -1,7 +1,7 @@
 -- ===================================================================
 -- VE016Plantillas: Vista de Entorno para configuración de UI
 -- ===================================================================
-CREATE VIEW [dbo].[Ve016Plantillas] AS
+CREATE VIEW [dbo].[Ve016IUPlantillas] AS
 SELECT * FROM (
     SELECT 'i_Cve_Plantilla' as Nombre, 1 AS Llave, 11 AS Longitud, 0 AS TipoDato, 1 AS Visible, 'Clave Plantilla' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '1' AS TipoFiltro
     UNION ALL

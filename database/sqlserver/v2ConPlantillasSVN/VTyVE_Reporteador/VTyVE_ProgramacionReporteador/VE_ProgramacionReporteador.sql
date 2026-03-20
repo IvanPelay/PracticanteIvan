@@ -1,7 +1,7 @@
 -- ===================================================================
 -- VE016Programacion: Vista de Entorno para programaciones
 -- ===================================================================
-CREATE VIEW [dbo].[Ve016Programacion] AS
+CREATE VIEW [dbo].[Ve016IUProgramacion] AS
 SELECT * FROM (
     SELECT 'i_Cve_Programacion' as Nombre, 1 AS Llave, 11 AS Longitud, 0 AS TipoDato, 1 AS Visible, 'Clave Programación' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '1' AS TipoFiltro
     UNION ALL
@@ -19,7 +19,7 @@ SELECT * FROM (
     UNION ALL
     SELECT 't_Hora' as Nombre, 0 AS Llave, 8 AS Longitud, 4 AS TipoDato, 1 AS Visible, 'Hora' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
-    SELECT 't_Parametros' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Parámetros (JSON)' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' TipoFiltro
+    SELECT 't_Parametros' as Nombre, 0 AS Llave, 2147483647 AS Longitud, 1 AS TipoDato, 1 AS Visible, 'Parámetros (JSON)' AS NombreColumna, 1 AS PuedeInsertar, 1 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL
     SELECT 'f_ProximaEjecucion' as Nombre, 0 AS Llave, 23 AS Longitud, 4 AS TipoDato, 1 AS Visible, 'Próxima Ejecución' AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, '' AS ValorDefault, '2' AS TipoFiltro
     UNION ALL

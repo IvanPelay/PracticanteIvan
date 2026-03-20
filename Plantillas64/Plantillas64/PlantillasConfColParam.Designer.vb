@@ -41,8 +41,8 @@ Partial Class frm000PlantillasConfColParam
         Me.tbCampo = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.ParametrosCargados = New System.Windows.Forms.ListBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.ParametrosCargados = New System.Windows.Forms.ListBox()
         Me.bModificarParametro = New System.Windows.Forms.Button()
         Me.bAgregarParametro = New System.Windows.Forms.Button()
         Me.tbOrdenParametro = New System.Windows.Forms.TextBox()
@@ -60,9 +60,11 @@ Partial Class frm000PlantillasConfColParam
         Me.groupBox2 = New System.Windows.Forms.GroupBox()
         Me.rtbConsultaSQL = New System.Windows.Forms.RichTextBox()
         Me.groupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.chkEstatus = New System.Windows.Forms.CheckBox()
+        Me.tbCliente = New System.Windows.Forms.TextBox()
         Me.RtbDescripcion = New System.Windows.Forms.RichTextBox()
         Me.lbDescripción = New System.Windows.Forms.Label()
-        Me.cbBaseDeDatos = New System.Windows.Forms.ComboBox()
         Me.label3 = New System.Windows.Forms.Label()
         Me.bSeleccionarPlantilla = New System.Windows.Forms.Button()
         Me.tbRutaPlantillaxlsx = New System.Windows.Forms.TextBox()
@@ -119,7 +121,7 @@ Partial Class frm000PlantillasConfColParam
         Me.ControlPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ControlPanel.Location = New System.Drawing.Point(0, 575)
         Me.ControlPanel.Name = "ControlPanel"
-        Me.ControlPanel.Size = New System.Drawing.Size(506, 78)
+        Me.ControlPanel.Size = New System.Drawing.Size(708, 78)
         Me.ControlPanel.TabIndex = 359
         Me.ControlPanel.Controls.SetChildIndex(Me.btnCancelar, 0)
         Me.ControlPanel.Controls.SetChildIndex(Me.btnAceptar, 0)
@@ -131,7 +133,7 @@ Partial Class frm000PlantillasConfColParam
         Me.lblVersionModulo.AutoSize = True
         Me.lblVersionModulo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblVersionModulo.ForeColor = System.Drawing.Color.White
-        Me.lblVersionModulo.Location = New System.Drawing.Point(443, 61)
+        Me.lblVersionModulo.Location = New System.Drawing.Point(645, 61)
         Me.lblVersionModulo.Name = "lblVersionModulo"
         Me.lblVersionModulo.Size = New System.Drawing.Size(58, 13)
         Me.lblVersionModulo.TabIndex = 357
@@ -142,7 +144,7 @@ Partial Class frm000PlantillasConfColParam
         Me.groupBox3.Controls.Add(Me.TCColumasnParametros)
         Me.groupBox3.Location = New System.Drawing.Point(26, 271)
         Me.groupBox3.Name = "groupBox3"
-        Me.groupBox3.Size = New System.Drawing.Size(438, 281)
+        Me.groupBox3.Size = New System.Drawing.Size(649, 281)
         Me.groupBox3.TabIndex = 363
         Me.groupBox3.TabStop = False
         Me.groupBox3.Text = "Parametros: "
@@ -154,7 +156,7 @@ Partial Class frm000PlantillasConfColParam
         Me.TCColumasnParametros.Location = New System.Drawing.Point(6, 19)
         Me.TCColumasnParametros.Name = "TCColumasnParametros"
         Me.TCColumasnParametros.SelectedIndex = 0
-        Me.TCColumasnParametros.Size = New System.Drawing.Size(426, 256)
+        Me.TCColumasnParametros.Size = New System.Drawing.Size(637, 256)
         Me.TCColumasnParametros.TabIndex = 1
         '
         'TabPage1
@@ -163,7 +165,7 @@ Partial Class frm000PlantillasConfColParam
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(418, 230)
+        Me.TabPage1.Size = New System.Drawing.Size(629, 230)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Columnas"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -183,13 +185,13 @@ Partial Class frm000PlantillasConfColParam
         Me.GroupBox4.Controls.Add(Me.Label8)
         Me.GroupBox4.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(406, 218)
+        Me.GroupBox4.Size = New System.Drawing.Size(617, 218)
         Me.GroupBox4.TabIndex = 364
         Me.GroupBox4.TabStop = False
         '
         'bModificarColumna
         '
-        Me.bModificarColumna.Location = New System.Drawing.Point(181, 46)
+        Me.bModificarColumna.Location = New System.Drawing.Point(507, 45)
         Me.bModificarColumna.Name = "bModificarColumna"
         Me.bModificarColumna.Size = New System.Drawing.Size(75, 23)
         Me.bModificarColumna.TabIndex = 15
@@ -198,7 +200,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'bAgregarColumna
         '
-        Me.bAgregarColumna.Location = New System.Drawing.Point(182, 20)
+        Me.bAgregarColumna.Location = New System.Drawing.Point(508, 19)
         Me.bAgregarColumna.Name = "bAgregarColumna"
         Me.bAgregarColumna.Size = New System.Drawing.Size(75, 23)
         Me.bAgregarColumna.TabIndex = 14
@@ -208,23 +210,23 @@ Partial Class frm000PlantillasConfColParam
         'ColumnasCargadas
         '
         Me.ColumnasCargadas.FormattingEnabled = True
-        Me.ColumnasCargadas.Location = New System.Drawing.Point(9, 106)
+        Me.ColumnasCargadas.Location = New System.Drawing.Point(6, 78)
         Me.ColumnasCargadas.Name = "ColumnasCargadas"
-        Me.ColumnasCargadas.Size = New System.Drawing.Size(391, 108)
+        Me.ColumnasCargadas.Size = New System.Drawing.Size(591, 134)
         Me.ColumnasCargadas.TabIndex = 13
         '
         'cbFormato
         '
         Me.cbFormato.FormattingEnabled = True
         Me.cbFormato.Items.AddRange(New Object() {"Moneda", "Número", "Número Entero", "Porcentaje", "Fecha", "Texto", "Sin formato"})
-        Me.cbFormato.Location = New System.Drawing.Point(54, 53)
+        Me.cbFormato.Location = New System.Drawing.Point(245, 13)
         Me.cbFormato.Name = "cbFormato"
         Me.cbFormato.Size = New System.Drawing.Size(121, 21)
         Me.cbFormato.TabIndex = 12
         '
         'tbOrden
         '
-        Me.tbOrden.Location = New System.Drawing.Point(54, 76)
+        Me.tbOrden.Location = New System.Drawing.Point(245, 36)
         Me.tbOrden.Name = "tbOrden"
         Me.tbOrden.Size = New System.Drawing.Size(121, 20)
         Me.tbOrden.TabIndex = 11
@@ -232,7 +234,7 @@ Partial Class frm000PlantillasConfColParam
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(6, 79)
+        Me.Label1.Location = New System.Drawing.Point(197, 40)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(42, 13)
         Me.Label1.TabIndex = 10
@@ -241,7 +243,7 @@ Partial Class frm000PlantillasConfColParam
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(6, 56)
+        Me.Label5.Location = New System.Drawing.Point(197, 16)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(51, 13)
         Me.Label5.TabIndex = 8
@@ -249,7 +251,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'tbEtiqueta
         '
-        Me.tbEtiqueta.Location = New System.Drawing.Point(54, 33)
+        Me.tbEtiqueta.Location = New System.Drawing.Point(54, 37)
         Me.tbEtiqueta.Name = "tbEtiqueta"
         Me.tbEtiqueta.Size = New System.Drawing.Size(121, 20)
         Me.tbEtiqueta.TabIndex = 5
@@ -257,7 +259,7 @@ Partial Class frm000PlantillasConfColParam
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(6, 36)
+        Me.Label4.Location = New System.Drawing.Point(6, 40)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(52, 13)
         Me.Label4.TabIndex = 4
@@ -281,26 +283,18 @@ Partial Class frm000PlantillasConfColParam
         '
         'TabPage2
         '
-        Me.TabPage2.Controls.Add(Me.ParametrosCargados)
         Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(418, 230)
+        Me.TabPage2.Size = New System.Drawing.Size(629, 230)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Parametros"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'ParametrosCargados
-        '
-        Me.ParametrosCargados.FormattingEnabled = True
-        Me.ParametrosCargados.Location = New System.Drawing.Point(6, 150)
-        Me.ParametrosCargados.Name = "ParametrosCargados"
-        Me.ParametrosCargados.Size = New System.Drawing.Size(406, 69)
-        Me.ParametrosCargados.TabIndex = 364
-        '
         'GroupBox5
         '
+        Me.GroupBox5.Controls.Add(Me.ParametrosCargados)
         Me.GroupBox5.Controls.Add(Me.bModificarParametro)
         Me.GroupBox5.Controls.Add(Me.bAgregarParametro)
         Me.GroupBox5.Controls.Add(Me.tbOrdenParametro)
@@ -317,13 +311,21 @@ Partial Class frm000PlantillasConfColParam
         Me.GroupBox5.Controls.Add(Me.Label14)
         Me.GroupBox5.Location = New System.Drawing.Point(6, 6)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(406, 149)
+        Me.GroupBox5.Size = New System.Drawing.Size(617, 218)
         Me.GroupBox5.TabIndex = 364
         Me.GroupBox5.TabStop = False
         '
+        'ParametrosCargados
+        '
+        Me.ParametrosCargados.FormattingEnabled = True
+        Me.ParametrosCargados.Location = New System.Drawing.Point(6, 85)
+        Me.ParametrosCargados.Name = "ParametrosCargados"
+        Me.ParametrosCargados.Size = New System.Drawing.Size(587, 121)
+        Me.ParametrosCargados.TabIndex = 364
+        '
         'bModificarParametro
         '
-        Me.bModificarParametro.Location = New System.Drawing.Point(191, 48)
+        Me.bModificarParametro.Location = New System.Drawing.Point(510, 48)
         Me.bModificarParametro.Name = "bModificarParametro"
         Me.bModificarParametro.Size = New System.Drawing.Size(75, 23)
         Me.bModificarParametro.TabIndex = 17
@@ -332,7 +334,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'bAgregarParametro
         '
-        Me.bAgregarParametro.Location = New System.Drawing.Point(192, 19)
+        Me.bAgregarParametro.Location = New System.Drawing.Point(511, 19)
         Me.bAgregarParametro.Name = "bAgregarParametro"
         Me.bAgregarParametro.Size = New System.Drawing.Size(75, 23)
         Me.bAgregarParametro.TabIndex = 16
@@ -341,7 +343,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'tbOrdenParametro
         '
-        Me.tbOrdenParametro.Location = New System.Drawing.Point(86, 118)
+        Me.tbOrdenParametro.Location = New System.Drawing.Point(86, 55)
         Me.tbOrdenParametro.Name = "tbOrdenParametro"
         Me.tbOrdenParametro.Size = New System.Drawing.Size(100, 20)
         Me.tbOrdenParametro.TabIndex = 11
@@ -349,7 +351,7 @@ Partial Class frm000PlantillasConfColParam
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(8, 118)
+        Me.Label9.Location = New System.Drawing.Point(6, 58)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(42, 13)
         Me.Label9.TabIndex = 10
@@ -357,7 +359,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'TbValorDefault
         '
-        Me.TbValorDefault.Location = New System.Drawing.Point(86, 96)
+        Me.TbValorDefault.Location = New System.Drawing.Point(275, 59)
         Me.TbValorDefault.Name = "TbValorDefault"
         Me.TbValorDefault.Size = New System.Drawing.Size(100, 20)
         Me.TbValorDefault.TabIndex = 9
@@ -365,7 +367,7 @@ Partial Class frm000PlantillasConfColParam
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(6, 99)
+        Me.Label10.Location = New System.Drawing.Point(199, 62)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(74, 13)
         Me.Label10.TabIndex = 8
@@ -374,7 +376,7 @@ Partial Class frm000PlantillasConfColParam
         'checkbRequerido
         '
         Me.checkbRequerido.AutoSize = True
-        Me.checkbRequerido.Location = New System.Drawing.Point(86, 79)
+        Me.checkbRequerido.Location = New System.Drawing.Point(265, 42)
         Me.checkbRequerido.Name = "checkbRequerido"
         Me.checkbRequerido.Size = New System.Drawing.Size(15, 14)
         Me.checkbRequerido.TabIndex = 7
@@ -383,7 +385,7 @@ Partial Class frm000PlantillasConfColParam
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(6, 79)
+        Me.Label11.Location = New System.Drawing.Point(199, 42)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(62, 13)
         Me.Label11.TabIndex = 6
@@ -391,7 +393,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'tbEtiquetaParametro
         '
-        Me.tbEtiquetaParametro.Location = New System.Drawing.Point(86, 59)
+        Me.tbEtiquetaParametro.Location = New System.Drawing.Point(86, 35)
         Me.tbEtiquetaParametro.Name = "tbEtiquetaParametro"
         Me.tbEtiquetaParametro.Size = New System.Drawing.Size(100, 20)
         Me.tbEtiquetaParametro.TabIndex = 5
@@ -399,7 +401,7 @@ Partial Class frm000PlantillasConfColParam
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(8, 59)
+        Me.Label12.Location = New System.Drawing.Point(6, 38)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(52, 13)
         Me.Label12.TabIndex = 4
@@ -409,7 +411,7 @@ Partial Class frm000PlantillasConfColParam
         '
         Me.cbTipo.FormattingEnabled = True
         Me.cbTipo.Items.AddRange(New Object() {"String", "Int", "Date", "Decimal"})
-        Me.cbTipo.Location = New System.Drawing.Point(86, 37)
+        Me.cbTipo.Location = New System.Drawing.Point(240, 13)
         Me.cbTipo.Name = "cbTipo"
         Me.cbTipo.Size = New System.Drawing.Size(100, 21)
         Me.cbTipo.TabIndex = 3
@@ -417,7 +419,7 @@ Partial Class frm000PlantillasConfColParam
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(8, 40)
+        Me.Label13.Location = New System.Drawing.Point(199, 16)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(34, 13)
         Me.Label13.TabIndex = 2
@@ -444,7 +446,7 @@ Partial Class frm000PlantillasConfColParam
         Me.groupBox2.Controls.Add(Me.rtbConsultaSQL)
         Me.groupBox2.Location = New System.Drawing.Point(26, 170)
         Me.groupBox2.Name = "groupBox2"
-        Me.groupBox2.Size = New System.Drawing.Size(438, 105)
+        Me.groupBox2.Size = New System.Drawing.Size(649, 105)
         Me.groupBox2.TabIndex = 362
         Me.groupBox2.TabStop = False
         Me.groupBox2.Text = "Consulta SQL: "
@@ -453,15 +455,17 @@ Partial Class frm000PlantillasConfColParam
         '
         Me.rtbConsultaSQL.Location = New System.Drawing.Point(10, 20)
         Me.rtbConsultaSQL.Name = "rtbConsultaSQL"
-        Me.rtbConsultaSQL.Size = New System.Drawing.Size(422, 75)
+        Me.rtbConsultaSQL.Size = New System.Drawing.Size(633, 75)
         Me.rtbConsultaSQL.TabIndex = 0
         Me.rtbConsultaSQL.Text = "SELECT * FROM Ventas WHERE Fecha BETWEEN @Inicio AND @Fin"
         '
         'groupBox1
         '
+        Me.groupBox1.Controls.Add(Me.Label15)
+        Me.groupBox1.Controls.Add(Me.chkEstatus)
+        Me.groupBox1.Controls.Add(Me.tbCliente)
         Me.groupBox1.Controls.Add(Me.RtbDescripcion)
         Me.groupBox1.Controls.Add(Me.lbDescripción)
-        Me.groupBox1.Controls.Add(Me.cbBaseDeDatos)
         Me.groupBox1.Controls.Add(Me.label3)
         Me.groupBox1.Controls.Add(Me.bSeleccionarPlantilla)
         Me.groupBox1.Controls.Add(Me.tbRutaPlantillaxlsx)
@@ -470,50 +474,69 @@ Partial Class frm000PlantillasConfColParam
         Me.groupBox1.Controls.Add(Me.Label7)
         Me.groupBox1.Location = New System.Drawing.Point(26, 63)
         Me.groupBox1.Name = "groupBox1"
-        Me.groupBox1.Size = New System.Drawing.Size(444, 101)
+        Me.groupBox1.Size = New System.Drawing.Size(649, 101)
         Me.groupBox1.TabIndex = 360
         Me.groupBox1.TabStop = False
         Me.groupBox1.Text = "Datos Generales:"
         '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(308, 42)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(48, 13)
+        Me.Label15.TabIndex = 19
+        Me.Label15.Text = "Estatus: "
+        '
+        'chkEstatus
+        '
+        Me.chkEstatus.AutoSize = True
+        Me.chkEstatus.Checked = True
+        Me.chkEstatus.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkEstatus.Location = New System.Drawing.Point(362, 41)
+        Me.chkEstatus.Name = "chkEstatus"
+        Me.chkEstatus.Size = New System.Drawing.Size(15, 14)
+        Me.chkEstatus.TabIndex = 18
+        Me.chkEstatus.UseVisualStyleBackColor = True
+        '
+        'tbCliente
+        '
+        Me.tbCliente.Location = New System.Drawing.Point(80, 35)
+        Me.tbCliente.Name = "tbCliente"
+        Me.tbCliente.Size = New System.Drawing.Size(169, 20)
+        Me.tbCliente.TabIndex = 9
+        Me.tbCliente.Text = "WME990813BAA"
+        '
         'RtbDescripcion
         '
-        Me.RtbDescripcion.Location = New System.Drawing.Point(304, 17)
+        Me.RtbDescripcion.Location = New System.Drawing.Point(80, 56)
         Me.RtbDescripcion.Name = "RtbDescripcion"
-        Me.RtbDescripcion.Size = New System.Drawing.Size(134, 75)
+        Me.RtbDescripcion.Size = New System.Drawing.Size(330, 26)
         Me.RtbDescripcion.TabIndex = 8
         Me.RtbDescripcion.Text = ""
         '
         'lbDescripción
         '
         Me.lbDescripción.AutoSize = True
-        Me.lbDescripción.Location = New System.Drawing.Point(238, 20)
+        Me.lbDescripción.Location = New System.Drawing.Point(7, 59)
         Me.lbDescripción.Name = "lbDescripción"
         Me.lbDescripción.Size = New System.Drawing.Size(69, 13)
         Me.lbDescripción.TabIndex = 7
         Me.lbDescripción.Text = "Descripción: "
         '
-        'cbBaseDeDatos
-        '
-        Me.cbBaseDeDatos.FormattingEnabled = True
-        Me.cbBaseDeDatos.Items.AddRange(New Object() {"Sys_Expert", "Solium", "Otra1", "Otra 2"})
-        Me.cbBaseDeDatos.Location = New System.Drawing.Point(96, 63)
-        Me.cbBaseDeDatos.Name = "cbBaseDeDatos"
-        Me.cbBaseDeDatos.Size = New System.Drawing.Size(136, 21)
-        Me.cbBaseDeDatos.TabIndex = 6
-        '
         'label3
         '
         Me.label3.AutoSize = True
-        Me.label3.Location = New System.Drawing.Point(7, 66)
+        Me.label3.Location = New System.Drawing.Point(7, 38)
         Me.label3.Name = "label3"
-        Me.label3.Size = New System.Drawing.Size(83, 13)
+        Me.label3.Size = New System.Drawing.Size(71, 13)
         Me.label3.TabIndex = 5
-        Me.label3.Text = "Base de Datos: "
+        Me.label3.Text = "Cliente/RFC: "
         '
         'bSeleccionarPlantilla
         '
         Me.bSeleccionarPlantilla.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.bSeleccionarPlantilla.Location = New System.Drawing.Point(238, 61)
+        Me.bSeleccionarPlantilla.Location = New System.Drawing.Point(539, 15)
         Me.bSeleccionarPlantilla.Name = "bSeleccionarPlantilla"
         Me.bSeleccionarPlantilla.Size = New System.Drawing.Size(48, 23)
         Me.bSeleccionarPlantilla.TabIndex = 4
@@ -522,7 +545,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'tbRutaPlantillaxlsx
         '
-        Me.tbRutaPlantillaxlsx.Location = New System.Drawing.Point(49, 41)
+        Me.tbRutaPlantillaxlsx.Location = New System.Drawing.Point(350, 17)
         Me.tbRutaPlantillaxlsx.Name = "tbRutaPlantillaxlsx"
         Me.tbRutaPlantillaxlsx.Size = New System.Drawing.Size(183, 20)
         Me.tbRutaPlantillaxlsx.TabIndex = 3
@@ -531,7 +554,7 @@ Partial Class frm000PlantillasConfColParam
         'label2
         '
         Me.label2.AutoSize = True
-        Me.label2.Location = New System.Drawing.Point(7, 44)
+        Me.label2.Location = New System.Drawing.Point(308, 20)
         Me.label2.Name = "label2"
         Me.label2.Size = New System.Drawing.Size(36, 13)
         Me.label2.TabIndex = 2
@@ -539,7 +562,7 @@ Partial Class frm000PlantillasConfColParam
         '
         'tbNombrePlantilla
         '
-        Me.tbNombrePlantilla.Location = New System.Drawing.Point(63, 17)
+        Me.tbNombrePlantilla.Location = New System.Drawing.Point(63, 15)
         Me.tbNombrePlantilla.Name = "tbNombrePlantilla"
         Me.tbNombrePlantilla.Size = New System.Drawing.Size(169, 20)
         Me.tbNombrePlantilla.TabIndex = 1
@@ -563,7 +586,7 @@ Partial Class frm000PlantillasConfColParam
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(506, 653)
+        Me.ClientSize = New System.Drawing.Size(708, 653)
         Me.Controls.Add(Me.groupBox3)
         Me.Controls.Add(Me.groupBox2)
         Me.Controls.Add(Me.groupBox1)
@@ -602,7 +625,6 @@ Partial Class frm000PlantillasConfColParam
     Private WithEvents groupBox2 As GroupBox
     Private WithEvents rtbConsultaSQL As RichTextBox
     Private WithEvents groupBox1 As GroupBox
-    Private WithEvents cbBaseDeDatos As ComboBox
     Private WithEvents label3 As Label
     Private WithEvents bSeleccionarPlantilla As Button
     Private WithEvents tbRutaPlantillaxlsx As TextBox
@@ -643,4 +665,7 @@ Partial Class frm000PlantillasConfColParam
     Private WithEvents lbDescripción As Label
     Friend WithEvents RtbDescripcion As RichTextBox
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Private WithEvents tbCliente As TextBox
+    Friend WithEvents chkEstatus As CheckBox
+    Private WithEvents Label15 As Label
 End Class

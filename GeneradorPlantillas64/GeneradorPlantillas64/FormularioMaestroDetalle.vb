@@ -1,10 +1,14 @@
-﻿Imports Gsol
-Imports Gsol.BaseDatos.Operaciones
+﻿Imports gsol
+Imports gsol.BaseDatos.Operaciones
 
-Public Class frm000Parametro
-    Inherits FormularioBase64
+Public Class Frm000GeneradorPlantillas
+    Inherits FormularioBaseMaestroDetalle
+
 
 #Region "Atributos"
+
+    ''EJEMPLO
+    'Private _claverequisicion As String
 
 #End Region
 
@@ -13,27 +17,8 @@ Public Class frm000Parametro
     Public Sub New(ByVal ioperacionescatalogo_ As IOperacionesCatalogo,
             ByVal tipooperacion_ As IOperacionesCatalogo.TiposOperacionSQL)
 
-        'Llamada necesaria para el diseñador.
+        ' Llamada necesaria para el diseñador.
         InitializeComponent()
-
-        '················ Consumo del formulario mediante IEnlace ...........................
-
-        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-
-        'ioperacionescatalogo_ = _sistema.EnsamblaModulo("Responsables").Clone
-
-        'Dim listaLibrerias_ As New List(Of String)
-
-        'ConstructorContexto(ClasesFormulario.ClaseA1,
-        '                     tipooperacion_,
-        '                     ioperacionescatalogo_,
-        '                     "0.0.0.0",
-        '                     "Responsables",
-        '                     "Vt026Responsables",
-        '                     "Responsables")
-
-
-        '················ Consumo del formulario manual ...........................
 
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         _ioperacionescatalogo = New OperacionesCatalogo
@@ -45,10 +30,21 @@ Public Class frm000Parametro
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         _sistema = New Organismo
 
+        '--------IMPLEMENTACION ADICIONAL 
+
         Select Case tipooperacion_
             Case IOperacionesCatalogo.TiposOperacionSQL.Insercion
                 LblAccion.Text = "Nuevo registro"
 
+                'EJEMPLO
+                'If _ioperacionescatalogo.TipoEscritura = IOperacionesCatalogo.TiposEscritura.MemoriaIntermedia Then
+
+                '    _claverequisicion = "-1"
+
+                'Else
+                '    _claverequisicion = _ioperacionescatalogo.OperacionAnterior.CampoPorNombre("i_Cve_Requisicion")
+
+                'End If
 
             Case IOperacionesCatalogo.TiposOperacionSQL.Modificar
 
@@ -60,16 +56,17 @@ Public Class frm000Parametro
 
         End Select
 
+        '---------------------------------
+
     End Sub
 
 #End Region
 
-#Region "Métodos"
+#Region "Metodos"
+
 
     Public Overrides Sub PreparaModificacion()
-
-        ':::::::::::::Ejemplo de asignación directa::::::::::::::
-
+        'EJEMPLO
         'TbClaveMaterial.Text = _ioperacionescatalogo.CampoPorNombre("i_Cve_Material")
 
         'TbDescripcion.Text = _ioperacionescatalogo.CampoPorNombre("t_Descripcion")
@@ -79,9 +76,7 @@ Public Class frm000Parametro
     End Sub
 
     Public Overrides Sub RealizarInsercion()
-
-        ':::::::::::::Ejemplo de asignación directa::::::::::::::
-
+        'EJEMPLO
         '_ioperacionescatalogo.CampoPorNombre("i_Cve_Requisicion") = _claverequisicion
 
         '_ioperacionescatalogo.CampoPorNombre("i_Cve_Material") = TbClaveMaterial.Text
@@ -95,9 +90,7 @@ Public Class frm000Parametro
     End Sub
 
     Public Overrides Sub RealizarModificacion()
-
-        ':::::::::::::Ejemplo de asignación directa::::::::::::::
-
+        'EJEMPLO
         '_ioperacionescatalogo.CampoPorNombre("i_Cve_Material") = TbClaveMaterial.Text
 
         '_ioperacionescatalogo.CampoPorNombre("t_Descripcion") = TbDescripcion.Text

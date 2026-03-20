@@ -44,25 +44,6 @@ Public Class frm000PlantillasConfColParam
         'Llamada necesaria para el diseñador.
         InitializeComponent()
 
-        '················ Consumo del formulario mediante IEnlace ...........................
-
-        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-
-        'ioperacionescatalogo_ = _sistema.EnsamblaModulo("Responsables").Clone
-
-        'Dim listaLibrerias_ As New List(Of String)
-
-        'ConstructorContexto(ClasesFormulario.ClaseA1,
-        '                     tipooperacion_,
-        '                     ioperacionescatalogo_,
-        '                     "0.0.0.0",
-        '                     "Responsables",
-        '                     "Vt026Responsables",
-        '                     "Responsables")
-
-
-        '················ Consumo del formulario manual ...........................
-
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         _ioperacionescatalogo = New OperacionesCatalogo
 
@@ -103,12 +84,6 @@ Public Class frm000PlantillasConfColParam
 #Region "Métodos"
 
     Private Sub InicializaCombos()
-        'Cargamos Bases de Datos disponibles
-        cbBaseDeDatos.Items.Clear()
-        cbBaseDeDatos.Items.Add("SysExpert")
-        cbBaseDeDatos.Items.Add("Solium")
-        cbBaseDeDatos.SelectedIndex = 0
-
         'Inicializamos combo de Formatos para Columnas
         cbFormato.SelectedIndex = 0
         'Inicializamos combo de Tipos para Parámetros
@@ -128,8 +103,9 @@ Public Class frm000PlantillasConfColParam
         tbNombrePlantilla.Text = _ioperacionescatalogo.CampoPorNombre("t_Nombre")
         RtbDescripcion.Text = _ioperacionescatalogo.CampoPorNombre("t_Descripcion")
         tbRutaPlantillaxlsx.Text = _ioperacionescatalogo.CampoPorNombre("t_RutaPlantilla")
-        cbBaseDeDatos.Text = _ioperacionescatalogo.CampoPorNombre("t_NombreBaseDeDatos")
+        tbCliente.Text = _ioperacionescatalogo.CampoPorNombre("t_NombreCliente")
         rtbConsultaSQL.Text = _ioperacionescatalogo.CampoPorNombre("t_Consulta")
+        chkEstatus.Checked = (_ioperacionescatalogo.CampoPorNombre("i_Cve_Estatus") = 1)
 
         'Validar que el Formato de Salida sea XLSX
         Dim formatoSalidaBD As String = _ioperacionescatalogo.CampoPorNombre("t_FormatoSalida")
@@ -145,6 +121,11 @@ Public Class frm000PlantillasConfColParam
         If Not String.IsNullOrEmpty(columnasJson) Then
             Try
                 _listaColumnas = JsonConvert.DeserializeObject(Of List(Of ColumnaConfig))(columnasJson)
+
+                If _listaColumnas Is Nothing Then
+                    _listaColumnas = New List(Of ColumnaConfig)
+                End If
+
             Catch ex As Exception
                 MessageBox.Show($"Error al cargar configuración de columnas: {ex.Message}",
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -172,14 +153,13 @@ Public Class frm000PlantillasConfColParam
         'Actualiza los listBox con el contenido de las listas
         ColumnasCargadas.Items.Clear()
         For Each col In _listaColumnas.OrderBy(Function(c) c.Orden)
-            ColumnasCargadas.Items.Add($"{col.Orden}: {col.Titulo} ({col.Campo}) -  Formato: {col.Formato}")
+            ColumnasCargadas.Items.Add($"{col.Orden}: {col.Titulo} ({col.Campo}) -  Formato: {ObtenerNombreFormatoColumna(col.Formato)}")
         Next
 
         ParametrosCargados.Items.Clear()
         For Each param In _listaParametros.OrderBy(Function(p) p.Orden)
             Dim req As String = If(param.Requerido, "SÍ", "NO")
-            ParametrosCargados.Items.Add($"{param.Orden}{req}: {param.Etiqueta} 
-                ({param.Nombre}: {param.Tipo}) = {param.ValorDefault}")
+            ParametrosCargados.Items.Add($"{param.Orden} {req}: {param.Etiqueta} ({param.Nombre}: {param.Tipo}) = {param.ValorDefault}")
         Next
     End Sub
     Public Overrides Sub RealizarInsercion()
@@ -194,8 +174,9 @@ Public Class frm000PlantillasConfColParam
         _ioperacionescatalogo.CampoPorNombre("t_Nombre") = tbNombrePlantilla.Text
         _ioperacionescatalogo.CampoPorNombre("t_Descripcion") = RtbDescripcion.Text
         _ioperacionescatalogo.CampoPorNombre("t_RutaPlantilla") = tbRutaPlantillaxlsx.Text
-        _ioperacionescatalogo.CampoPorNombre("t_NombreBaseDeDatos") = cbBaseDeDatos.Text
+        _ioperacionescatalogo.CampoPorNombre("t_NombreCliente") = tbCliente.Text
         _ioperacionescatalogo.CampoPorNombre("t_Consulta") = rtbConsultaSQL.Text
+        _ioperacionescatalogo.CampoPorNombre("i_Cve_Estatus") = If(chkEstatus.Checked, "1", "0") 'Activo/Inactivo
         'El formato de salida se fija a XLSX
         _ioperacionescatalogo.CampoPorNombre("t_FormatoSalida") = FORMATO_SALIDA
         'Serializar las listas a JSON para almacenarlas en el catálogo
@@ -215,7 +196,6 @@ Public Class frm000PlantillasConfColParam
             'Asignar valores adicionales para nueva plantilla si es necesario
             '_ioperacionescatalogo.CampoPorNombre("t_UsuarioRegistro") = _sistema.UsuarioActual.CveUsuario
             _ioperacionescatalogo.CampoPorNombre("f_FechaRegistro") = DateTime.Now
-            _ioperacionescatalogo.CampoPorNombre("i_Cve_Estatus") = "1" 'Activo
             _ioperacionescatalogo.CampoPorNombre("i_Cve_Estado") = "1" 'Activo
         Else
             'f_Registro y usuario de registro no se modifican en edición
@@ -256,30 +236,57 @@ Public Class frm000PlantillasConfColParam
             Return
         End If
 
+        'Validar orden único
+        If _listaColumnas.Any(Function(c) c.Orden = orden) Then
+            MessageBox.Show($"Ya existe una columna con el orden {orden}. Por favor, elija un orden diferente.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        'validar campo único
+        If _listaColumnas.Any(Function(c) c.Campo.Equals(tbCampo.Text, StringComparison.OrdinalIgnoreCase)) Then
+            MessageBox.Show($"Ya existe una columna con el campo '{tbCampo.Text}'. Por favor, elija un campo diferente.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
         'Agregar nueva columna a la lista
         Dim nuevaColumna As New ColumnaConfig With {
             .Campo = tbCampo.Text,
             .Titulo = tbEtiqueta.Text,
             .Formato = cbFormato.SelectedIndex,
-            .Orden = _listaColumnas.Count + 1
+            .Orden = orden
         }
 
         _listaColumnas.Add(nuevaColumna)
         'Refrescar UI y limpiar campos
         RefrescarListasUI()
-        tLimpiarCamposColumna()
+        TLimpiarCamposColumna()
     End Sub
 
     Private Sub BModificarColumna_Click(sender As Object, e As EventArgs) Handles bModificarColumna.Click
         'Validar que se haya seleccionado una columna
         If ColumnasCargadas.SelectedIndex < 0 Then
             MessageBox.Show("Debe seleccionar una columna para modificar.",
-                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
+        'Obtener columna seleccionada DIRECTAMENTE
+        Dim indice As Integer = ColumnasCargadas.SelectedIndex
+        Dim listaOrdenada = _listaColumnas.OrderBy(Function(c) c.Orden).ToList()
+
+        'Validar que el índice sea válido
+        If indice < 0 OrElse indice >= listaOrdenada.Count Then
+            MessageBox.Show("Error al obtener la columna seleccionada.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        Dim columnaSeleccionada = listaOrdenada(indice)
+
         'Validar campos de columna
-        If String.IsNullOrEmpty(tbCampo.Text) OrElse String.IsNullOrEmpty(tbEtiqueta.Text) Then
+        If String.IsNullOrWhiteSpace(tbCampo.Text) OrElse String.IsNullOrWhiteSpace(tbEtiqueta.Text) Then
             MessageBox.Show("Debe ingresar el campo y Etiqueta de la columna.",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -287,22 +294,37 @@ Public Class frm000PlantillasConfColParam
 
         'Validar que el Orden sea Númerico y positivo
         Dim orden As Integer
-        If Not Integer.TryParse(tbOrden.Text, orden) OrElse orden <= 0 Then
-            MessageBox.Show("El orden de la columna debe ser un número entero positivo.",
+        If Not Integer.TryParse(tbOrden.Text, orden) OrElse orden <= 0 OrElse orden > 100 Then
+            MessageBox.Show("El orden de la columna debe ser un número entero positivo entre 1 y 100.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        'Validar orden único (permitiendo el mismo orden si no se cambia)
+        Dim columnaMismoOrden = _listaColumnas.FirstOrDefault(Function(c) c.Orden = orden AndAlso c IsNot columnaSeleccionada)
+
+        If columnaMismoOrden IsNot Nothing Then
+            MessageBox.Show($"Ya existe una columna con el orden {orden}. Por favor, elija un orden diferente.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        'Validar campo único (permitiendo el mismo campo si no se cambia)
+        Dim columnaMismoCampo = _listaColumnas.FirstOrDefault(Function(c) c.Campo.Equals(tbCampo.Text, StringComparison.OrdinalIgnoreCase) AndAlso c IsNot columnaSeleccionada)
+        If columnaMismoCampo IsNot Nothing Then
+            MessageBox.Show($"Ya existe una columna con el campo '{tbCampo.Text}'. Por favor, elija un campo diferente.",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         'Modificar la columna seleccionada en la lista
-        Dim indice As Integer = ColumnasCargadas.SelectedIndex
-        Dim columnaSeleccionada As ColumnaConfig = _listaColumnas.OrderBy(Function(c) c.Orden).ElementAt(indice)
-        columnaSeleccionada.Campo = tbCampo.Text
-        columnaSeleccionada.Titulo = tbEtiqueta.Text
-        columnaSeleccionada.Formato = cbFormato.Text
+        columnaSeleccionada.Titulo = tbEtiqueta.Text.Trim()
+        columnaSeleccionada.Campo = tbCampo.Text.Trim()
+        columnaSeleccionada.Formato = cbFormato.SelectedIndex
         columnaSeleccionada.Orden = orden
         'Refrescar UI y limpiar campos
         RefrescarListasUI()
-        tLimpiarCamposColumna()
+        TLimpiarCamposColumna()
     End Sub
 
     Private Sub ColumnasCargadas_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ColumnasCargadas.SelectedIndexChanged
@@ -317,7 +339,7 @@ Public Class frm000PlantillasConfColParam
         End If
     End Sub
 
-    Private Sub tLimpiarCamposColumna()
+    Private Sub TLimpiarCamposColumna()
         tbCampo.Clear()
         tbEtiqueta.Clear()
         cbFormato.SelectedIndex = 0
@@ -341,6 +363,25 @@ Public Class frm000PlantillasConfColParam
             Return
         End If
 
+        If _listaParametros.Any(Function(p) p.Nombre.ToUpper = tbNombre.Text.ToUpper()) Then
+            MessageBox.Show($"Ya existe un parámetro con ese nombre.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If Not ValidarValorDefaultParametro(TbValorDefault.Text, cbTipo.SelectedItem.ToString()) Then
+            MessageBox.Show("El valor default no es válido para el tipo seleccionado.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        'validar orden único
+        If _listaParametros.Any(Function(p) p.Orden = orden) Then
+            MessageBox.Show($"Ya existe un parámetro con el orden {orden}. Por favor, elija un orden diferente.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
         'Agregar nuevo parámetro a la lista
         Dim nuevoParametro As New ParametroConfig With {
             .Nombre = tbNombre.Text,
@@ -348,12 +389,12 @@ Public Class frm000PlantillasConfColParam
             .Etiqueta = tbEtiquetaParametro.Text,
             .Requerido = checkbRequerido.Checked,
             .ValorDefault = TbValorDefault.Text,
-            .Orden = _listaParametros.Count + 1
+            .Orden = orden
         }
         _listaParametros.Add(nuevoParametro)
         'Refrescar UI y limpiar campos
         RefrescarListasUI()
-        tLimpiarCamposParametro()
+        TLimpiarCamposParametro()
     End Sub
 
     Private Sub BModificarParametro_Click(sender As Object, e As EventArgs) Handles bModificarParametro.Click
@@ -390,7 +431,7 @@ Public Class frm000PlantillasConfColParam
         parametroSeleccionado.Orden = orden
         'Refrescar UI y limpiar campos
         RefrescarListasUI()
-        tLimpiarCamposParametro()
+        TLimpiarCamposParametro()
     End Sub
 
     Private Sub ParametrosCargados_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ParametrosCargados.SelectedIndexChanged
@@ -407,7 +448,7 @@ Public Class frm000PlantillasConfColParam
         End If
     End Sub
 
-    Private Sub tLimpiarCamposParametro()
+    Private Sub TLimpiarCamposParametro()
         tbNombre.Clear()
         cbTipo.SelectedIndex = 0
         tbEtiquetaParametro.Clear()
@@ -437,35 +478,47 @@ Public Class frm000PlantillasConfColParam
                 Return
             End If
 
-            '2 Validar Ruta de plantilla
-            If Not ValidarRutaPlantilla() Then
-                e.Cancel = True
-                Return
-            End If
-
-            '3 Validar que al menos haya una columna configurada
-            If _listaColumnas Is Nothing OrElse _listaColumnas.Count = 0 Then
-                Dim resultado = MessageBox.Show("No hay columnas configuradas. ¿Desea continuar sin configurar columnas?",
-                                                "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If String.IsNullOrEmpty(tbCliente.Text) Then
+                Dim resultado = MessageBox.Show("El nombre del cliente está vacío. ¿Desea continuar sin asignar un cliente?",
+                                            "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If resultado = DialogResult.No Then
                     e.Cancel = True
                     Return
                 End If
             End If
 
-            '4 Validar integridad de los JSON (duplicados)
-            ValidarIntegridadJSON()
+                '2 Validar Ruta de plantilla
+                If Not ValidarRutaPlantilla() Then
+                    e.Cancel = True
+                    Return
+                End If
 
-            '5 Validar consulta SQL contra los parámetros configurados
-            If Not ValidarConsultaSQL() Then
-                e.Cancel = True
-                Return
+                '3 Validar que al menos haya una columna configurada
+                If _listaColumnas Is Nothing OrElse _listaColumnas.Count = 0 Then
+                    Dim resultado = MessageBox.Show("No hay columnas configuradas. ¿Desea continuar sin configurar columnas?",
+                                                "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If resultado = DialogResult.No Then
+                        e.Cancel = True
+                        Return
+                    End If
+                End If
+
+                '4 Validar integridad de los JSON (duplicados)
+                If Not ValidarIntegridadJSON() Then
+                    e.Cancel = True
+                    Return
+                End If
+
+                '5 Validar consulta SQL contra los parámetros configurados
+                If Not ValidarConsultaSQL() Then
+                    e.Cancel = True
+                    Return
+                End If
+
             End If
-
-        End If
     End Sub
 
-    Private Sub ValidarIntegridadJSON()
+    Private Function ValidarIntegridadJSON() As Boolean
         'Validar que no haya nobres duplicados en las columnas
         Dim camposDuplicados = _listaColumnas.GroupBy(Function(c) c.Campo.ToUpper()).
             Where(Function(g) g.Count() > 1).Select(Function(g) g.Key).ToList()
@@ -473,6 +526,7 @@ Public Class frm000PlantillasConfColParam
         If camposDuplicados.Any() Then
             MessageBox.Show($"Los siguiuentes campos están duplicados: {String.Join(", ", camposDuplicados)}",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
         End If
 
         'Validar que no haya nombres de parámetros duplicados
@@ -482,11 +536,15 @@ Public Class frm000PlantillasConfColParam
         If parametrosDuplicados.Any() Then
             MessageBox.Show($"Los siguientes nombres de parámetros están duplicados: {String.Join(", ", parametrosDuplicados)}",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
         End If
-    End Sub
+
+        Return True
+    End Function
 
     Private Function ValidarConsultaSQL() As Boolean
         Dim consulta As String = rtbConsultaSQL.Text.Trim()
+        Dim palabrasProhibidas As String() = {"INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE"}
         'Validar que la consulta no esté vacía
         If String.IsNullOrEmpty(consulta) Then
             MessageBox.Show("La consulta SQL no puede estar vacía.",
@@ -501,16 +559,26 @@ Public Class frm000PlantillasConfColParam
             Return False
         End If
 
+        For Each palabra In palabrasProhibidas
+            If consulta.ToUpper().Contains(palabra) Then
+                MessageBox.Show("Solo se permiten consultas SELECT.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return False
+            End If
+        Next
+
         'Validar que los parametros en la consulta coincidan con los parámetros definidos en la configuración
         Dim parametrosEnConsulta As New List(Of String)
-        Dim coincidencia = System.Text.RegularExpressions.Regex.Matches(consulta, "@(\w+)")
+        Dim coincidencia = System.Text.RegularExpressions.Regex.Matches(consulta, "@([a-zA-Z][a-zA-Z0-9_]*)")
 
         For Each match As System.Text.RegularExpressions.Match In coincidencia
-            parametrosEnConsulta.Add(match.Groups(1).Value.ToUpper())
+            If match.Success AndAlso match.Groups.Count > 1 Then
+                parametrosEnConsulta.Add(match.Groups(1).Value.ToUpper())
+            End If
         Next
 
         'Comparar con los parámetros definidos
-        Dim parametrosDefinidos = _listaParametros.Select(Function(p) "@" & p.Nombre).ToList()
+        Dim parametrosDefinidos = _listaParametros.Select(Function(p) p.Nombre.ToUpper()).ToList()
         Dim parametrosFaltantes = parametrosEnConsulta.Except(parametrosDefinidos).ToList()
         Dim parametrosExtra = parametrosDefinidos.Except(parametrosEnConsulta).ToList()
 
@@ -534,6 +602,50 @@ Public Class frm000PlantillasConfColParam
         End If
 
         Return True
+    End Function
+
+    Private Function ObtenerNombreFormatoColumna(formatoIndex As Integer) As String
+        Select Case formatoIndex
+            Case 0 : Return "Moneda"
+            Case 1 : Return "Número"
+            Case 2 : Return "Número Entero"
+            Case 3 : Return "Porcentaje"
+            Case 4 : Return "Fecha"
+            Case 5 : Return "Texto"
+            Case 6 : Return "Sin formato"
+            Case Else : Return formatoIndex.ToString()
+        End Select
+    End Function
+
+    'Validar valor default de los parámetros dependiendo del tipo seleccionado
+    Private Function ValidarValorDefaultParametro(valor As String, tipo As String) As Boolean
+        If String.IsNullOrEmpty(valor) Then
+            'Si el valor default está vacío, no hay nada que validar
+            Return True
+        End If
+        Try
+            Select Case tipo
+                Case "String"
+                    Return True
+                Case "Int"
+                    Dim intValue As Integer = Integer.Parse(valor)
+                    Return True
+                Case "Decimal"
+                    Dim decimalValue As Decimal = Decimal.Parse(valor)
+                    Return True
+                Case "DateTime"
+                    Dim dateValue As DateTime = DateTime.Parse(valor)
+                    Return True
+                Case Else
+                    MessageBox.Show("Tipo de parámetro desconocido para validación.",
+                                    "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return False
+            End Select
+        Catch ex As Exception
+            MessageBox.Show($"El valor default no es válido para el tipo seleccionado: {ex.Message}",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return False
+        End Try
     End Function
 
     'validacion de la ruta de la plantilla

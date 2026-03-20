@@ -12,6 +12,7 @@ SELECT
         WHEN 'D' THEN 'Diaria'
         WHEN 'S' THEN 'Semanal'
         WHEN 'M' THEN 'Mensual'
+        WHEN 'Q' THEN 'Quincenal'
     END AS t_FrecuenciaDesc,
     p.t_DiasSemana,
     p.i_DiaMes,

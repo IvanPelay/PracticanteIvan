@@ -218,7 +218,7 @@ EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Día del mes (
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'i_DiaMes';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Hora de ejecución', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Hora';
-EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con valores fijos para los parámetros de la plantilla', 
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'JSON con valores para los parámetros de la plantilla', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N't_Parametros';
 EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Fecha y hora de la próxima ejecución programada', 
     @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Enc016ProgramacionReporteador', @level2type = N'COLUMN', @level2name = N'f_ProximaEjecucion';
@@ -319,10 +319,9 @@ SELECT
     pl.i_Cve_Plantilla,
     pl.t_Nombre AS t_NombrePlantilla,
     pl.t_Consulta,
-    pl.t_ColumnasConfig
+    pl.t_ColumnasConfig,
     pl.t_ParametrosConfig,
-    pl.t_RutaPlantilla,
-    pl.t_NombreBaseDatos
+    pl.t_RutaPlantilla
 FROM [dbo].[Enc016ProgramacionReporteador] p
 INNER JOIN [dbo].[Cat016PlantillasReporteador] pl ON p.i_Cve_Plantilla = pl.i_Cve_Plantilla
 WHERE p.i_Cve_Estado = 1 
