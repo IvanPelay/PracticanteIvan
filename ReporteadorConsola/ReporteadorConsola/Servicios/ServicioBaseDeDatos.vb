@@ -1,5 +1,6 @@
 ﻿Imports System
 Imports System.Data
+Imports System.Collections.Generic
 Imports System.Data.SqlClient
 Imports System.IO
 Imports ReporteadorConsola.Modelos
@@ -43,13 +44,17 @@ Namespace Servicios
                                 reporte.i_Cve_Generacion = Convert.ToInt32(lector("i_Cve_Generacion"))
                                 reporte.NombreReporte = If(lector("NombreReporte") Is DBNull.Value, "", lector("NombreReporte").ToString())
                                 reporte.t_RutaPlantilla = If(lector("t_RutaPlantilla") Is DBNull.Value, "", lector("t_RutaPlantilla").ToString())
-                                reporte.t_Consulta = If(lector("t_Consulta") Is DBNull.Value, "", lector("t_Consulta").ToString())
                                 reporte.t_FormatoSalida = If(lector("t_FormatoSalida") Is DBNull.Value, "", lector("t_FormatoSalida").ToString())
                                 reporte.t_ParametrosConfig = If(lector("t_ParametrosConfig") Is DBNull.Value, "", lector("t_ParametrosConfig").ToString())
                                 reporte.t_ColumnasConfig = If(lector("t_ColumnasConfig") Is DBNull.Value, "", lector("t_ColumnasConfig").ToString())
                                 reporte.t_Parametros = If(lector("t_Parametros") Is DBNull.Value, "", lector("t_Parametros").ToString())
                                 reporte.t_DiasSemana = If(lector("t_DiasSemana") Is DBNull.Value, "", lector("t_DiasSemana").ToString())
                                 reporte.i_DiaMes = If(lector("i_DiaMes") Is DBNull.Value, Nothing, Convert.ToInt32(lector("i_DiaMes")))
+                                reporte.t_Frecuencia = If(lector("t_Frecuencia") Is DBNull.Value, "", lector("t_frecuencia").ToString())
+                                reporte.t_NombreVista = If(lector("t_NombreVista") Is DBNull.Value, "", lector("t_NombreVista").ToString())
+                                reporte.t_NombreSP = If(lector("t_NombreSP") Is DBNull.Value, "", lector("t_NombreSP").ToString())
+                                reporte.f_ViegnciaInicio = Convert.ToDateTime(lector("f_VigenciaInicio"))
+                                reporte.f_VigenciaFin = If(lector("f_VigenciaFin") Is DBNull.Value, Nothing, Convert.ToDateTime(lector("f_VigenciaFin")))
 
                                 resultado.Add(reporte)
                             End While
@@ -71,40 +76,104 @@ Namespace Servicios
         End Function
 
 
-        'Ejecutar consulta del Reporte
-        Public Function EjecutarConsulta(consulta As String, parametros As Dictionary(Of String, Object)) As DataTable
+        'Ejecutar el reporte y obtener los resultados
+        ' si tiene sp obtiene sus parametros obligatorios y resuelve el json con el inicio de periodo y fin del periodo
+        Public Function EjecutarConsultaReporte(reporte As ReportePendiente) As DataTable
+            If reporte.TieneSP Then
+                Return EjecutarSP(reporte)
+            Else
+                Return EjecutarVista(reporte.t_NombreVista)
+            End If
+        End Function
 
+        Private Function EjecutarSP(reporte As ReportePendiente) As DataTable
             Dim resultado As New DataTable()
-
             Try
                 Using con As New SqlConnection(_conexion)
-                    Using cmd As New SqlCommand(consulta, con)
-                        cmd.CommandTimeout = _config.CommandTimeout
+                    con.Open()
+                    'obtener parametros obligatorios del SP
+                    Dim obligatorios = ObtenerParametrosSP(con, reporte.t_NombreSP)
 
-                        If parametros IsNot Nothing Then
-                            For Each p In parametros
+                    'resolver parametros con validación de cobertura
+                    Dim resolutor = New ServicioCalculosFecha() 'probar como funciona con DateTime.Now()
 
-                                Dim nombre = If(p.Key.StartsWith("@"), p.Key, "@" & p.Key)
+                    Dim parametros = resolutor.Resolver(
+                        reporte.t_Parametros,
+                        reporte.t_ParametrosConfig,
+                        reporte.t_Frecuencia,
+                        obligatorios)
 
-                                cmd.Parameters.AddWithValue(nombre, If(p.Value Is Nothing, DBNull.Value, p.Value))
-                            Next
-                        End If
+                    'EjecutarSP
+                    Using cmd As New SqlCommand(reporte.t_NombreSP, con)
+                        cmd.CommandType = CommandType.StoredProcedure
+                        cmd.CommandTimeout = 120
 
-                        con.Open()
+                        For Each kvp In parametros
+                            Dim nombre = If(kvp.Key.StartsWith("@"), kvp.Key, "@" & kvp.Key)
+                            If obligatorios.Contains(nombre.ToUpperInvariant()) Then
+                                cmd.Parameters.AddWithValue(nombre, If(kvp.Value Is Nothing, DBNull.Value, kvp.Value))
+                            End If
+                        Next
 
                         Using da As New SqlDataAdapter(cmd)
                             da.Fill(resultado)
                         End Using
                     End Using
+
+                End Using
+
+                Console.WriteLine($"[DB] SP '{reporte.t_NombreSP}' -> {resultado.Rows.Count} registros")
+            Catch ex As InvalidOperationException
+                'error de cobertura: re lanzar con contexto
+                Throw New Exception($"Reporte '{reporte.NombreReporte}': {ex.Message}", ex)
+            Catch ex As Exception
+                LogError($"EjecutarSP_{reporte.t_NombreSP}", ex)
+                Throw New Exception($"Error ejecutando SP '{reporte.t_NombreSP}': {ex.Message}", ex)
+
+            End Try
+            Return resultado
+        End Function
+
+        Private Function EjecutarVista(nombreVista As String) As DataTable
+            Dim resultado As New DataTable()
+            Try
+                Using con As New SqlConnection(_conexion)
+                    Using cmd As New SqlCommand($"SELECT * FROM [{nombreVista}]", con)
+                        cmd.CommandTimeout = 120
+                        con.Open()
+                        Using da As New SqlDataAdapter(cmd)
+                            da.Fill(resultado)
+                        End Using
+                    End Using
+                End Using
+                Console.WriteLine($"[DB] Vista '{nombreVista}' -> {resultado.Rows.Count} registros")
+            Catch ex As Exception
+                LogError($"EjecutarVista_{nombreVista}", ex)
+                Throw New Exception($"Error ejecutando la vista '{nombreVista}': {ex.Message}", ex)
+            End Try
+            Return resultado
+        End Function
+
+        'Debolvemos todos los parametros del SP
+        Public Function ObtenerParametrosSP(con As SqlConnection, nombreSP As String) As HashSet(Of String)
+            Dim resultado As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+            Try
+                Using cmd As New SqlCommand(
+                "SELECT UPPER(name) FROM sys.parameter " &
+                "WHERE object_id = OBJECT_ID(@sp)", con)
+                    cmd.Parameters.AddWithValue("@sp", nombreSP)
+                    Using r = cmd.ExecuteReader()
+                        While r.Read()
+                            resultado.Add(r.GetString(0))
+                        End While
+                    End Using
                 End Using
             Catch ex As Exception
-                LogError("EjecucionConsulta", ex)
-                Throw New Exception("Error ejecutando consulta del reporte", ex)
+                Console.WriteLine($"[ADVERTENCIA] No se obtuvieron parámetros de '{nombreSP}': {ex.Message}")
             End Try
-
             Return resultado
-
         End Function
+
 
         'Actualizar el estado de una generacion para que nos marque completado o fallido
         Public Sub ActualizarEstadoGeneracion(iCveGeneracion As Integer, exito As Boolean, rutaDocumento As String,

@@ -40,7 +40,7 @@ Module Module1
             End If
 
             'Inicializar los servicios
-            _servicioDB = New ServicioBaseDeDatos(_cadenaConexion)
+            _servicioDB = New ServicioBaseDeDatos(_cadenaConexion, _config)
             _servicioExcel = New ServicioGeneracionExcel()
 
             'configurar manejador
@@ -88,6 +88,7 @@ Module Module1
 
             If reportesPendientes Is Nothing OrElse reportesPendientes.Count = 0 Then
                 Console.WriteLine("No hay reportes pendientes por procesar")
+                Return
             End If
 
             Console.WriteLine($"Se encontraron {reportesPendientes.Count} reportes pendientes")
@@ -107,6 +108,7 @@ Module Module1
     'Procesar un reporte individual
     Private Sub ProcesarReporte(reporte As ReportePendiente)
         Console.WriteLine($"Procesando: {reporte.NombreReporte} (Gen: {reporte.i_Cve_Generacion})")
+        Console.WriteLine($"  Modo: {If(reporte.TieneSP, "SP → " & reporte.t_NombreSP, "Vista → " & reporte.t_NombreVista)}")
 
         Dim rutaDocumento As String = Nothing
         Dim registrosProcesados = 0
@@ -117,36 +119,32 @@ Module Module1
             'Validamos que tenemos lo minimo necesario
             ValidarReporte(reporte)
 
-            'Construir parametros de la consulta
-            Dim parametros = ConstruirParametros(reporte)
-
-            'Ejecutar consulta SQL
-            Console.WriteLine("Ejecutando la consulta SQL ...")
-            Dim datos = _servicioDB.EjecutarConsulta(reporte.t_Consulta, parametros)
+            'ejecutar consulta
+            Console.WriteLine(" Ejecutando Consulta...")
+            Dim datos = _servicioDB.EjecutarConsultaReporte(reporte)
             registrosProcesados = If(datos Is Nothing, 0, datos.Rows.Count)
-            Console.WriteLine($" Registros Obtenidos: {registrosProcesados}")
+            Console.WriteLine($" Registros obtenidos: {registrosProcesados}")
 
-            'Generar archivo segun formato xlsx
+            'generar archivo
             Select Case reporte.t_FormatoSalida.ToUpper()
                 Case "XLSX", "XLS", ""
                     rutaDocumento = _servicioExcel.GenerarExcelDesdePlantilla(
                         reporte.t_RutaPlantilla,
                         datos,
                         reporte.t_ColumnasConfig,
-                        reporte.NombreReporte
-                    )
+                        reporte.NombreReporte)
                 Case Else
                     Throw New Exception($"Formato no soportado: {reporte.t_FormatoSalida}")
             End Select
 
-            Console.WriteLine($"Archivo generado: {rutaDocumento}")
+            Console.WriteLine($" Archivo generado: {rutaDocumento}")
             exito = True
 
         Catch ex As Exception
 
             errorMsg = ex.Message
             Console.WriteLine($" ERROR {errorMsg}")
-            LogErrorGlobal($"Procesar Reporte_ {reporte.i_Cve_Generacion}", ex)
+            LogErrorGlobal($"Procesar Reporte_{reporte.i_Cve_Generacion}", ex)
         End Try
 
 
@@ -171,8 +169,8 @@ Module Module1
 
     'Validar que el reporte contenga los valores minimos necesarios
     Private Sub ValidarReporte(reporte As ReportePendiente)
-        If String.IsNullOrEmpty(reporte.t_Consulta) Then
-            Throw New Exception("La consulta SQL esta vacia")
+        If String.IsNullOrEmpty(reporte.t_NombreVista) Then
+            Throw New Exception("La Vista es obligatoria y esta vacia")
         End If
 
         If String.IsNullOrEmpty(reporte.t_RutaPlantilla) AndAlso reporte.t_FormatoSalida.ToUpper() = "XLSX" Then
@@ -184,87 +182,6 @@ Module Module1
         End If
     End Sub
 
-    'Construir el diccionario de parametros para la consulta SQL
-    Private Function ConstruirParametros(reporte As ReportePendiente) As Dictionary(Of String, Object)
-        Dim parametros = New Dictionary(Of String, Object)(StringComparer.OrdinalIgnoreCase)
-
-        Try
-            'Agregamos parametros fijos del sistema
-            parametros("@FechaActual") = DateTime.Now.Date
-            parametros("@FechaHoraActual") = DateTime.Now
-            parametros("@UsuarioEjecucion") = "MOTOR_REPORTEADOR"
-
-            'Procesar parametros de la programacion JSON
-            If Not String.IsNullOrEmpty(reporte.t_Parametros) Then
-                Dim parametrosProgramacion = JsonConvert.DeserializeObject(Of Dictionary(Of String, Object))(reporte.t_Parametros)
-                If parametrosProgramacion IsNot Nothing Then
-                    For Each kvp In parametrosProgramacion
-                        Dim nombreParametro = If(kvp.Key.StartsWith("@"), kvp.Key, "@" & kvp.Key)
-                        parametros(nombreParametro) = kvp.Value
-                    Next
-                End If
-            End If
-
-            'Procesar configuracion de parametros en caso de valor default
-            If Not String.IsNullOrEmpty(reporte.t_ParametrosConfig) Then
-                Dim ConfiguracionParametros = JsonConvert.DeserializeObject(Of List(Of ParametroConfig))(reporte.t_ParametrosConfig)
-                If ConfiguracionParametros IsNot Nothing Then
-                    For Each parametro In ConfiguracionParametros
-                        Dim nombreParametro = If(parametro.Nombre.StartsWith("@"), parametro.Nombre, "@" & parametro.Nombre)
-
-                        'Si no existe el parametro usamos el valor default
-                        If Not parametros.ContainsKey(nombreParametro) AndAlso Not String.IsNullOrEmpty(parametro.ValorDefault) Then
-                            parametros(nombreParametro) = ConvertirValoresDefault(parametro.ValorDefault, parametro.Tipo)
-                        End If
-                    Next
-                End If
-
-
-            End If
-
-        Catch ex As Exception
-            Console.WriteLine($" [ADVERTENCIA] Error construyendo los parametros: {ex.Message}")
-        End Try
-
-        Return parametros
-
-    End Function
-
-    Private Function ConvertirValoresDefault(valor As String, tipo As String) As Object
-        Select Case tipo.ToUpper()
-            Case "INT", "INTEGER", "BIGINT", "SMALLINT"
-                Dim resultado As Integer
-                If Integer.TryParse(valor, resultado) Then Return resultado
-                Return 0
-            Case "DECIMAL", "NUMERIC", "FLOAT", "MONEY"
-                Dim resultado As Decimal
-                If Decimal.TryParse(valor, resultado) Then Return resultado
-                Return 0D
-            Case "DATE", "DATETIME", "SMALLDATETIME"
-                Dim resultado As DateTime
-                If DateTime.TryParse(valor, resultado) Then Return resultado
-                Return DateTime.Now
-            Case "BIT", "BOOLEAN"
-                If valor.Equals("1", StringComparison.OrdinalIgnoreCase) OrElse valor.Equals("true", StringComparison.OrdinalIgnoreCase) Then
-                    Return True
-                End If
-                Return False
-            Case Else
-                Return valor
-        End Select
-
-    End Function
-
-    'Limpiar nombre del archivo
-    Private Function LimpiarNombreArchivo(nombre As String) As String
-        If String.IsNullOrEmpty(nombre) Then Return "Reporte"
-        Dim IDInvalidos = Path.GetInvalidFileNameChars()
-        Dim resultado = New String(nombre.Where(Function(c) Not IDInvalidos.Contains(c)).ToArray())
-        If resultado.Length > 50 Then resultado = resultado.Substring(0, 50)
-        Return resultado.Trim()
-    End Function
-
-    'Manejador de salida nos permitira hacer copiar y pegar en consola
     Private Sub ManejadorSalida(evento As Object, e As ConsoleCancelEventArgs)
         Console.WriteLine()
         Console.WriteLine("Deteniendo el reporteador ...")
@@ -272,24 +189,18 @@ Module Module1
         e.Cancel = True
     End Sub
 
-    'Log de errores global
+    ' Log de errores global
     Private Sub LogErrorGlobal(origen As String, ex As Exception)
         Try
-            Dim logPath = _config?.DirectorioLogs ?? "C:\ReporteadorLogs"
-            If Not Directory.Exists(logPath) Then
-                Directory.CreateDirectory(logPath)
-            End If
+            Dim rutaLogs = "C:\ReporteadorLogs"
+            If Not Directory.Exists(rutaLogs) Then Directory.CreateDirectory(rutaLogs)
 
-            Dim archivoLog = Path.Combine(logPath, $"errores_fatal_{DateTime.Now:yyyyMMdd}.log")
-            Dim mensaje As String = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{origen}] {ex.Message}" &
-                                       Environment.NewLine & ex.StackTrace &
-                                       Environment.NewLine & "--------------------------------------------------" &
-                                       Environment.NewLine
+            Dim archivoLog = Path.Combine(rutaLogs, $"errores_fatal_{DateTime.Now:yyyyMMdd}.log")
+            Dim mensaje = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{origen}] {ex.Message}" &
+                             Environment.NewLine & ex.StackTrace & Environment.NewLine &
+                             "--------------------------------------------------" & Environment.NewLine
             File.AppendAllText(archivoLog, mensaje)
-
         Catch
-            'Ignoramos los errores que pueda tener el log
-
         End Try
     End Sub
 
