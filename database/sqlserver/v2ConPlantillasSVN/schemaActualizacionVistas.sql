@@ -51,13 +51,13 @@ CREATE TABLE [dbo].[Cat016ConsultasReporteador] (
     -- Vista base OBLIGATORIA
     -- Contiene todos los JOINs. Puede referenciar otras BDs
     -- directamente: SysExpert.dbo.Tabla, Aduana.dbo.Tabla, etc.
-    -- Ejemplo: 'VT016OperacionesBase'
+    -- Ejemplo: 'VT016OperacionesAnexo24'
     t_NombreVista     VARCHAR(200) NOT NULL,
  
     -- Stored Procedure OPCIONAL
     -- Si existe: el motor lo ejecuta pasando los parámetros del JSON.
     -- Si es NULL: el motor ejecuta SELECT * FROM [vista] con filtros.
-    -- Ejemplo: 'spVT016OperacionesDetalle'
+    -- Ejemplo: 'spVT016OperacionesAnexo24'
     t_NombreSP        VARCHAR(200) NULL,
  
     -- Auditoría
