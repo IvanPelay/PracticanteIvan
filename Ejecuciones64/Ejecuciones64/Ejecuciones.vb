@@ -33,10 +33,10 @@ Public Class frm000ProgramarEjecucion
     End Class
 
     'Diccionario para almacenar los parámetros de la plantilla
-    Private _ControlesParametros As New Dictionary(Of String, Control)
-    Private _ParametrosPlantilla As New List(Of ParametrosPlantilla)
     Private _parametrosActuales As New List(Of ParametroValor) 'Almacena los valores actuales de los parámetros
     Private _Plantillas As New List(Of PlantillaInfo)
+    Private Shared ReadOnly _expresionesDate As String = "INICIO_PERIODO, FIN_PERIODO, INICIO_SEMANA, FIN_SEMANA, " &
+        "INICIO_MES, FIN_MES, INICIO_QUINCENA, FIN_QUINCENA, HOY, HOY-N, HOY+N"
 #End Region
 
 #Region "Constructores"
@@ -57,7 +57,7 @@ Public Class frm000ProgramarEjecucion
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         _sistema = New Organismo
 
-        InicializarCombos()     'Cargar plantillas Disponibles
+        CargarPlantillasDisponibles()     'Cargar plantillas Disponibles
         ConfigurarGrid()        'Configurar columnas del grid de parámetros
         ConfigurarEventos()       'Configurar eventos de controles dinámicos
 
@@ -68,6 +68,9 @@ Public Class frm000ProgramarEjecucion
                 ckbEstatus.Checked = True
                 rbFrecuenciaU.Checked = True
                 HoraEjecucion.Value = DateTime.Now.Date.AddHours(1) 'Hora por defecto a 1 hora de la hora actual
+                dtpVigenciaInicio.Value = DateTime.Today
+                dtpVigenciaFin.Value = DateTime.Today.AddYears(1)
+                ActualizarEstadoVigencia()
 
 
             Case IOperacionesCatalogo.TiposOperacionSQL.Modificar
@@ -86,55 +89,54 @@ Public Class frm000ProgramarEjecucion
 
 #Region "Métodos"
 
-    'Inicializar combos del formulario
-    Private Sub InicializarCombos()
-        CargarPlantillasDisponibles()
-    End Sub
-
     'configurar el grid de parámetros
     Private Sub ConfigurarGrid()
         dgvParametros.Columns.Clear()
-        Dim colNombre As New DataGridViewTextBoxColumn() With {
-            .Name = "Nombre",
-            .HeaderText = "Nombre del Parámetro",
-            .ReadOnly = True,
-            .Width = 150
-        }
-        dgvParametros.Columns.Add(colNombre)
-        Dim colValor As New DataGridViewTextBoxColumn() With {
-            .Name = "Valor",
-            .HeaderText = "Valor a Ingresar",
-            .Width = 200
-        }
-        dgvParametros.Columns.Add(colValor)
-        Dim colTipo As New DataGridViewTextBoxColumn() With {
-            .Name = "Tipo",
-            .HeaderText = "Tipo de Dato",
-            .ReadOnly = True,
-            .Width = 100
-        }
-        dgvParametros.Columns.Add(colTipo)
+        dgvParametros.Columns.Add(New DataGridViewTextBoxColumn With {
+            .Name = "Nombre", .HeaderText = "Parámetro",
+            .ReadOnly = True, .Width = 110})
 
-        'Configurar comportamiento
+        dgvParametros.Columns.Add(New DataGridViewTextBoxColumn With {
+            .Name = "Valor", .HeaderText = "Valor",
+            .Width = 130})
+
+        dgvParametros.Columns.Add(New DataGridViewTextBoxColumn With {
+            .Name = "Tipo", .HeaderText = "Tipo",
+            .ReadOnly = True, .Width = 55})
+
+        ' Columna de ayuda: muestra expresiones disponibles para tipo Date
+        Dim colInfo As New DataGridViewTextBoxColumn With {
+            .Name = "ExpresionesInfo",
+            .HeaderText = "Expresiones válidas",
+            .ReadOnly = True,
+            .Width = 160}
+        colInfo.DefaultCellStyle.ForeColor = System.Drawing.Color.DimGray
+        colInfo.DefaultCellStyle.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!)
+        dgvParametros.Columns.Add(colInfo)
+
         dgvParametros.AllowUserToAddRows = False
         dgvParametros.AllowUserToDeleteRows = False
         dgvParametros.RowHeadersVisible = False
     End Sub
 
+
     Private Sub ConfigurarEventos()
         AddHandler cbPlantillas.SelectedIndexChanged, AddressOf CbPlantillas_SelectedIndexChanged
+        AddHandler rbFrecuenciaU.CheckedChanged, AddressOf Frecuencia_CheckedChanged
+        AddHandler rbFrecuenciaD.CheckedChanged, AddressOf Frecuencia_CheckedChanged
+        AddHandler rbFrecuenciaS.CheckedChanged, AddressOf Frecuencia_CheckedChanged
+        AddHandler rbFrecuenciaM.CheckedChanged, AddressOf Frecuencia_CheckedChanged
+        AddHandler rbFrecuenciaQ.CheckedChanged, AddressOf Frecuencia_CheckedChanged
         AddHandler Me.FormClosing, AddressOf Frm000ProgramarEjecucion_FormClosing
     End Sub
 
 
     'evento cuando se cambia la plantilla seleccionada
     Private Sub CbPlantillas_SelectedIndexChanged(sender As Object, e As EventArgs)
-        Dim idPlantilla As Integer
-        If Integer.TryParse(cbPlantillas.SelectedValue?.ToString(), idPlantilla) Then
-            Dim info = _Plantillas.FirstOrDefault(Function(p) p.Id = idPlantilla)
-            If info IsNot Nothing Then
-                CargarParametrosEnGrid(info.ParametrosConfig)
-            End If
+        If cbPlantillas.SelectedItem IsNot Nothing AndAlso
+           TypeOf cbPlantillas.SelectedItem Is PlantillaInfo Then
+            Dim info = CType(cbPlantillas.SelectedItem, PlantillaInfo)
+            CargarParametrosEnGrid(info.ParametrosConfig)
         End If
     End Sub
 
@@ -144,33 +146,36 @@ Public Class frm000ProgramarEjecucion
 
         If String.IsNullOrEmpty(jsonConfig) Then
             'Mostrar mensaje de que no hay parametros
-            dgvParametros.Rows.Add("Sin Parametros", "", "")
+            dgvParametros.Rows.Add("Sin Parametros", "", "", "")
             dgvParametros.ReadOnly = True
             Return
         End If
 
         Try
-            'Deserializar Json que viene de la plantilla
-            Dim parametrosPlantilla = JsonConvert.DeserializeObject(Of List(Of ParametrosPlantilla))(jsonConfig)
+            Dim parametros = JsonConvert.DeserializeObject(Of List(Of ParametrosPlantilla))(jsonConfig)
 
-            If parametrosPlantilla IsNot Nothing Then
-                For Each param In parametrosPlantilla.OrderBy(Function(p) p.Orden)
-                    dgvParametros.Rows.Add(param.Nombre, param.ValorDefault, param.Tipo)
+            If parametros IsNot Nothing AndAlso parametros.Count > 0 Then
+                dgvParametros.ReadOnly = False
 
-                    'Guardar en la lista de actuales
+                For Each param In parametros.OrderBy(Function(p) p.Orden)
+                    ' Columna de ayuda: solo para tipo Date
+                    Dim ayuda As String = If(param.Tipo.Equals("Date", StringComparison.OrdinalIgnoreCase),
+                                             _expresionesDate, "")
+                    dgvParametros.Rows.Add(param.Nombre, param.ValorDefault, param.Tipo, ayuda)
+
                     _parametrosActuales.Add(New ParametroValor With {
-                    .Nombre = param.Nombre,
-                    .Valor = param.ValorDefault,
-                    .Tipo = param.Tipo
+                        .Nombre = param.Nombre,
+                        .Valor = param.ValorDefault,
+                        .Tipo = param.Tipo
                     })
                 Next
             Else
-                dgvParametros.Rows.Add("Sin parametros Configurados", "", "")
+                dgvParametros.Rows.Add("Sin parámetros configurados", "", "", "")
                 dgvParametros.ReadOnly = True
             End If
         Catch ex As Exception
             MessageBox.Show("Error al procesar los parametros de la plantilla: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            dgvParametros.Rows.Add("Error al cargarl los parametros", "", "")
+            dgvParametros.Rows.Add("Error al cargarl los parametros", "", "", "")
             dgvParametros.ReadOnly = True
         End Try
     End Sub
@@ -251,7 +256,7 @@ Public Class frm000ProgramarEjecucion
             rbFrecuenciaQ.Checked = (frecuencia = "Q")
 
             'Cargar hora de ejecución
-            Dim horaStr As String = _ioperacionescatalogo.CampoPorNombre("t_Hora").ToString()
+            Dim horaStr = _ioperacionescatalogo.CampoPorNombre("t_Hora").ToString()
 
             If Not String.IsNullOrEmpty(horaStr) Then
                 Dim hora As DateTime
@@ -260,11 +265,37 @@ Public Class frm000ProgramarEjecucion
                 End If
             End If
 
-            'cargar parametros guardados
-            Dim parametrosJson As String = _ioperacionescatalogo.CampoPorNombre("t_Parametros").ToString()
+            ' Vigencia inicio
+            Dim vigIniStr = _ioperacionescatalogo.CampoPorNombre("f_VigenciaInicio")?.ToString()
+            If Not String.IsNullOrEmpty(vigIniStr) Then
+                Dim vigIni As DateTime
+                If DateTime.TryParse(vigIniStr, vigIni) Then
+                    dtpVigenciaInicio.Value = vigIni
+                End If
+            End If
+
+            'vigencia fin
+            Dim vigFinStr = _ioperacionescatalogo.CampoPorNombre("f_VigenciaFin")?.ToString()
+            If Not String.IsNullOrEmpty(vigFinStr) Then
+                Dim vigFin As DateTime
+                If DateTime.TryParse(vigFinStr, vigFin) Then
+                    dtpVigenciaFin.Value = vigFin
+                End If
+            End If
+
+            'Plantilla seleccionada
+            Dim idPlantilla As Integer
+            If Integer.TryParse(_ioperacionescatalogo.CampoPorNombre("i_Cve_Plantilla").ToString(), idPlantilla) Then
+                SeleccionarPlantillaPorId(idPlantilla)
+            End If
+
+            'valores Parametros guardados
+            Dim parametrosJson = _ioperacionescatalogo.CampoPorNombre("t_Parametros")?.ToString()
             If Not String.IsNullOrEmpty(parametrosJson) Then
                 CargarValoresParametrosGuardados(parametrosJson)
             End If
+
+            ActualizarEstadoVigencia()
 
         Catch ex As Exception
             MessageBox.Show("Error al cargar los datos para la modificación: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -275,23 +306,22 @@ Public Class frm000ProgramarEjecucion
     'Selecciona una plantilla por su Id
     Private Sub SeleccionarPlantillaPorId(id As Integer)
         For i As Integer = 0 To cbPlantillas.Items.Count - 1
-            Dim item As PlantillaInfo = CType(cbPlantillas.Items(i), PlantillaInfo)
-            If item.Id = id Then
-                cbPlantillas.SelectedIndex = i
-                Exit For
+            If TypeOf cbPlantillas.Items(i) Is PlantillaInfo Then
+                If CType(cbPlantillas.Items(i), PlantillaInfo).Id = id Then
+                    cbPlantillas.SelectedIndex = i
+                    Return
+                End If
             End If
         Next
     End Sub
 
     'carga los valores de los parámetros guardados en el grid
     Private Sub CargarValoresParametrosGuardados(jsonValores As String)
+        If String.IsNullOrEmpty(jsonValores) Then Return
         Try
-            If String.IsNullOrEmpty(jsonValores) Then Return
-
             Dim valores = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(jsonValores)
-
+            If valores Is Nothing Then Return
             'Recorrer las filas del grid y asignar valores
-
             For Each row As DataGridViewRow In dgvParametros.Rows
                 If Not row.IsNewRow Then
                     Dim nombreParam = row.Cells("Nombre").Value?.ToString()
@@ -305,6 +335,21 @@ Public Class frm000ProgramarEjecucion
             Debug.WriteLine($"Error cargando los valores de los parámetros: {ex.Message}")
         End Try
     End Sub
+
+    'control de vigencia según frecuencia
+    Private Sub Frecuencia_CheckedChanged(sender As Object, e As EventArgs)
+        ActualizarEstadoVigencia()
+    End Sub
+
+    ' Habilita o deshabilita dtpVigenciaFin según la frecuencia seleccionada.
+    Private Sub ActualizarEstadoVigencia()
+        Dim esUnica = rbFrecuenciaU.Checked
+
+        dtpVigenciaFin.Enabled = True
+        lblVigenciaFinOpc.Text = If(esUnica, "(opcional para unica vez)", "(Obligatoria para D/S/M/Q)")
+        lblVigenciaFinOpc.ForeColor = If(esUnica, System.Drawing.Color.Gray, System.Drawing.Color.DarkRed)
+    End Sub
+
 
     Public Overrides Sub RealizarInsercion()
 
@@ -358,6 +403,16 @@ Public Class frm000ProgramarEjecucion
             _ioperacionescatalogo.CampoPorNombre("i_DiaMes") = numericUDMes.Value.ToString()
         End If
 
+        'vigencia
+        _ioperacionescatalogo.CampoPorNombre("f_VigenciaInicio") = dtpVigenciaInicio.Value.ToString("yyyy-mm-dd")
+
+        'Para U sin fecha fin lo guardamos null en bd
+        If rbFrecuenciaU.Checked Then
+            _ioperacionescatalogo.CampoPorNombre("f_VigenciaFin") = dtpVigenciaFin.Value.ToString("yyyy-mm-dd")
+        Else
+            _ioperacionescatalogo.CampoPorNombre("f_VigenciaFin") = dtpVigenciaFin.Value.ToString("yyyy-MM-dd")
+        End If
+
         ' GENERACIÓN DEL JSON DE VALORES
         Dim valoresFinales As New Dictionary(Of String, String)
 
@@ -373,14 +428,11 @@ Public Class frm000ProgramarEjecucion
         Next
 
         ' Guardamos el JSON resultante
-        If valoresFinales.Any() Then
-            _ioperacionescatalogo.CampoPorNombre("t_Parametros") = JsonConvert.SerializeObject(valoresFinales)
-        Else
-            _ioperacionescatalogo.CampoPorNombre("t_Parametros") = String.Empty
-        End If
+        _ioperacionescatalogo.CampoPorNombre("t_Parametros") =
+            If(valoresFinales.Any(), JsonConvert.SerializeObject(valoresFinales), String.Empty)
 
 
-        ' Campos de auditoría obligatorios por tu framework
+        ' Campos de auditoría obligatorios por framework
         If _modalidadoperativa = IOperacionesCatalogo.TiposOperacionSQL.Insercion Then
             _ioperacionescatalogo.CampoPorNombre("f_FechaRegistro") = DateTime.Now
             _ioperacionescatalogo.CampoPorNombre("i_Cve_Estado") = "1"
@@ -397,9 +449,17 @@ Public Class frm000ProgramarEjecucion
             proximaFecha = proximaFecha.AddDays(1)
         End If
 
+        ' Respetar f_VigenciaInicio: si la primera ejecución sería antes de la vigencia,
+        ' adelantarla a la fecha de vigencia con la hora configurada
+        Dim vigIni = dtpVigenciaInicio.Value.Date.Add(hora)
+        If proximaFecha < vigIni Then proximaFecha = vigIni
+
         If rbFrecuenciaU.Checked Then
+            ' Única: la próxima ejecución es exactamente la fecha/hora configurada
+            ' (ya resuelta arriba considerando vigencia)
 
         ElseIf rbFrecuenciaD.Checked Then
+            ' Diaria: ya resuelta arriba
 
         ElseIf rbFrecuenciaS.Checked Then
             ' SEMANAL: Buscar el siguiente día marcado en los checkboxes
@@ -449,7 +509,7 @@ Public Class frm000ProgramarEjecucion
 
     'validacion al cerrar el formulario
     Private Sub Frm000ProgramarEjecucion_FormClosing(sender As Object, e As FormClosingEventArgs)
-        If Me.DialogResult = DialogResult.OK Then
+        If Me.DialogResult <> DialogResult.OK Then
             'Validar nombre
             If String.IsNullOrEmpty(tbNombreProgramacion.Text) Then
                 MessageBox.Show("El nombre de la programación es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -468,18 +528,17 @@ Public Class frm000ProgramarEjecucion
 
         'validar parametros requeridos
         For Each row As DataGridViewRow In dgvParametros.Rows
-            If Not row.IsNewRow Then
+            If Not row.IsNewRow AndAlso Not dgvParametros.ReadOnly Then
                 Dim nombreParam = row.Cells("Nombre").Value?.ToString()
                 Dim valorIngresado = row.Cells("Valor").Value?.ToString()
                 Dim tipo = row.Cells("Tipo").Value?.ToString()
 
-                If Not dgvParametros.ReadOnly AndAlso Not String.IsNullOrEmpty(nombreParam) Then
-                    Dim resultado = MessageBox.Show($"El parámetro '{nombreParam}' no tiene un valor asignado. ¿Desea guardar así la programación?",
-                                        "Validación", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-
-                    If resultado = DialogResult.No Then
-                        e.Cancel = True
-                        Return
+                If Not String.IsNullOrEmpty(nombreParam) AndAlso String.IsNullOrEmpty(valorIngresado) Then
+                    Dim res = MessageBox.Show(
+                        $"El parámetro '{Nombre}' no tiene valor. ¿Continuar sin asignarlo?",
+                        "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If res = DialogResult.No Then
+                        e.Cancel = True : Return
                     End If
                 End If
             End If
@@ -494,6 +553,26 @@ Public Class frm000ProgramarEjecucion
             e.Cancel = True
             Return
         End If
+
+        'vigencia f_Vigencia obligatoria para D/S/M/Q
+        If Not rbFrecuenciaU.Checked Then
+            If dtpVigenciaFin.Value.Date <= dtpVigenciaInicio.Value.Date Then
+                MessageBox.Show("La fecha fin de la vigencia debe ser posterior a la fecha inicio",
+                                "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                e.Cancel = True : Return
+            End If
+        End If
+
+        'vigencia no anterior a hoy
+        If _modalidadoperativa = IOperacionesCatalogo.TiposOperacionSQL.Insercion Then
+            If dtpVigenciaInicio.Value.Date < DateTime.Today Then
+                Dim res = MessageBox.Show("La fecha inicio de vigencia es anterior a hoy. ¿Desea continuar?",
+                    "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If res = DialogResult.No Then
+                    e.Cancel = True : Return
+                End If
+            End If
+            End If
 
     End Sub
 
