@@ -8,20 +8,20 @@
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <RootNamespace>Plantillas64</RootNamespace>
-    <AssemblyName>Plantillas64.0.0.0.0</AssemblyName>
+    <RootNamespace>Gsol.Nucleo.Modulos.Plantillas64</RootNamespace>
+    <AssemblyName>Gsol.Nucleo.Modulos.Plantillas64.0.0.0.0</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>ARM64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\..\SVN QA\Namespaces\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\SVN\SVN QA\Modulos\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>

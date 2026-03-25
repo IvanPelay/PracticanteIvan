@@ -57,8 +57,13 @@ Partial Class frm000PlantillasConfColParam
         Me.Label13 = New System.Windows.Forms.Label()
         Me.tbNombre = New System.Windows.Forms.TextBox()
         Me.Label14 = New System.Windows.Forms.Label()
-        Me.groupBox2 = New System.Windows.Forms.GroupBox()
-        Me.rtbConsultaSQL = New System.Windows.Forms.RichTextBox()
+        Me.groupBoxConsulta = New System.Windows.Forms.GroupBox()
+        Me.cbConsulta = New System.Windows.Forms.ComboBox()
+        Me.lblConsultaInfo = New System.Windows.Forms.Label()
+        Me.lblConsultaVista = New System.Windows.Forms.Label()
+        Me.lblConsultaSP = New System.Windows.Forms.Label()
+        Me.lblConsultaVistaVal = New System.Windows.Forms.Label()
+        Me.lblConsultaSPVal = New System.Windows.Forms.Label()
         Me.groupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.chkEstatus = New System.Windows.Forms.CheckBox()
@@ -79,7 +84,7 @@ Partial Class frm000PlantillasConfColParam
         Me.GroupBox4.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
-        Me.groupBox2.SuspendLayout()
+        Me.groupBoxConsulta.SuspendLayout()
         Me.groupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -139,7 +144,199 @@ Partial Class frm000PlantillasConfColParam
         Me.lblVersionModulo.TabIndex = 357
         Me.lblVersionModulo.Text = "v.0.0.0.0"
         '
-        'groupBox3
+        'groupBox1 — Datos Generales (sin cambios de posición)
+        '
+        Me.groupBox1.Controls.Add(Me.Label15)
+        Me.groupBox1.Controls.Add(Me.chkEstatus)
+        Me.groupBox1.Controls.Add(Me.tbCliente)
+        Me.groupBox1.Controls.Add(Me.RtbDescripcion)
+        Me.groupBox1.Controls.Add(Me.lbDescripción)
+        Me.groupBox1.Controls.Add(Me.label3)
+        Me.groupBox1.Controls.Add(Me.bSeleccionarPlantilla)
+        Me.groupBox1.Controls.Add(Me.tbRutaPlantillaxlsx)
+        Me.groupBox1.Controls.Add(Me.label2)
+        Me.groupBox1.Controls.Add(Me.tbNombrePlantilla)
+        Me.groupBox1.Controls.Add(Me.Label7)
+        Me.groupBox1.Location = New System.Drawing.Point(26, 63)
+        Me.groupBox1.Name = "groupBox1"
+        Me.groupBox1.Size = New System.Drawing.Size(649, 101)
+        Me.groupBox1.TabIndex = 360
+        Me.groupBox1.TabStop = False
+        Me.groupBox1.Text = "Datos Generales:"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(308, 42)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(43, 13)
+        Me.Label15.TabIndex = 19
+        Me.Label15.Text = "Activo: "
+        '
+        'chkEstatus
+        '
+        Me.chkEstatus.AutoSize = True
+        Me.chkEstatus.Checked = True
+        Me.chkEstatus.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkEstatus.Location = New System.Drawing.Point(362, 41)
+        Me.chkEstatus.Name = "chkEstatus"
+        Me.chkEstatus.Size = New System.Drawing.Size(15, 14)
+        Me.chkEstatus.TabIndex = 18
+        Me.chkEstatus.UseVisualStyleBackColor = True
+        '
+        'tbCliente
+        '
+        Me.tbCliente.Location = New System.Drawing.Point(80, 35)
+        Me.tbCliente.Name = "tbCliente"
+        Me.tbCliente.Size = New System.Drawing.Size(169, 20)
+        Me.tbCliente.TabIndex = 9
+        '
+        'RtbDescripcion
+        '
+        Me.RtbDescripcion.Location = New System.Drawing.Point(80, 56)
+        Me.RtbDescripcion.Name = "RtbDescripcion"
+        Me.RtbDescripcion.Size = New System.Drawing.Size(330, 26)
+        Me.RtbDescripcion.TabIndex = 8
+        Me.RtbDescripcion.Text = ""
+        '
+        'lbDescripción
+        '
+        Me.lbDescripción.AutoSize = True
+        Me.lbDescripción.Location = New System.Drawing.Point(7, 59)
+        Me.lbDescripción.Name = "lbDescripción"
+        Me.lbDescripción.Size = New System.Drawing.Size(69, 13)
+        Me.lbDescripción.TabIndex = 7
+        Me.lbDescripción.Text = "Descripción: "
+        '
+        'label3
+        '
+        Me.label3.AutoSize = True
+        Me.label3.Location = New System.Drawing.Point(7, 38)
+        Me.label3.Name = "label3"
+        Me.label3.Size = New System.Drawing.Size(71, 13)
+        Me.label3.TabIndex = 5
+        Me.label3.Text = "Cliente/RFC: "
+        '
+        'bSeleccionarPlantilla
+        '
+        Me.bSeleccionarPlantilla.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.bSeleccionarPlantilla.Location = New System.Drawing.Point(539, 15)
+        Me.bSeleccionarPlantilla.Name = "bSeleccionarPlantilla"
+        Me.bSeleccionarPlantilla.Size = New System.Drawing.Size(48, 23)
+        Me.bSeleccionarPlantilla.TabIndex = 4
+        Me.bSeleccionarPlantilla.Text = "..."
+        Me.bSeleccionarPlantilla.UseVisualStyleBackColor = True
+        '
+        'tbRutaPlantillaxlsx
+        '
+        Me.tbRutaPlantillaxlsx.Location = New System.Drawing.Point(350, 17)
+        Me.tbRutaPlantillaxlsx.Name = "tbRutaPlantillaxlsx"
+        Me.tbRutaPlantillaxlsx.Size = New System.Drawing.Size(183, 20)
+        Me.tbRutaPlantillaxlsx.TabIndex = 3
+        '
+        'label2
+        '
+        Me.label2.AutoSize = True
+        Me.label2.Location = New System.Drawing.Point(308, 20)
+        Me.label2.Name = "label2"
+        Me.label2.Size = New System.Drawing.Size(36, 13)
+        Me.label2.TabIndex = 2
+        Me.label2.Text = "Ruta: "
+        '
+        'tbNombrePlantilla
+        '
+        Me.tbNombrePlantilla.Location = New System.Drawing.Point(63, 15)
+        Me.tbNombrePlantilla.Name = "tbNombrePlantilla"
+        Me.tbNombrePlantilla.Size = New System.Drawing.Size(169, 20)
+        Me.tbNombrePlantilla.TabIndex = 1
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(7, 20)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(50, 13)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "Nombre: "
+        '
+        'groupBoxConsulta — NUEVO: reemplaza groupBox2 con RichTextBox SQL
+        ' Misma posición y tamaño que groupBox2 original (170, 105)
+        '
+        Me.groupBoxConsulta.Controls.Add(Me.cbConsulta)
+        Me.groupBoxConsulta.Controls.Add(Me.lblConsultaInfo)
+        Me.groupBoxConsulta.Controls.Add(Me.lblConsultaVista)
+        Me.groupBoxConsulta.Controls.Add(Me.lblConsultaVistaVal)
+        Me.groupBoxConsulta.Controls.Add(Me.lblConsultaSP)
+        Me.groupBoxConsulta.Controls.Add(Me.lblConsultaSPVal)
+        Me.groupBoxConsulta.Location = New System.Drawing.Point(26, 170)
+        Me.groupBoxConsulta.Name = "groupBoxConsulta"
+        Me.groupBoxConsulta.Size = New System.Drawing.Size(649, 95)
+        Me.groupBoxConsulta.TabIndex = 362
+        Me.groupBoxConsulta.TabStop = False
+        Me.groupBoxConsulta.Text = "Consulta / Reporte:"
+        '
+        'cbConsulta — ComboBox que carga Vt016ConsultasDisponibles
+        '
+        Me.cbConsulta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbConsulta.FormattingEnabled = True
+        Me.cbConsulta.Location = New System.Drawing.Point(10, 20)
+        Me.cbConsulta.Name = "cbConsulta"
+        Me.cbConsulta.Size = New System.Drawing.Size(380, 21)
+        Me.cbConsulta.TabIndex = 0
+        '
+        'lblConsultaInfo — texto de ayuda junto al combo
+        '
+        Me.lblConsultaInfo.AutoSize = True
+        Me.lblConsultaInfo.ForeColor = System.Drawing.Color.Gray
+        Me.lblConsultaInfo.Location = New System.Drawing.Point(396, 23)
+        Me.lblConsultaInfo.Name = "lblConsultaInfo"
+        Me.lblConsultaInfo.Size = New System.Drawing.Size(200, 13)
+        Me.lblConsultaInfo.TabIndex = 1
+        Me.lblConsultaInfo.Text = "Seleccione la consulta registrada por DBA"
+        '
+        'lblConsultaVista — etiqueta "Vista base:"
+        '
+        Me.lblConsultaVista.AutoSize = True
+        Me.lblConsultaVista.ForeColor = System.Drawing.Color.DimGray
+        Me.lblConsultaVista.Location = New System.Drawing.Point(10, 52)
+        Me.lblConsultaVista.Name = "lblConsultaVista"
+        Me.lblConsultaVista.Size = New System.Drawing.Size(60, 13)
+        Me.lblConsultaVista.TabIndex = 2
+        Me.lblConsultaVista.Text = "Vista base:"
+        '
+        'lblConsultaVistaVal — valor de la vista (se llena al seleccionar)
+        '
+        Me.lblConsultaVistaVal.AutoSize = True
+        Me.lblConsultaVistaVal.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular)
+        Me.lblConsultaVistaVal.ForeColor = System.Drawing.Color.DarkSlateGray
+        Me.lblConsultaVistaVal.Location = New System.Drawing.Point(76, 52)
+        Me.lblConsultaVistaVal.Name = "lblConsultaVistaVal"
+        Me.lblConsultaVistaVal.Size = New System.Drawing.Size(10, 14)
+        Me.lblConsultaVistaVal.TabIndex = 3
+        Me.lblConsultaVistaVal.Text = ""
+        '
+        'lblConsultaSP — etiqueta "Stored Procedure:"
+        '
+        Me.lblConsultaSP.AutoSize = True
+        Me.lblConsultaSP.ForeColor = System.Drawing.Color.DimGray
+        Me.lblConsultaSP.Location = New System.Drawing.Point(10, 70)
+        Me.lblConsultaSP.Name = "lblConsultaSP"
+        Me.lblConsultaSP.Size = New System.Drawing.Size(100, 13)
+        Me.lblConsultaSP.TabIndex = 4
+        Me.lblConsultaSP.Text = "Stored Procedure:"
+        '
+        'lblConsultaSPVal — valor del SP (se llena al seleccionar, "(ninguno)" si NULL)
+        '
+        Me.lblConsultaSPVal.AutoSize = True
+        Me.lblConsultaSPVal.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular)
+        Me.lblConsultaSPVal.ForeColor = System.Drawing.Color.DarkSlateGray
+        Me.lblConsultaSPVal.Location = New System.Drawing.Point(116, 70)
+        Me.lblConsultaSPVal.Name = "lblConsultaSPVal"
+        Me.lblConsultaSPVal.Size = New System.Drawing.Size(10, 14)
+        Me.lblConsultaSPVal.TabIndex = 5
+        Me.lblConsultaSPVal.Text = ""
+        '
+        'groupBox3 — Parámetros (sube levemente por eliminar groupBox2 de 105px y agregar groupBoxConsulta de 95px)
         '
         Me.groupBox3.Controls.Add(Me.TCColumasnParametros)
         Me.groupBox3.Location = New System.Drawing.Point(26, 271)
@@ -159,7 +356,7 @@ Partial Class frm000PlantillasConfColParam
         Me.TCColumasnParametros.Size = New System.Drawing.Size(637, 256)
         Me.TCColumasnParametros.TabIndex = 1
         '
-        'TabPage1
+        'TabPage1 — Columnas
         '
         Me.TabPage1.Controls.Add(Me.GroupBox4)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
@@ -281,7 +478,7 @@ Partial Class frm000PlantillasConfColParam
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "Campo: "
         '
-        'TabPage2
+        'TabPage2 — Parámetros
         '
         Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
@@ -407,7 +604,7 @@ Partial Class frm000PlantillasConfColParam
         Me.Label12.TabIndex = 4
         Me.Label12.Text = "Etiqueta: "
         '
-        'cbTipo
+        'cbTipo — se agrega "Date" como tipo para validar expresiones dinámicas
         '
         Me.cbTipo.FormattingEnabled = True
         Me.cbTipo.Items.AddRange(New Object() {"String", "Int", "Date", "Decimal"})
@@ -441,142 +638,6 @@ Partial Class frm000PlantillasConfColParam
         Me.Label14.TabIndex = 0
         Me.Label14.Text = "Nombre: "
         '
-        'groupBox2
-        '
-        Me.groupBox2.Controls.Add(Me.rtbConsultaSQL)
-        Me.groupBox2.Location = New System.Drawing.Point(26, 170)
-        Me.groupBox2.Name = "groupBox2"
-        Me.groupBox2.Size = New System.Drawing.Size(649, 105)
-        Me.groupBox2.TabIndex = 362
-        Me.groupBox2.TabStop = False
-        Me.groupBox2.Text = "Consulta SQL: "
-        '
-        'rtbConsultaSQL
-        '
-        Me.rtbConsultaSQL.Location = New System.Drawing.Point(10, 20)
-        Me.rtbConsultaSQL.Name = "rtbConsultaSQL"
-        Me.rtbConsultaSQL.Size = New System.Drawing.Size(633, 75)
-        Me.rtbConsultaSQL.TabIndex = 0
-        Me.rtbConsultaSQL.Text = "SELECT * FROM Ventas WHERE Fecha BETWEEN @Inicio AND @Fin"
-        '
-        'groupBox1
-        '
-        Me.groupBox1.Controls.Add(Me.Label15)
-        Me.groupBox1.Controls.Add(Me.chkEstatus)
-        Me.groupBox1.Controls.Add(Me.tbCliente)
-        Me.groupBox1.Controls.Add(Me.RtbDescripcion)
-        Me.groupBox1.Controls.Add(Me.lbDescripción)
-        Me.groupBox1.Controls.Add(Me.label3)
-        Me.groupBox1.Controls.Add(Me.bSeleccionarPlantilla)
-        Me.groupBox1.Controls.Add(Me.tbRutaPlantillaxlsx)
-        Me.groupBox1.Controls.Add(Me.label2)
-        Me.groupBox1.Controls.Add(Me.tbNombrePlantilla)
-        Me.groupBox1.Controls.Add(Me.Label7)
-        Me.groupBox1.Location = New System.Drawing.Point(26, 63)
-        Me.groupBox1.Name = "groupBox1"
-        Me.groupBox1.Size = New System.Drawing.Size(649, 101)
-        Me.groupBox1.TabIndex = 360
-        Me.groupBox1.TabStop = False
-        Me.groupBox1.Text = "Datos Generales:"
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(308, 42)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(48, 13)
-        Me.Label15.TabIndex = 19
-        Me.Label15.Text = "Estatus: "
-        '
-        'chkEstatus
-        '
-        Me.chkEstatus.AutoSize = True
-        Me.chkEstatus.Checked = True
-        Me.chkEstatus.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkEstatus.Location = New System.Drawing.Point(362, 41)
-        Me.chkEstatus.Name = "chkEstatus"
-        Me.chkEstatus.Size = New System.Drawing.Size(15, 14)
-        Me.chkEstatus.TabIndex = 18
-        Me.chkEstatus.UseVisualStyleBackColor = True
-        '
-        'tbCliente
-        '
-        Me.tbCliente.Location = New System.Drawing.Point(80, 35)
-        Me.tbCliente.Name = "tbCliente"
-        Me.tbCliente.Size = New System.Drawing.Size(169, 20)
-        Me.tbCliente.TabIndex = 9
-        Me.tbCliente.Text = "WME990813BAA"
-        '
-        'RtbDescripcion
-        '
-        Me.RtbDescripcion.Location = New System.Drawing.Point(80, 56)
-        Me.RtbDescripcion.Name = "RtbDescripcion"
-        Me.RtbDescripcion.Size = New System.Drawing.Size(330, 26)
-        Me.RtbDescripcion.TabIndex = 8
-        Me.RtbDescripcion.Text = ""
-        '
-        'lbDescripción
-        '
-        Me.lbDescripción.AutoSize = True
-        Me.lbDescripción.Location = New System.Drawing.Point(7, 59)
-        Me.lbDescripción.Name = "lbDescripción"
-        Me.lbDescripción.Size = New System.Drawing.Size(69, 13)
-        Me.lbDescripción.TabIndex = 7
-        Me.lbDescripción.Text = "Descripción: "
-        '
-        'label3
-        '
-        Me.label3.AutoSize = True
-        Me.label3.Location = New System.Drawing.Point(7, 38)
-        Me.label3.Name = "label3"
-        Me.label3.Size = New System.Drawing.Size(71, 13)
-        Me.label3.TabIndex = 5
-        Me.label3.Text = "Cliente/RFC: "
-        '
-        'bSeleccionarPlantilla
-        '
-        Me.bSeleccionarPlantilla.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.bSeleccionarPlantilla.Location = New System.Drawing.Point(539, 15)
-        Me.bSeleccionarPlantilla.Name = "bSeleccionarPlantilla"
-        Me.bSeleccionarPlantilla.Size = New System.Drawing.Size(48, 23)
-        Me.bSeleccionarPlantilla.TabIndex = 4
-        Me.bSeleccionarPlantilla.Text = "..."
-        Me.bSeleccionarPlantilla.UseVisualStyleBackColor = True
-        '
-        'tbRutaPlantillaxlsx
-        '
-        Me.tbRutaPlantillaxlsx.Location = New System.Drawing.Point(350, 17)
-        Me.tbRutaPlantillaxlsx.Name = "tbRutaPlantillaxlsx"
-        Me.tbRutaPlantillaxlsx.Size = New System.Drawing.Size(183, 20)
-        Me.tbRutaPlantillaxlsx.TabIndex = 3
-        Me.tbRutaPlantillaxlsx.Text = "C:\Reportes\Templates\Ventas.xlsx"
-        '
-        'label2
-        '
-        Me.label2.AutoSize = True
-        Me.label2.Location = New System.Drawing.Point(308, 20)
-        Me.label2.Name = "label2"
-        Me.label2.Size = New System.Drawing.Size(36, 13)
-        Me.label2.TabIndex = 2
-        Me.label2.Text = "Ruta: "
-        '
-        'tbNombrePlantilla
-        '
-        Me.tbNombrePlantilla.Location = New System.Drawing.Point(63, 15)
-        Me.tbNombrePlantilla.Name = "tbNombrePlantilla"
-        Me.tbNombrePlantilla.Size = New System.Drawing.Size(169, 20)
-        Me.tbNombrePlantilla.TabIndex = 1
-        Me.tbNombrePlantilla.Text = "Reporte de Ventas Mensual"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(7, 20)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(50, 13)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Nombre: "
-        '
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
@@ -588,7 +649,7 @@ Partial Class frm000PlantillasConfColParam
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(708, 653)
         Me.Controls.Add(Me.groupBox3)
-        Me.Controls.Add(Me.groupBox2)
+        Me.Controls.Add(Me.groupBoxConsulta)
         Me.Controls.Add(Me.groupBox1)
         Me.Controls.Add(Me.ControlPanel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -597,7 +658,7 @@ Partial Class frm000PlantillasConfColParam
         Me.Text = "Gestor"
         Me.Controls.SetChildIndex(Me.ControlPanel, 0)
         Me.Controls.SetChildIndex(Me.groupBox1, 0)
-        Me.Controls.SetChildIndex(Me.groupBox2, 0)
+        Me.Controls.SetChildIndex(Me.groupBoxConsulta, 0)
         Me.Controls.SetChildIndex(Me.groupBox3, 0)
         Me.Controls.SetChildIndex(Me.LblMensaje, 0)
         Me.Controls.SetChildIndex(Me.Label6, 0)
@@ -612,18 +673,25 @@ Partial Class frm000PlantillasConfColParam
         Me.TabPage2.ResumeLayout(False)
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
-        Me.groupBox2.ResumeLayout(False)
+        Me.groupBoxConsulta.ResumeLayout(False)
+        Me.groupBoxConsulta.PerformLayout()
         Me.groupBox1.ResumeLayout(False)
         Me.groupBox1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
+
     Friend WithEvents ControlPanel As System.Windows.Forms.Panel
     Friend WithEvents lblVersionModulo As System.Windows.Forms.Label
     Private WithEvents groupBox3 As GroupBox
-    Private WithEvents groupBox2 As GroupBox
-    Private WithEvents rtbConsultaSQL As RichTextBox
+    ' groupBoxConsulta reemplaza groupBox2
+    Private WithEvents groupBoxConsulta As GroupBox
+    Private WithEvents cbConsulta As ComboBox
+    Private WithEvents lblConsultaInfo As Label
+    Private WithEvents lblConsultaVista As Label
+    Private WithEvents lblConsultaVistaVal As Label
+    Private WithEvents lblConsultaSP As Label
+    Private WithEvents lblConsultaSPVal As Label
     Private WithEvents groupBox1 As GroupBox
     Private WithEvents label3 As Label
     Private WithEvents bSeleccionarPlantilla As Button
