@@ -445,9 +445,9 @@ CREATE VIEW [dbo].[Vt016Plantillas] AS
 SELECT
     p.i_Cve_Plantilla,
     p.i_Cve_Consulta,
-    c.t_Nombre        AS t_NombreConsulta,
-    c.t_NombreVista,
-    c.t_NombreSP,
+    c.t_Nombre        AS t_NombreConsulta,   -- solo lectura, para mostrar en UI
+    c.t_NombreVista,                          -- solo lectura
+    c.t_NombreSP,                             -- solo lectura
     p.t_Nombre,
     p.t_Descripcion,
     p.t_RutaPlantilla,
@@ -457,10 +457,10 @@ SELECT
     p.t_FormatoSalida,
     p.f_FechaRegistro,
     p.t_UsuarioRegistro,
-    CASE WHEN p.i_Cve_Estatus = 1 THEN 'Activo' ELSE 'Inactivo' END AS t_Estatus,
-    CASE WHEN p.i_Cve_Estado  = 1 THEN 'Activo' ELSE 'Inactivo' END AS t_Estado
-FROM [dbo].[Cat016PlantillasReporteador]     p
-INNER JOIN [dbo].[Cat016ConsultasReporteador] c ON c.i_Cve_Consulta = p.i_Cve_Consulta
+    p.i_Cve_Estatus,   -- INTEGER: el framework necesita el valor numérico para INSERT/UPDATE
+    p.i_Cve_Estado     -- INTEGER: ídem
+FROM [dbo].[Cat016PlantillasReporteador]      p
+INNER JOIN [dbo].[Cat016ConsultasReporteador]  c ON c.i_Cve_Consulta = p.i_Cve_Consulta
 WHERE p.i_Cve_Estado = 1
 GO
  
@@ -510,8 +510,8 @@ SELECT * FROM (
     UNION ALL SELECT 't_NombreSP',       0, 200, 1, 1, 'Stored Procedure',       1, 1, '',  '2'
     UNION ALL SELECT 'f_FechaRegistro',  0, 23,  4, 1, 'Fecha Registro',         0, 0, '',  '2'
     UNION ALL SELECT 't_UsuarioRegistro',0, 50,  1, 1, 'Usuario Registro',       0, 0, '',  '2'
-    UNION ALL SELECT 't_Estatus',        0, 10,  1, 1, 'Estatus',                1, 1, '',  '2'
-    UNION ALL SELECT 't_Estado',         0, 10,  1, 1, 'Estado',                 1, 1, '',  '2'
+    UNION ALL SELECT 'i_Cve_Estatus',        0, 10,  1, 1, 'Estatus',                1, 1, '',  '2'
+    UNION ALL SELECT 'i_Cve_Estado',         0, 10,  1, 1, 'Estado',                 1, 1, '',  '2'
 ) AS VE
 GO
  
@@ -520,22 +520,23 @@ GO
 -- ===================================================================
 CREATE VIEW [dbo].[Ve016IUPlantillas] AS
 SELECT * FROM (
+--  Nombre              Llave  Longitud  TipoDato  Visible  NombreColumna              Insert  Modif   Default   Filtro
     SELECT 'i_Cve_Plantilla'   AS Nombre, 1 AS Llave, 11          AS Longitud, 0 AS TipoDato, 1 AS Visible, 'Clave Plantilla'          AS NombreColumna, 0 AS PuedeInsertar, 0 AS PuedeModificar, ''     AS ValorDefault, '1' AS TipoFiltro
-    UNION ALL SELECT 'i_Cve_Consulta',     0, 11,         0, 1, 'Consulta/Reporte',                           1,                 1,                 '',              '2'
-    UNION ALL SELECT 't_NombreConsulta',   0, 200,        1, 1, 'Nombre Consulta',                            0,                 0,                 '',              '2'
-    UNION ALL SELECT 't_NombreVista',      0, 200,        1, 1, 'Vista Base',                                 0,                 0,                 '',              '2'
-    UNION ALL SELECT 't_NombreSP',         0, 200,        1, 1, 'Stored Procedure',                           0,                 0,                 '',              '2'
-    UNION ALL SELECT 't_Nombre',           0, 200,        1, 1, 'Nombre Plantilla',                           1,                 1,                 '',              '2'
-    UNION ALL SELECT 't_Descripcion',      0, 1000,       1, 1, 'Descripción Plantilla',                      1,                 1,                 '',              '0'
-    UNION ALL SELECT 't_RutaPlantilla',    0, 500,        1, 1, 'Ruta Plantilla',                             1,                 1,                 '',              '2'
-    UNION ALL SELECT 't_NombreCliente',    0, 100,        1, 1, 'Cliente/RFC',                                1,                 1,                 '',              '2'
-    UNION ALL SELECT 't_ColumnasConfig',   0, 2147483647, 1, 1, 'Config. Columnas (JSON)',                    1,                 1,                 '',              '0'
-    UNION ALL SELECT 't_ParametrosConfig', 0, 2147483647, 1, 1, 'Config. Parámetros (JSON)',                  1,                 1,                 '',              '0'
-    UNION ALL SELECT 't_FormatoSalida',    0, 10,         1, 1, 'Formato Salida',                             1,                 1,                 'XLSX',          '2'
-    UNION ALL SELECT 'f_FechaRegistro',    0, 23,         4, 1, 'Fecha Registro',                             0,                 0,                 '',              '2'
-    UNION ALL SELECT 't_UsuarioRegistro',  0, 50,         1, 1, 'Usuario Registro',                           0,                 0,                 '',              '2'
-    UNION ALL SELECT 't_Estatus',          0, 10,         1, 1, 'Estatus',                                    1,                 1,                 '',              '2'
-    UNION ALL SELECT 't_Estado',           0, 10,         1, 1, 'Estado',                                     1,                 1,                 '',              '2'
+    UNION ALL SELECT 'i_Cve_Consulta',     0, 11,         0, 1, 'Consulta/Reporte',         1, 1, '',    '2'  -- FK, el combo lo llena
+    UNION ALL SELECT 't_NombreConsulta',   0, 200,        1, 1, 'Nombre Consulta',           0, 0, '',    '2'  -- solo lectura (viene del JOIN)
+    UNION ALL SELECT 't_NombreVista',      0, 200,        1, 1, 'Vista Base',                0, 0, '',    '2'  -- solo lectura
+    UNION ALL SELECT 't_NombreSP',         0, 200,        1, 1, 'Stored Procedure',          0, 0, '',    '2'  -- solo lectura
+    UNION ALL SELECT 't_Nombre',           0, 200,        1, 1, 'Nombre Plantilla',          1, 1, '',    '2'
+    UNION ALL SELECT 't_Descripcion',      0, 1000,       1, 1, 'Descripción Plantilla',     1, 1, '',    '0'
+    UNION ALL SELECT 't_RutaPlantilla',    0, 500,        1, 1, 'Ruta Plantilla',            1, 1, '',    '2'
+    UNION ALL SELECT 't_NombreCliente',    0, 100,        1, 1, 'Cliente/RFC',               1, 1, '',    '2'
+    UNION ALL SELECT 't_ColumnasConfig',   0, 2147483647, 1, 0, 'Config. Columnas (JSON)',   1, 1, '',    '0'
+    UNION ALL SELECT 't_ParametrosConfig', 0, 2147483647, 1, 0, 'Config. Parámetros (JSON)', 1, 1, '',    '0'
+    UNION ALL SELECT 't_FormatoSalida',    0, 10,         1, 1, 'Formato Salida',            1, 1, 'XLSX','2'
+    UNION ALL SELECT 'f_FechaRegistro',    0, 23,         4, 1, 'Fecha Registro',            0, 0, '',    '2'
+    UNION ALL SELECT 't_UsuarioRegistro',  0, 50,         1, 1, 'Usuario Registro',          0, 0, '',    '2'
+    UNION ALL SELECT 'i_Cve_Estatus',      0, 1,          0, 1, 'Estatus',                   1, 1, '1',   '2'  -- INT 0/1, default activo
+    UNION ALL SELECT 'i_Cve_Estado',       0, 1,          0, 1, 'Estado',                    1, 0, '1',   '2'  -- INT, solo en inserción
 ) AS VE
 GO
  
@@ -559,8 +560,8 @@ SELECT * FROM (
     UNION ALL SELECT 'f_UltimaEjecucion',      0, 23,  4, 1, 'Última Ejecución',       0, 0, '',   '2'
     UNION ALL SELECT 'f_FechaRegistro',        0, 23,  4, 1, 'Fecha Registro',         0, 0, '',   '2'
     UNION ALL SELECT 't_UsuarioRegistro',      0, 50,  1, 1, 'Usuario Registro',       0, 0, '',   '2'
-    UNION ALL SELECT 't_Estatus',              0, 10,  1, 1, 'Estatus',                0, 0, '',   '2'
-    UNION ALL SELECT 't_Estado',               0, 10,  1, 1, 'Estado',                 0, 0, '',   '2'
+    UNION ALL SELECT 'i_Cve_Estatus',              0, 10,  1, 1, 'Estatus',                0, 0, '',   '2'
+    UNION ALL SELECT 'i_Cve_Estado',               0, 10,  1, 1, 'Estado',                 0, 0, '',   '2'
 ) AS VE
 GO
  
