@@ -12,12 +12,13 @@ Namespace Modelos
         Public Property t_NombreVista As String
         Public Property t_NombreSP As String
         Public Property t_ParametrosConfig As String
-        Public Property t_ColumnasConfig As String
+        Public Property i_FilaInicio As Integer
+        Public Property i_ColumnaInicio As Integer
         Public Property t_Parametros As String
         Public Property t_DiasSemana As String
         Public Property i_DiaMes As Integer?
         Public Property t_Frecuencia As String
-        Public Property f_ViegnciaInicio As DateTime
+        Public Property f_VigenciaInicio As DateTime
         Public Property f_VigenciaFin As DateTime?
 
         Public ReadOnly Property TieneSP As Boolean
@@ -30,7 +31,7 @@ Namespace Modelos
         Public ReadOnly Property VigenciaActiva As Boolean
             Get
                 Dim ahora = DateTime.Now
-                Return ahora >= f_ViegnciaInicio AndAlso (Not f_VigenciaFin.HasValue OrElse ahora <= f_VigenciaFin.Value)
+                Return ahora >= f_VigenciaInicio AndAlso (Not f_VigenciaFin.HasValue OrElse ahora <= f_VigenciaFin.Value)
             End Get
         End Property
     End Class

@@ -1,10 +1,10 @@
 ﻿Imports System.Configuration
+Imports System.IO
 
 Public Class ConfiguracionReporteador
     Private Shared _instancia As ConfiguracionReporteador
     Private Shared _lock As New Object()
 
-    Private _conexion As String
     Private _intervaloEjecucion As Integer
     Private _directorioSalida As String
     Private _directorioPlantillas As String
@@ -34,12 +34,6 @@ Public Class ConfiguracionReporteador
     End Property
 
     Private Sub CargarConfiguracion()
-        ' Connection Strings
-        _conexion = ConfigurationManager.ConnectionStrings("ReporteadorDB")?.ConnectionString
-        If String.IsNullOrEmpty(_conexion) Then
-            Throw New Exception("No se encontró la cadena de conexión 'ReporteadorDB' en app.config")
-        End If
-
         ' AppSettings con valores por defecto
         _intervaloEjecucion = GetAppSettingInteger("IntervaloEjecucion", 60000)
         _directorioSalida = GetAppSettingString("DirectorioSalida", "C:\ReporteadorGenerados")
@@ -91,12 +85,6 @@ Public Class ConfiguracionReporteador
     End Sub
 
     ' Propiedades públicas
-    Public ReadOnly Property Conexion As String
-        Get
-            Return _conexion
-        End Get
-    End Property
-
     Public ReadOnly Property IntervaloEjecucion As Integer
         Get
             Return _intervaloEjecucion
@@ -160,10 +148,6 @@ Public Class ConfiguracionReporteador
     ' Método de ayuda para validar configuración
     Public Function ValidarConfiguracion() As List(Of String)
         Dim errores As New List(Of String)()
-
-        If String.IsNullOrEmpty(_conexion) Then
-            errores.Add("La cadena de conexión no está configurada")
-        End If
 
         If Not IO.Directory.Exists(_directorioPlantillas) Then
             errores.Add($"El directorio de plantillas no existe: {_directorioPlantillas}")

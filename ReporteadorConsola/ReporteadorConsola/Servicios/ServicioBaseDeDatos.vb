@@ -1,20 +1,26 @@
 ﻿Imports System
 Imports System.Data
 Imports System.Collections.Generic
-Imports System.Data.SqlClient
 Imports System.IO
+Imports System.Text
 Imports ReporteadorConsola.Modelos
+
+Imports Gsol
+Imports Gsol.BaseDatos.Operaciones
+Imports Wma.Exceptions
 
 Namespace Servicios
 
     Public Class ServicioBaseDeDatos
 
-        Private ReadOnly _conexion As String
+        Private ReadOnly _operaciones As OperacionesCatalogo
+        Private ReadOnly _sistema As Organismo
         Private ReadOnly _logPath As String
         Private ReadOnly _config As ConfiguracionReporteador
 
-        Public Sub New(conexion As String, config As ConfiguracionReporteador)
-            _conexion = conexion
+        Public Sub New(operaciones As OperacionesCatalogo, sistema As Organismo, config As ConfiguracionReporteador)
+            _operaciones = operaciones
+            _sistema = sistema
             _config = config
             _logPath = config.DirectorioLogs
 
@@ -25,60 +31,58 @@ Namespace Servicios
         End Sub
 
         'Obtener las programaciones Pendientes 
-        Public Function ObtenerReportesPendientes() As List(Of ReportePendiente)
+        Public Function ObtenerReportesPendientes() As TagWatcher
+            Dim estatus As New TagWatcher
             Dim resultado As New List(Of ReportePendiente)()
 
             Try
-                Using con As New SqlConnection(_conexion)
-                    Using cmd As New SqlCommand("SP016ProcesarColaReportes", con)
-                        cmd.CommandType = CommandType.StoredProcedure
-                        cmd.Parameters.AddWithValue("@UsuarioSistema", "MOTOR_REPORTEADOR")
+                Dim query As String = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED EXEC SP016ProcesarColaReportes @UsuarioSistema = 'MOTOR_REPORTEADOR'"
+                estatus = _sistema.ConexionSingleton.SQLServerSingletonConexion.EjecutaConsultaDirectaEstandarizadaOpenCloseDataTable(query)
 
-                        con.Open()
+                If estatus.Status = TagWatcher.TypeStatus.Ok Then
+                    Dim dt As DataTable = CType(estatus.ObjectReturned, DataTable)
 
-                        Using lector As SqlDataReader = cmd.ExecuteReader()
-                            While lector.Read()
-                                Dim reporte As New ReportePendiente()
+                    For Each lector As DataRow In dt.Rows
+                        Dim reporte As New ReportePendiente()
 
-                                reporte.i_Cve_Programacion = Convert.ToInt32(lector("i_Cve_Programacion"))
-                                reporte.i_Cve_Generacion = Convert.ToInt32(lector("i_Cve_Generacion"))
-                                reporte.NombreReporte = If(lector("NombreReporte") Is DBNull.Value, "", lector("NombreReporte").ToString())
-                                reporte.t_RutaPlantilla = If(lector("t_RutaPlantilla") Is DBNull.Value, "", lector("t_RutaPlantilla").ToString())
-                                reporte.t_FormatoSalida = If(lector("t_FormatoSalida") Is DBNull.Value, "", lector("t_FormatoSalida").ToString())
-                                reporte.t_ParametrosConfig = If(lector("t_ParametrosConfig") Is DBNull.Value, "", lector("t_ParametrosConfig").ToString())
-                                reporte.t_ColumnasConfig = If(lector("t_ColumnasConfig") Is DBNull.Value, "", lector("t_ColumnasConfig").ToString())
-                                reporte.t_Parametros = If(lector("t_Parametros") Is DBNull.Value, "", lector("t_Parametros").ToString())
-                                reporte.t_DiasSemana = If(lector("t_DiasSemana") Is DBNull.Value, "", lector("t_DiasSemana").ToString())
-                                reporte.i_DiaMes = If(lector("i_DiaMes") Is DBNull.Value, Nothing, Convert.ToInt32(lector("i_DiaMes")))
-                                reporte.t_Frecuencia = If(lector("t_Frecuencia") Is DBNull.Value, "", lector("t_frecuencia").ToString())
-                                reporte.t_NombreVista = If(lector("t_NombreVista") Is DBNull.Value, "", lector("t_NombreVista").ToString())
-                                reporte.t_NombreSP = If(lector("t_NombreSP") Is DBNull.Value, "", lector("t_NombreSP").ToString())
-                                reporte.f_ViegnciaInicio = Convert.ToDateTime(lector("f_VigenciaInicio"))
-                                reporte.f_VigenciaFin = If(lector("f_VigenciaFin") Is DBNull.Value, Nothing, Convert.ToDateTime(lector("f_VigenciaFin")))
+                        reporte.i_Cve_Programacion = Convert.ToInt32(lector("i_Cve_Programacion"))
+                        reporte.i_Cve_Generacion = Convert.ToInt32(lector("i_Cve_Generacion"))
+                        reporte.NombreReporte = If(lector("NombreReporte") Is DBNull.Value, "", lector("NombreReporte").ToString())
+                        reporte.t_RutaPlantilla = If(lector("t_RutaPlantilla") Is DBNull.Value, "", lector("t_RutaPlantilla").ToString())
+                        reporte.t_FormatoSalida = If(lector("t_FormatoSalida") Is DBNull.Value, "", lector("t_FormatoSalida").ToString())
+                        reporte.t_ParametrosConfig = If(lector("t_ParametrosConfig") Is DBNull.Value, "", lector("t_ParametrosConfig").ToString())
+                        reporte.i_FilaInicio = Convert.ToInt32(lector("i_FilaInicio"))
+                        reporte.i_ColumnaInicio = Convert.ToInt32(lector("i_ColumnaInicio"))
+                        reporte.t_Parametros = If(lector("t_Parametros") Is DBNull.Value, "", lector("t_Parametros").ToString())
+                        reporte.t_DiasSemana = If(lector("t_DiasSemana") Is DBNull.Value, "", lector("t_DiasSemana").ToString())
+                        reporte.i_DiaMes = If(lector("i_DiaMes") Is DBNull.Value, Nothing, Convert.ToInt32(lector("i_DiaMes")))
+                        reporte.t_Frecuencia = If(lector("t_Frecuencia") Is DBNull.Value, "", lector("t_frecuencia").ToString())
+                        reporte.t_NombreVista = If(lector("t_NombreVista") Is DBNull.Value, "", lector("t_NombreVista").ToString())
+                        reporte.t_NombreSP = If(lector("t_NombreSP") Is DBNull.Value, "", lector("t_NombreSP").ToString())
+                        reporte.f_VigenciaInicio = Convert.ToDateTime(lector("f_VigenciaInicio"))
+                        reporte.f_VigenciaFin = If(lector("f_VigenciaFin") Is DBNull.Value, Nothing, Convert.ToDateTime(lector("f_VigenciaFin")))
 
-                                resultado.Add(reporte)
-                            End While
+                        resultado.Add(reporte)
+                    Next
 
-                        End Using
+                    estatus.ObjectReturned = resultado
+                    Console.WriteLine($"[DB] SP016ProcesarColaReportes ejecutado → {resultado.Count} reportes pendientes")
+                End If
 
-                    End Using
-                End Using
-
-                Console.WriteLine($"[DB] SP016ProcesarColaReportes ejecutado → {resultado.Count} reportes pendientes")
             Catch ex As Exception
                 Console.WriteLine($"[ERROR] ObtenerReportesPendientes: {ex.Message}")
                 LogError("ObtenerReportesPendientes", ex)
-                Throw
+                estatus.SetError(Me, $"Excepcion en obtener Reportes pendientes: {ex.Message}", TagWatcher.ErrorTypes.C6_012_1042)
             End Try
 
-            Return resultado
+            Return estatus
 
         End Function
 
 
         'Ejecutar el reporte y obtener los resultados
         ' si tiene sp obtiene sus parametros obligatorios y resuelve el json con el inicio de periodo y fin del periodo
-        Public Function EjecutarConsultaReporte(reporte As ReportePendiente) As DataTable
+        Public Function EjecutarConsultaReporte(reporte As ReportePendiente) As TagWatcher
             If reporte.TieneSP Then
                 Return EjecutarSP(reporte)
             Else
@@ -86,131 +90,139 @@ Namespace Servicios
             End If
         End Function
 
-        Private Function EjecutarSP(reporte As ReportePendiente) As DataTable
-            Dim resultado As New DataTable()
+        Private Function EjecutarSP(reporte As ReportePendiente) As TagWatcher
+            Dim estatus As New TagWatcher()
             Try
-                Using con As New SqlConnection(_conexion)
-                    con.Open()
-                    'obtener parametros obligatorios del SP
-                    Dim obligatorios = ObtenerParametrosSP(con, reporte.t_NombreSP)
 
-                    'resolver parametros con validación de cobertura
-                    Dim resolutor = New ServicioCalculosFecha() 'probar como funciona con DateTime.Now()
+                Dim estatusParametros = ObtenerParametrosSP(reporte.t_NombreSP)
+                If estatusParametros.Status <> TagWatcher.TypeStatus.Ok Then
+                    Return estatusParametros
+                End If
 
-                    Dim parametros = resolutor.Resolver(
-                        reporte.t_Parametros,
-                        reporte.t_ParametrosConfig,
-                        reporte.t_Frecuencia,
-                        obligatorios)
+                Dim obligatorios = CType(estatusParametros.ObjectReturned, HashSet(Of String))
 
-                    'EjecutarSP
-                    Using cmd As New SqlCommand(reporte.t_NombreSP, con)
-                        cmd.CommandType = CommandType.StoredProcedure
-                        cmd.CommandTimeout = 120
+                Dim resolutor = New ServicioCalculosFecha()
+                Dim parametros = resolutor.Resolver(
+                    reporte.t_Parametros,
+                    reporte.t_ParametrosConfig,
+                    reporte.t_Frecuencia,
+                    obligatorios)
 
-                        For Each kvp In parametros
-                            Dim nombre = If(kvp.Key.StartsWith("@"), kvp.Key, "@" & kvp.Key)
-                            If obligatorios.Contains(nombre.ToUpperInvariant()) Then
-                                cmd.Parameters.AddWithValue(nombre, If(kvp.Value Is Nothing, DBNull.Value, kvp.Value))
-                            End If
-                        Next
+                Dim queryBuilder As New StringBuilder()
+                queryBuilder.Append($"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED EXEC {reporte.t_NombreSP} ")
 
-                        Using da As New SqlDataAdapter(cmd)
-                            da.Fill(resultado)
-                        End Using
-                    End Using
+                Dim primerParametro As Boolean = True
+                For Each kvp In parametros
+                    Dim nombre = If(kvp.Key.StartsWith("@"), kvp.Key, "@" & kvp.Key)
+                    If obligatorios.Contains(nombre.ToUpperInvariant()) Then
+                        If Not primerParametro Then queryBuilder.Append(", ")
 
-                End Using
+                        If kvp.Value Is Nothing OrElse kvp.Value Is DBNull.Value Then
+                            queryBuilder.Append($"{nombre} = Null")
+                        ElseIf TypeOf kvp.Value Is DateTime Then
+                            queryBuilder.Append($"{nombre} = '{CType(kvp.Value, DateTime):yyyy-MM-dd HH:mm:ss}'")
+                        ElseIf TypeOf kvp.Value Is String Then
+                            queryBuilder.Append($"{nombre} = '{kvp.Value.ToString().Replace("'", "''")}'")
+                        ElseIf TypeOf kvp.Value Is Boolean Then
+                            queryBuilder.Append($"{nombre} = {If(CBool(kvp.Value), 1, 0)}")
+                        Else
+                            queryBuilder.Append($"{nombre} = {kvp.Value}")
+                        End If
+                        primerParametro = False
+                    End If
+                Next
 
-                Console.WriteLine($"[DB] SP '{reporte.t_NombreSP}' -> {resultado.Rows.Count} registros")
+                estatus = _sistema.ConexionSingleton.SQLServerSingletonConexion.EjecutaConsultaDirectaEstandarizadaOpenCloseDataTable(queryBuilder.ToString())
+
+                If estatus.Status = TagWatcher.TypeStatus.Ok Then
+                    Dim dt = CType(estatus.ObjectReturned, DataTable)
+                    Console.WriteLine($"[DB] SP '{reporte.t_NombreSP}' -> {dt.Rows.Count} registros")
+                End If
+
             Catch ex As InvalidOperationException
-                'error de cobertura: re lanzar con contexto
-                Throw New Exception($"Reporte '{reporte.NombreReporte}': {ex.Message}", ex)
+                estatus.SetError(Me, $"Reporte '{reporte.NombreReporte}': {ex.Message}", TagWatcher.ErrorTypes.C3_001_3005)
             Catch ex As Exception
                 LogError($"EjecutarSP_{reporte.t_NombreSP}", ex)
-                Throw New Exception($"Error ejecutando SP '{reporte.t_NombreSP}': {ex.Message}", ex)
-
+                estatus.SetError(Me, $"Error ejecutando SP '{reporte.t_NombreSP}': {ex.Message}", TagWatcher.ErrorTypes.C6_012_1042)
             End Try
-            Return resultado
+            Return estatus
         End Function
 
-        Private Function EjecutarVista(nombreVista As String) As DataTable
-            Dim resultado As New DataTable()
+        Private Function EjecutarVista(nombreVista As String) As TagWatcher
+            Dim estatus As New TagWatcher()
             Try
-                Using con As New SqlConnection(_conexion)
-                    Using cmd As New SqlCommand($"SELECT * FROM [{nombreVista}]", con)
-                        cmd.CommandTimeout = 120
-                        con.Open()
-                        Using da As New SqlDataAdapter(cmd)
-                            da.Fill(resultado)
-                        End Using
-                    End Using
-                End Using
-                Console.WriteLine($"[DB] Vista '{nombreVista}' -> {resultado.Rows.Count} registros")
+                Dim query As String = $"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT * FROM [{nombreVista}]"
+                estatus = _sistema.ConexionSingleton.SQLServerSingletonConexion.EjecutaConsultaDirectaEstandarizadaOpenCloseDataTable(query)
+
+                If estatus.Status = TagWatcher.TypeStatus.Ok Then
+                    Dim dt = CType(estatus.ObjectReturned, DataTable)
+                    Console.WriteLine($"[DB] Vista '{nombreVista}' -> {dt.Rows.Count} registros")
+                End If
+
             Catch ex As Exception
                 LogError($"EjecutarVista_{nombreVista}", ex)
-                Throw New Exception($"Error ejecutando la vista '{nombreVista}': {ex.Message}", ex)
+                estatus.SetError(Me, $"Error ejecutando la vista '{nombreVista}': {ex.Message}", TagWatcher.ErrorTypes.C6_012_1042)
             End Try
-            Return resultado
+            Return estatus
         End Function
 
         'Debolvemos todos los parametros del SP
-        Public Function ObtenerParametrosSP(con As SqlConnection, nombreSP As String) As HashSet(Of String)
+        Public Function ObtenerParametrosSP(nombreSP As String) As TagWatcher
+
+            Dim estatus As New TagWatcher()
             Dim resultado As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+
             Try
-                Using cmd As New SqlCommand(
-                "SELECT UPPER(name) FROM sys.parameter " &
-                "WHERE object_id = OBJECT_ID(@sp)", con)
-                    cmd.Parameters.AddWithValue("@sp", nombreSP)
-                    Using r = cmd.ExecuteReader()
-                        While r.Read()
-                            resultado.Add(r.GetString(0))
-                        End While
-                    End Using
-                End Using
+
+                Dim query As String = $"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT UPPER(name) AS name FROM sys.parameters WHERE object_id = OBJECT_ID('{nombreSP}')"
+                estatus = _sistema.ConexionSingleton.SQLServerSingletonConexion.EjecutaConsultaDirectaEstandarizadaOpenCloseDataTable(query)
+
+                If estatus.Status = TagWatcher.TypeStatus.Ok Then
+                    Dim dt = CType(estatus.ObjectReturned, DataTable)
+                    For Each r As DataRow In dt.Rows
+                        resultado.Add(r("name").ToString())
+                    Next
+                    estatus.ObjectReturned = resultado
+                End If
+
             Catch ex As Exception
                 Console.WriteLine($"[ADVERTENCIA] No se obtuvieron parámetros de '{nombreSP}': {ex.Message}")
+                estatus.SetError(Me, $"Fallo de la lectura sys.parameters '{nombreSP}': {ex.Message}", TagWatcher.ErrorTypes.C6_012_1042)
             End Try
-            Return resultado
+            Return estatus
         End Function
 
 
         'Actualizar el estado de una generacion para que nos marque completado o fallido
-        Public Sub ActualizarEstadoGeneracion(iCveGeneracion As Integer, exito As Boolean, rutaDocumento As String,
-                                              registros As Integer, errorMsg As String)
+        Public Function ActualizarEstadoGeneracion(iCveGeneracion As Integer, exito As Boolean, rutaDocumento As String,
+                                              registros As Integer, errorMsg As String) As TagWatcher
 
+            Dim estatus As New TagWatcher
             Dim proceso As String = If(exito, "COMPLETADO", "FALLIDO")
 
+            'formato seguro para sql
+            Dim sqlRuta As String = If(String.IsNullOrEmpty(rutaDocumento), "NULL", $"'{rutaDocumento.Replace("'", "''")}'")
+            Dim sqlError As String = If(String.IsNullOrEmpty(errorMsg), "NULL", $"'{errorMsg.Replace("'", "''")}'")
+
             Dim query As String =
-                        "UPDATE Bit016GeneracionReporteador SET " &
-                        "f_FechaFin = GETDATE(), " &
-                        "t_Proceso = @proceso, " &
-                        "i_RegistrosProcesados = @registros, " &
-                        "t_RutaDocumento = @ruta, " &
-                        "t_Error = @error " &
-                        "WHERE i_Cve_Generacion = @id"
+                        $"UPDATE Bit016GeneracionReporteador SET " &
+                        $"f_FechaFin = GETDATE(), " &
+                        $"t_Proceso = '{proceso}', " &
+                        $"i_RegistrosProcesados = {registros}, " &
+                        $"t_RutaDocumento = {sqlRuta}, " &
+                        $"t_Error = {sqlError} " &
+                        $"WHERE i_Cve_Generacion = {iCveGeneracion}"
 
             Try
-                Using con As New SqlConnection(_conexion)
-                    Using cmd As New SqlCommand(query, con)
-                        cmd.Parameters.AddWithValue("@id", iCveGeneracion)
-                        cmd.Parameters.AddWithValue("@proceso", proceso)
-                        cmd.Parameters.AddWithValue("@registros", registros)
-                        cmd.Parameters.AddWithValue("@ruta", If(String.IsNullOrEmpty(rutaDocumento),
-                                                    DBNull.Value, CObj(rutaDocumento)))
-                        cmd.Parameters.AddWithValue("@error", If(String.IsNullOrEmpty(errorMsg),
-                                                    DBNull.Value, CObj(errorMsg)))
-                        con.Open()
-                        cmd.ExecuteNonQuery()
-
-                    End Using
-                End Using
+                estatus = _sistema.ConexionSingleton.SQLServerSingletonConexion.EjecutaConsultaDirectaEstandarizada(query)
             Catch ex As Exception
                 Console.WriteLine($"[ERROR] ActualizarEstadoGeneracion: {ex.Message}")
                 LogError("ActualizarEstadoGeneracion", ex)
+                estatus.SetError(Me, $"Error al actualizar la bitacora: {ex.Message}", TagWatcher.ErrorTypes.C6_012_1042)
             End Try
 
-        End Sub
+            Return estatus
+        End Function
 
         'Sistema de Logs
         Private Sub LogError(origen As String, ex As Exception)
